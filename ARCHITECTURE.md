@@ -55,6 +55,8 @@ Esta es la ESTRUCTURA DE DIRECTORIOS OBLIGATORIA que la IA debe respetar y const
 5. **5. Control de Acceso (RBAC):** Implementar roles de usuario (ADMIN, CUSTOMER). Las rutas del backend /api/admin/* y las rutas del frontend /dashboard/* DEBEN estar protegidas por un middleware/guardia que verifique que el JWT contiene el rol ADMIN.
 
 ## ⚙️ Reglas Críticas de Negocio
+- - **Gestión de Paquetes:** Todo comando de instalación o ejecución de scripts debe hacerse EXCLUSIVAMENTE con `pnpm` (ej. `pnpm add`, `pnpm run dev`).
+
 - **Modelo User:** Debe incluir role (Enum: ADMIN, CUSTOMER), nif_cif (obligatorio para la facturación española) y detalles de dirección de facturación (Calle, CP, Ciudad, Provincia, País).
 
 - **Modelo Product:** Debe implementar Soft Delete (isActive: Boolean en lugar de borrar el registro, para no romper el historial de facturas). Debe incluir stock (Int) y taxRate (Decimal, para guardar el porcentaje de IVA a aplicar: 21, 10, 4 o 0).
