@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response, NextFunction } from 'express';
-import { AuthController } from '@modules/auth/infrastructure/authController';
+import { AuthController } from '../../authController';
 
 // Helper to create mock request
 const createMockRequest = (body: any = {}, user?: any): Partial<Request> => ({

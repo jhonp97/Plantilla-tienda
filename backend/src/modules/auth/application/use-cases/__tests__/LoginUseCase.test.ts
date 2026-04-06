@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { LoginUseCase } from '@modules/auth/application/LoginUseCase';
+import { LoginUseCase } from '../../LoginUseCase';
 
 // Mock jwt
 vi.mock('jsonwebtoken', () => ({
@@ -9,7 +9,7 @@ vi.mock('jsonwebtoken', () => ({
 }));
 
 // Mock env
-vi.mock('@config/env', () => ({
+vi.mock('../../../../../../config/env', () => ({
   env: {
     JWT_SECRET: 'test-secret',
     JWT_EXPIRES_IN: '24h',
