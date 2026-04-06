@@ -1,0 +1,1 @@
+export { CloudinaryService, getCloudinaryService } from './CloudinaryService';

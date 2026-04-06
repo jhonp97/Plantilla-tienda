@@ -2,11 +2,99 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+// Role Enum
+// ==========================================
+enum Role {
+  ADMIN
+  CUSTOMER
+}
+
+// ==========================================
+// User Model
+// ==========================================
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(CUSTOMER)
+  nifCif       String
+  fullName     String
+  phone        String?
+  address      Json     // Embedded: { street, postalCode, city, province, country }
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([email])
+  @@index([role])
+  @@index([createdAt])
+  @@map("users")
+}
+
+// ==========================================
+// Category Model
+// ==========================================
+model Category {
+  id          String    @id @default(uuid())
+  name        String
+  slug        String    @unique
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  products Product[]
+
+  @@index([slug])
+  @@index([createdAt])
+  @@map("categories")
+}
+
+// ==========================================
+// Product Model
+// ==========================================
+model Product {
+  id            String        @id @default(uuid())
+  name          String
+  slug          String        @unique
+  description   String?
+  price         Int           // Price in cents (avoid float)
+  stockQuantity Int           @default(0)
+  isActive      Boolean       @default(true)
+  categoryId    String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  category   Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  images     ProductImage[]
+
+  @@index([categoryId])
+  @@index([isActive])
+  @@index([price])
+  @@index([createdAt])
+  @@index([slug])
+  @@map("products")
+}
+
+// ==========================================
+// ProductImage Model
+// ==========================================
+model ProductImage {
+  id        String   @id @default(uuid())
+  productId String
+  url       String
+  publicId  String   // Cloudinary public ID
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("product_images")
 }

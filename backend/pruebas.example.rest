@@ -1,0 +1,275 @@
+# ==========================================
+# 🧪 PRUEBAS REST CLIENT - Plantilla Tienda
+# ==========================================
+# Copiar este archivo a 'pruebas.rest' y completar con tus valores reales
+# pruebas.rest está en .gitignore y NO se sube a GitHub
+# ==========================================
+
+### Variables (completar)
+@baseUrl = http://localhost:3000
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+# ==========================================
+# 🔐 AUTENTICACIÓN
+# ==========================================
+
+### 1. Registro de usuario (CLIENTE)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "cliente@ejemplo.com",
+  "password": "Password123!",
+  "fullName": "Cliente Ejemplo",
+  "nifCif": "12345678A"
+}
+
+### 2. Login (obtener token)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "cliente@ejemplo.com",
+  "password": "Password123!"
+}
+
+### 3. Login como Admin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@tienda.com",
+  "password": "AdminPass123!"
+}
+
+### 4. Ver perfil actual
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{authToken}}
+
+### 5. Logout
+POST {{baseUrl}}/api/auth/logout
+Authorization: Bearer {{authToken}}
+
+# ==========================================
+# 📦 CATEGORÍAS (ADMIN)
+# ==========================================
+
+### 6. Crear categoría
+POST {{baseUrl}}/api/categories
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Electrónica",
+  "description": "Productos electrónicos y tecnología"
+}
+
+### 7. Listar categorías (PÚBLICO)
+GET {{baseUrl}}/api/categories
+
+### 8. Ver categoría por slug
+GET {{baseUrl}}/api/categories/electronica
+
+### 9. Actualizar categoría
+PUT {{baseUrl}}/api/categories/:id
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Electrónica y Tech",
+  "description": "Descripción actualizada"
+}
+
+### 10. Eliminar categoría
+DELETE {{baseUrl}}/api/categories/:id
+Authorization: Bearer {{authToken}}
+
+# ==========================================
+# 🛍️ PRODUCTOS (ADMIN)
+# ==========================================
+
+### 11. Crear producto
+POST {{baseUrl}}/api/products
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Auriculares Bluetooth",
+  "description": "Auriculares inalámbricos con cancelación de ruido",
+  "price": 9999,
+  "stockQuantity": 50,
+  "categoryId": "uuid-de-categoria"
+}
+
+### 12. Crear producto con imágenes (multipart)
+POST {{baseUrl}}/api/products
+Content-Type: multipart/form-data; boundary=----FormBoundary
+Authorization: Bearer {{authToken}}
+
+------FormBoundary
+Content-Disposition: form-data; name="name"
+
+Auriculares Pro
+------FormBoundary
+Content-Disposition: form-data; name="description"
+
+Descripción del producto
+------FormBoundary
+Content-Disposition: form-data; name="price"
+
+14999
+------FormBoundary
+Content-Disposition: form-data; name="stockQuantity"
+
+25
+------FormBoundary
+Content-Disposition: form-data; name="categoryId"
+
+uuid-categoria
+------FormBoundary
+Content-Disposition: form-data; name="images"; filename="producto1.jpg"
+Content-Type: image/jpeg
+
+< ./ruta/a/imagen.jpg
+------FormBoundary--
+
+### 13. Listar productos (PÚBLICO)
+GET {{baseUrl}}/api/products
+
+### 14. Listar con filtros
+GET {{baseUrl}}/api/products?categoryId=uuid&minPrice=1000&maxPrice=50000&search=auriculares&sort=priceAsc&page=1&limit=10
+
+### 15. Ver producto por slug
+GET {{baseUrl}}/api/products/auriculares-bluetooth
+
+### 16. Actualizar producto
+PUT {{baseUrl}}/api/products/:id
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Auriculares Bluetooth Pro",
+  "price": 12999,
+  "stockQuantity": 30
+}
+
+### 17. Actualizar stock
+PATCH {{baseUrl}}/api/products/:id/stock
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "quantity": 75
+}
+
+### 18. Desactivar producto (soft delete)
+PATCH {{baseUrl}}/api/products/:id/deactivate
+Authorization: Bearer {{authToken}}
+
+# ==========================================
+# 🖼️ IMÁGENES (ADMIN)
+# ==========================================
+
+### 19. Subir imágenes a producto
+POST {{baseUrl}}/api/products/:productId/images
+Content-Type: multipart/form-data; boundary=----FormBoundary
+Authorization: Bearer {{authToken}}
+
+------FormBoundary
+Content-Disposition: form-data; name="images"; filename="imagen1.jpg"
+Content-Type: image/jpeg
+
+< ./imagen1.jpg
+------FormBoundary
+Content-Disposition: form-data; name="images"; filename="imagen2.jpg"
+Content-Type: image/jpeg
+
+< ./imagen2.jpg
+------FormBoundary--
+
+### 20. Eliminar imagen
+DELETE {{baseUrl}}/api/images/:id
+Authorization: Bearer {{authToken}}
+
+### 21. Reordenar imágenes
+PATCH {{baseUrl}}/api/products/:productId/images/reorder
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "imageOrders": [
+    { "imageId": "uuid-1", "order": 0 },
+    { "imageId": "uuid-2", "order": 1 },
+    { "imageId": "uuid-3", "order": 2 }
+  ]
+}
+
+# ==========================================
+# 🛒 CARRITO (CLIENTE)
+# ==========================================
+
+### 22. Agregar al carrito
+POST {{baseUrl}}/api/cart/items
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "productId": "uuid-producto",
+  "quantity": 2
+}
+
+### 23. Ver carrito
+GET {{baseUrl}}/api/cart
+Authorization: Bearer {{authToken}}
+
+### 24. Actualizar cantidad
+PUT {{baseUrl}}/api/cart/items/:itemId
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "quantity": 3
+}
+
+### 25. Eliminar del carrito
+DELETE {{baseUrl}}/api/cart/items/:itemId
+Authorization: Bearer {{authToken}}
+
+### 26. Vaciar carrito
+DELETE {{baseUrl}}/api/cart
+Authorization: Bearer {{authToken}}
+
+# ==========================================
+# 💳 CHECKOUT (CLIENTE)
+# ==========================================
+
+### 27. Crear sesión de pago Stripe
+POST {{baseUrl}}/api/payments/create-payment-intent
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "shippingAddress": {
+    "street": "Calle Principal 123",
+    "postalCode": "28001",
+    "city": "Madrid",
+    "province": "Madrid",
+    "country": "España"
+  }
+}
+
+# ==========================================
+# 📊 ORDENES
+# ==========================================
+
+### 28. Ver mis órdenes (CLIENTE)
+GET {{baseUrl}}/api/orders
+Authorization: Bearer {{authToken}}
+
+### 29. Ver detalle de orden
+GET {{baseUrl}}/api/orders/:id
+Authorization: Bearer {{authToken}}
+
+### 30. Listar todas las órdenes (ADMIN)
+GET {{baseUrl}}/api/orders/all
+Authorization: Bearer {{authToken}}

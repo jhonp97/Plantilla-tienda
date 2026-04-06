@@ -12,7 +12,7 @@ export interface CartItem {
 interface CartState {
   cartId: string | null;
   items: CartItem[];
-  addItem: (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => void;
+  addItem: (item: Omit<CartItem, 'id'>) => void;
   removeItem: (productId: string) => void;
   clearCart: () => void;
   mergeCart: () => Promise<void>;
@@ -48,18 +48,23 @@ export const useCartStore = create<CartState>((set, get) => ({
   getCartId: () => get().cartId,
 
   addItem: (item) => {
+    const newItem: CartItem = {
+      ...item,
+      id: generateUUID(),
+      quantity: item.quantity || 1,
+    };
     set((state) => {
       const existing = state.items.find((i) => i.productId === item.productId);
       if (existing) {
         return {
           items: state.items.map((i) =>
             i.productId === item.productId
-              ? { ...i, quantity: i.quantity + (item.quantity || 1) }
+              ? { ...i, quantity: i.quantity + newItem.quantity }
               : i
           ),
         };
       }
-      return { items: [...state.items, { ...item, quantity: item.quantity || 1 }] };
+      return { items: [...state.items, newItem] };
     });
   },
 

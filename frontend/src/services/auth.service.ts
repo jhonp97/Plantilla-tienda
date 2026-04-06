@@ -11,8 +11,8 @@ interface LoginCredentials {
 interface RegisterInput {
   email: string;
   password: string;
-  name: string;
-  nif_cif: string;
+  fullName: string;
+  nifCif: string;
 }
 
 const deps = {

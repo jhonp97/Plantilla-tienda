@@ -3,4 +3,8 @@ dist
 # Keep environment variables out of version control
 .env
 
+# REST Client test files with real credentials
+pruebas.rest
+*.private.rest
+
 /generated/prisma
