@@ -9,3 +9,7 @@ process.env.NODE_ENV = 'test';
 process.env.CLOUDINARY_CLOUD_NAME = 'test-cloud';
 process.env.CLOUDINARY_API_KEY = '123456789012345';
 process.env.CLOUDINARY_API_SECRET = 'test-secret-for-cloudinary';
+process.env.STRIPE_SECRET_KEY = 'sk_test_1234567890abcdefghijklmnop';
+process.env.STRIPE_WEBHOOK_SECRET = 'whsec_test_1234567890abcdefghijklmnop';
+process.env.STRIPE_PUBLISHABLE_KEY = 'pk_test_1234567890abcdefghijklmnop';
+process.env.REPORTS_FOLDER = './reports';

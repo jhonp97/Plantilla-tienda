@@ -18,6 +18,18 @@ enum Role {
 }
 
 // ==========================================
+// OrderStatus Enum
+// ==========================================
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+// ==========================================
 // User Model
 // ==========================================
 model User {
@@ -31,6 +43,9 @@ model User {
   address      Json     // Embedded: { street, postalCode, city, province, country }
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  addresses Address[]
+  orders    Order[]
 
   @@index([email])
   @@index([role])
@@ -97,4 +112,98 @@ model ProductImage {
 
   @@index([productId])
   @@map("product_images")
+}
+
+// ==========================================
+// Address Model
+// ==========================================
+model Address {
+  id          String   @id @default(uuid())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  street      String
+  postalCode  String
+  city        String
+  province    String
+  country     String   @default("España")
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  shippingOrders Order[] @relation("ShippingAddress")
+  billingOrders  Order[] @relation("BillingAddress")
+
+  @@index([userId])
+  @@map("addresses")
+}
+
+// ==========================================
+// Order Model
+// ==========================================
+model Order {
+  id              String      @id @default(uuid())
+  orderNumber     String      @unique
+  userId          String?
+  user            User?       @relation(fields: [userId], references: [id])
+
+  // Guest fields
+  guestEmail      String?
+  guestFullName   String?
+  guestPhone      String?
+  guestNifCif     String?
+
+  status          OrderStatus @default(PENDING)
+  subtotal        Int
+  shippingCost    Int
+  taxAmount       Int
+  totalAmount     Int
+
+  shippingAddressId String
+  shippingAddress Address @relation("ShippingAddress", fields: [shippingAddressId], references: [id])
+  billingAddressId  String?
+  billingAddress  Address? @relation("BillingAddress", fields: [billingAddressId], references: [id])
+
+  stripePaymentIntentId String?
+  paidAt          DateTime?
+  trackingNumber  String?
+  shippedAt       DateTime?
+  deliveredAt     DateTime?
+
+  items           OrderItem[]
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([orderNumber])
+  @@map("orders")
+}
+
+// ==========================================
+// OrderItem Model
+// ==========================================
+model OrderItem {
+  id          String @id @default(uuid())
+  orderId     String
+  order       Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String
+  productName String
+  productPrice Int
+  quantity    Int
+
+  @@index([orderId])
+  @@map("order_items")
+}
+
+// ==========================================
+// StoreSettings Model
+// ==========================================
+model StoreSettings {
+  id                    String   @id @default(cuid())
+  shippingType          String   // 'FREE', 'FIXED', 'THRESHOLD'
+  shippingPrice         Int?
+  freeShippingThreshold Int?
+  updatedAt             DateTime @updatedAt
+  updatedBy             String?
 }
