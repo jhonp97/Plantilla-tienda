@@ -1,0 +1,1 @@
+export { VerifactuRepository } from './VerifactuRepository';

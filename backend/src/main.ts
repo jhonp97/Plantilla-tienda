@@ -113,6 +113,15 @@ import { createWebhookRouter } from '@modules/order/infrastructure/routes/webhoo
 import { createAnalyticsRouter } from '@modules/order/infrastructure/routes/analytics.routes';
 import { createReportsRouter } from '@modules/order/infrastructure/routes/reports.routes';
 
+// Verifactu module imports
+import { VerifactuApiService } from '@modules/verifactu/infrastructure/services/VerifactuApiService';
+import { VerifactuRepository } from '@modules/verifactu/infrastructure/persistence/VerifactuRepository';
+import { VerifactuController } from '@modules/verifactu/infrastructure/http/VerifactuController';
+import { createVerifactuRouter } from '@modules/verifactu/infrastructure/routes/verifactu.routes';
+import { GenerateInvoiceFromOrder } from '@modules/verifactu/application/use-cases/GenerateInvoiceFromOrder';
+import { RegisterInvoiceUseCase } from '@modules/verifactu/application/use-cases/RegisterInvoiceUseCase';
+import { CheckInvoiceStatusUseCase } from '@modules/verifactu/application/use-cases/CheckInvoiceStatusUseCase';
+
 const app: Express = express();
 
 // Security headers
@@ -454,6 +463,120 @@ app.use('/api/payments', paymentRouter);
 app.use('/api/webhooks', webhookRouter);
 app.use('/api/admin/analytics', analyticsRouter);
 app.use('/api/admin/reports', reportsRouter);
+
+// ==========================================
+// Verifactu module - dependency injection
+// ==========================================
+
+// Services
+const verifactuApiService = new VerifactuApiService();
+const verifactuRepository = new VerifactuRepository(prisma);
+
+// Use cases
+const generateInvoiceFromOrder = new GenerateInvoiceFromOrder();
+const registerInvoiceUseCase = new RegisterInvoiceUseCase(
+  verifactuApiService,
+  verifactuRepository,
+  generateInvoiceFromOrder,
+);
+const checkInvoiceStatusUseCase = new CheckInvoiceStatusUseCase(
+  verifactuApiService,
+  verifactuRepository,
+);
+
+// Controller
+const verifactuController = new VerifactuController(
+  registerInvoiceUseCase,
+  checkInvoiceStatusUseCase,
+  verifactuRepository,
+);
+
+// Routes
+const verifactuRouter = createVerifactuRouter(verifactuController);
+
+// Mount Verifactu routes
+app.use('/api/verifactu', verifactuRouter);
+
+// ==========================================
+// Verifactu Event Listeners
+// ==========================================
+
+// Import the OrderPaidEvent type
+import type { OrderPaidEvent } from '@shared/events/EventBus';
+
+// Listen for OrderPaid events to automatically register invoices
+eventBus.on<OrderPaidEvent>('OrderPaid', async (event) => {
+  console.log('[Verifactu] OrderPaid event received:', event.orderNumber);
+  
+  try {
+    // Fetch the complete order with items and user data using Prisma directly
+    const orderRecord = await prisma.order.findUnique({
+      where: { id: event.orderId },
+      include: {
+        items: true,
+        user: {
+          select: {
+            nifCif: true,
+            fullName: true,
+          },
+        },
+      },
+    });
+    
+    if (!orderRecord) {
+      console.error('[Verifactu] Order not found:', event.orderId);
+      return;
+    }
+
+    // Transform order to Verifactu format
+    const orderData = {
+      id: orderRecord.id,
+      orderNumber: orderRecord.orderNumber,
+      userId: orderRecord.userId,
+      status: orderRecord.status,
+      subtotal: orderRecord.subtotal,
+      taxAmount: orderRecord.taxAmount,
+      shippingCost: orderRecord.shippingCost,
+      discountAmount: 0, // Discount is calculated at domain level, not stored in DB
+      totalAmount: orderRecord.totalAmount,
+      guestNifCif: orderRecord.guestNifCif,
+      guestFullName: orderRecord.guestFullName,
+      user: orderRecord.userId ? { 
+        nifCif: orderRecord.user?.nifCif || null, 
+        fullName: orderRecord.user?.fullName || null 
+      } : null,
+      items: orderRecord.items.map(item => ({
+        productPrice: item.productPrice,
+        quantity: item.quantity,
+      })),
+      createdAt: orderRecord.createdAt,
+    };
+
+    // Register invoice with Verifactu
+    await registerInvoiceUseCase.execute(orderData);
+    
+  } catch (error) {
+    console.error('[Verifactu] Error handling OrderPaid event:', error);
+  }
+});
+
+// ==========================================
+// Verifactu Polling Job
+// Check invoice status every 5 minutes
+// ==========================================
+
+const VERIFACTU_POLL_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
+setInterval(async () => {
+  console.log('[Verifactu] Running scheduled status check...');
+  try {
+    await checkInvoiceStatusUseCase.execute();
+  } catch (error) {
+    console.error('[Verifactu] Error in scheduled status check:', error);
+  }
+}, VERIFACTU_POLL_INTERVAL);
+
+console.log('[Verifactu] Polling job scheduled every 5 minutes');
 
 // Error handling (must be last)
 app.use(errorHandler);

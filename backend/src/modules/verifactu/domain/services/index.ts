@@ -1,0 +1,1 @@
+export type { IVerifactuApiService, VerifactuApiResponse, VerifactuStatusResponse } from './IVerifactuApiService';

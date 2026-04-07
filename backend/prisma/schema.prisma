@@ -168,6 +168,13 @@ model Order {
   shippedAt       DateTime?
   deliveredAt     DateTime?
 
+  // Verifactu fields
+  verifactuUuid        String?
+  verifactuQrCode      String?   @db.Text
+  verifactuUrl         String?
+  verifactuStatus      String?
+  verifactuRegisteredAt DateTime?
+
   items           OrderItem[]
 
   createdAt       DateTime    @default(now())
@@ -177,6 +184,8 @@ model Order {
   @@index([status])
   @@index([createdAt])
   @@index([orderNumber])
+  @@index([verifactuUuid])
+  @@index([verifactuStatus])
   @@map("orders")
 }
 
@@ -206,4 +215,37 @@ model StoreSettings {
   freeShippingThreshold Int?
   updatedAt             DateTime @updatedAt
   updatedBy             String?
+}
+
+// ==========================================
+// VerifactuInvoice Model
+// ==========================================
+model VerifactuInvoice {
+  id              String    @id @default(uuid())
+  orderId         String    @unique
+  serie           String
+  numero          String
+  fechaExpedicion String
+  tipoFactura     String
+  descripcion     String
+  nif             String?
+  nombre          String
+  lineas          Json      // Array of invoice lines
+  importeTotal    String
+  
+  // Response fields
+  uuid            String?
+  qrCode          String?   @db.Text
+  urlVerificacion String?
+  estado          String?
+  codigoError     String?
+  mensajeError    String?
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([orderId])
+  @@index([uuid])
+  @@index([estado])
+  @@map("verifactu_invoices")
 }

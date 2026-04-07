@@ -17,6 +17,9 @@ const envSchema = z.object({
   EMAIL_FROM: z.string().email().optional(),
   ADMIN_EMAIL: z.string().email().optional(),
   REPORTS_FOLDER: z.string().default('./reports'),
+  // Verifactu configuration
+  VERIFACTU_API_KEY: z.string().optional(),
+  VERIFACTU_BASE_URL: z.string().default('https://api.verifacti.com'),
 });
 
 export const env = envSchema.parse(process.env);

@@ -1,0 +1,1 @@
+export type { IVerifactuRepository, VerifactuOrderUpdate } from './IVerifactuRepository';
