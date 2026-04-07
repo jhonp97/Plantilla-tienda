@@ -29,6 +29,8 @@
 .form {
   width: 100%;
   max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
   background: var(--color-white);
   border-radius: var(--radius-xl);
   padding: var(--spacing-2xl);
@@ -36,6 +38,7 @@
   position: relative;
   z-index: 1;
   animation: slideUp 0.5s ease-out;
+  box-sizing: border-box;
 }
 
 @keyframes slideUp {
@@ -72,6 +75,42 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-md);
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.passwordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.passwordInput {
+  width: 100%;
+  padding-right: 40px;
+  box-sizing: border-box;
+}
+
+.eyeButton {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast);
+  z-index: 2;
+}
+
+.eyeButton:hover {
+  color: var(--text-primary);
 }
 
 .inputGroup {

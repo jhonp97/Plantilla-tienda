@@ -122,7 +122,7 @@ function FilterSidebar({
             />
             <span className="text-gray-600">Todas</span>
           </label>
-          {categories.map((category) => (
+          {categories && categories.map((category) => (
             <label key={category.id} className="flex items-center cursor-pointer">
               <input
                 type="radio"
@@ -368,7 +368,7 @@ export default function ProductList() {
                   <ProductCardSkeleton key={i} />
                 ))}
               </div>
-            ) : products.length === 0 ? (
+            ) : !products || products.length === 0 ? (
               <div className="text-center py-16">
                 <svg className="w-24 h-24 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
@@ -385,7 +385,7 @@ export default function ProductList() {
             )}
 
             {/* Pagination */}
-            {!isLoading && products.length > 0 && (
+            {!isLoading && products && products.length > 0 && (
               <Pagination
                 currentPage={pagination.page}
                 totalPages={pagination.totalPages}
