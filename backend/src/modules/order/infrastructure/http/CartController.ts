@@ -1,6 +1,19 @@
 import type { Request, Response, NextFunction } from 'express';
+import type { AddToCartUseCase } from '@modules/order/application/use-cases/cart/AddToCartUseCase';
+import type { UpdateCartItemUseCase } from '@modules/order/application/use-cases/cart/UpdateCartItemUseCase';
+import type { RemoveFromCartUseCase } from '@modules/order/application/use-cases/cart/RemoveFromCartUseCase';
+import type { GetCartUseCase } from '@modules/order/application/use-cases/cart/GetCartUseCase';
+import type { MergeGuestCartUseCase } from '@modules/order/application/use-cases/cart/MergeGuestCartUseCase';
 
 export class CartController {
+  constructor(
+    private readonly addToCartUseCase: AddToCartUseCase,
+    private readonly updateCartItemUseCase: UpdateCartItemUseCase,
+    private readonly removeFromCartUseCase: RemoveFromCartUseCase,
+    private readonly getCartUseCase: GetCartUseCase,
+    private readonly mergeGuestCartUseCase: MergeGuestCartUseCase,
+  ) {}
+
   addItem = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       res.status(201).json({

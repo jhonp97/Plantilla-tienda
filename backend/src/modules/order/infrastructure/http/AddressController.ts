@@ -1,4 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
+import type { CreateAddressUseCase } from '@modules/order/application/use-cases/address/CreateAddressUseCase';
+import type { UpdateAddressUseCase } from '@modules/order/application/use-cases/address/UpdateAddressUseCase';
+import type { DeleteAddressUseCase } from '@modules/order/application/use-cases/address/DeleteAddressUseCase';
+import type { ListUserAddressesUseCase } from '@modules/order/application/use-cases/address/ListUserAddressesUseCase';
 
 interface AuthRequest extends Request {
   user?: {
@@ -9,6 +13,13 @@ interface AuthRequest extends Request {
 }
 
 export class AddressController {
+  constructor(
+    private readonly createAddressUseCase: CreateAddressUseCase,
+    private readonly updateAddressUseCase: UpdateAddressUseCase,
+    private readonly deleteAddressUseCase: DeleteAddressUseCase,
+    private readonly listUserAddressesUseCase: ListUserAddressesUseCase,
+  ) {}
+
   create = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = req.user?.id;

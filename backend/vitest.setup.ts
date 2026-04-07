@@ -13,3 +13,6 @@ process.env.STRIPE_SECRET_KEY = 'sk_test_1234567890abcdefghijklmnop';
 process.env.STRIPE_WEBHOOK_SECRET = 'whsec_test_1234567890abcdefghijklmnop';
 process.env.STRIPE_PUBLISHABLE_KEY = 'pk_test_1234567890abcdefghijklmnop';
 process.env.REPORTS_FOLDER = './reports';
+process.env.RESEND_API_KEY = 're_test_1234567890abcdefghijklmnop';
+process.env.EMAIL_FROM = 'test@tienda.com';
+process.env.ADMIN_EMAIL = 'admin@tienda.com';

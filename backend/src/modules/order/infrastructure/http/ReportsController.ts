@@ -1,4 +1,9 @@
 import type { Request, Response, NextFunction } from 'express';
+import type { GenerateInvoicesReportUseCase } from '@modules/order/application/use-cases/reports/GenerateInvoicesReportUseCase';
+import type { ExportSalesReportUseCase } from '@modules/order/application/use-cases/reports/ExportSalesReportUseCase';
+import type { ExportProductsReportUseCase } from '@modules/order/application/use-cases/reports/ExportProductsReportUseCase';
+import type { GenerateCSVReportUseCase } from '@modules/order/application/use-cases/reports/GenerateCSVReportUseCase';
+import type { GeneratePDFReportUseCase } from '@modules/order/application/use-cases/reports/GeneratePDFReportUseCase';
 
 interface AuthRequest extends Request {
   user?: {
@@ -9,6 +14,14 @@ interface AuthRequest extends Request {
 }
 
 export class ReportsController {
+  constructor(
+    private readonly generateInvoicesReportUseCase: GenerateInvoicesReportUseCase,
+    private readonly exportSalesReportUseCase: ExportSalesReportUseCase,
+    private readonly exportProductsReportUseCase: ExportProductsReportUseCase,
+    private readonly generateCSVReportUseCase: GenerateCSVReportUseCase,
+    private readonly generatePDFReportUseCase: GeneratePDFReportUseCase,
+  ) {}
+
   generateInvoices = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
       if (req.user?.role !== 'ADMIN') {

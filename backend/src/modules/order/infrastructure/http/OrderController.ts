@@ -1,6 +1,23 @@
 import type { Request, Response, NextFunction } from 'express';
+import type { CreateOrderUseCase } from '@modules/order/application/use-cases/order/CreateOrderUseCase';
+import type { GetOrderByIdUseCase } from '@modules/order/application/use-cases/order/GetOrderByIdUseCase';
+import type { GetOrderByNumberUseCase } from '@modules/order/application/use-cases/order/GetOrderByNumberUseCase';
+import type { ListUserOrdersUseCase } from '@modules/order/application/use-cases/order/ListUserOrdersUseCase';
+import type { ListAdminOrdersUseCase } from '@modules/order/application/use-cases/order/ListAdminOrdersUseCase';
+import type { UpdateOrderStatusUseCase } from '@modules/order/application/use-cases/order/UpdateOrderStatusUseCase';
+import type { CancelOrderUseCase } from '@modules/order/application/use-cases/order/CancelOrderUseCase';
 
 export class OrderController {
+  constructor(
+    private readonly createOrderUseCase: CreateOrderUseCase,
+    private readonly getOrderByIdUseCase: GetOrderByIdUseCase,
+    private readonly getOrderByNumberUseCase: GetOrderByNumberUseCase,
+    private readonly listUserOrdersUseCase: ListUserOrdersUseCase,
+    private readonly listAdminOrdersUseCase: ListAdminOrdersUseCase,
+    private readonly updateOrderStatusUseCase: UpdateOrderStatusUseCase,
+    private readonly cancelOrderUseCase: CancelOrderUseCase,
+  ) {}
+
   create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       res.status(201).json({
