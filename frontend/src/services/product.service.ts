@@ -39,7 +39,8 @@ export async function getProducts(filters?: ProductFilters): Promise<PaginatedPr
   const queryString = params.toString();
   const url = `/api/products${queryString ? `?${queryString}` : ''}`;
   
-  return apiGet<PaginatedProducts>(url, {}, deps);
+  const response = await apiGet<{ success: boolean; data: PaginatedProducts }>(url, {}, deps);
+  return response.data;
 }
 
 /**

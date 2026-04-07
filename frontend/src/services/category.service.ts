@@ -16,7 +16,8 @@ const deps = {
  * Get all categories
  */
 export async function getCategories(): Promise<Category[]> {
-  return apiGet<Category[]>('/api/categories', {}, deps);
+  const response = await apiGet<{ success: boolean; data: Category[] }>('/api/categories', {}, deps);
+  return response.data;
 }
 
 /**
