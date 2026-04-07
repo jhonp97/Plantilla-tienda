@@ -32,10 +32,12 @@ function LoadingFallback() {
   );
 }
 
+import { Navigate } from 'react-router-dom';
+
 export function ShopRoutes() {
   return (
     <>
-      <Route path="/" element={<div style={{ padding: '2rem', textAlign: 'center' }}><h1>Home</h1><p>Próximamente: Catálogo de productos</p></div>} />
+      <Route path="/" element={<Navigate to="/products" replace />} />
       <Route path="login" element={
         <Suspense fallback={<LoadingFallback />}>
           <Login />
