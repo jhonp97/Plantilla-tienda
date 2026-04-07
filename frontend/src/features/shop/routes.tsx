@@ -5,6 +5,11 @@ const Login = lazy(() => import('./Login'));
 const Register = lazy(() => import('./Register'));
 const ProductList = lazy(() => import('./pages/ProductList'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail'));
+const CartPage = lazy(() => import('./pages/CartPage'));
+const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
+const CheckoutSuccessPage = lazy(() => import('./pages/CheckoutSuccessPage'));
+const OrderHistoryPage = lazy(() => import('./pages/OrderHistoryPage'));
+const OrderDetailPage = lazy(() => import('./pages/OrderDetailPage'));
 
 function LoadingFallback() {
   return (
@@ -51,8 +56,31 @@ export function ShopRoutes() {
           <ProductDetail />
         </Suspense>
       } />
-      <Route path="cart" element={<div style={{ padding: '2rem', textAlign: 'center' }}><h1>Carrito</h1><p>Próximamente: Tu carrito de compras</p></div>} />
-      <Route path="checkout" element={<div style={{ padding: '2rem', textAlign: 'center' }}><h1>Checkout</h1><p>Próximamente: Finalizar compra</p></div>} />
+      <Route path="cart" element={
+        <Suspense fallback={<LoadingFallback />}>
+          <CartPage />
+        </Suspense>
+      } />
+      <Route path="checkout" element={
+        <Suspense fallback={<LoadingFallback />}>
+          <CheckoutPage />
+        </Suspense>
+      } />
+      <Route path="checkout/success" element={
+        <Suspense fallback={<LoadingFallback />}>
+          <CheckoutSuccessPage />
+        </Suspense>
+      } />
+      <Route path="orders" element={
+        <Suspense fallback={<LoadingFallback />}>
+          <OrderHistoryPage />
+        </Suspense>
+      } />
+      <Route path="orders/:id" element={
+        <Suspense fallback={<LoadingFallback />}>
+          <OrderDetailPage />
+        </Suspense>
+      } />
     </>
   );
 }

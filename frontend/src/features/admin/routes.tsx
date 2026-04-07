@@ -6,6 +6,11 @@ const ProductManagement = lazy(() => import('./pages/ProductManagement'));
 const ProductCreate = lazy(() => import('./pages/ProductCreate'));
 const ProductEdit = lazy(() => import('./pages/ProductEdit'));
 const CategoryManagement = lazy(() => import('./pages/CategoryManagement'));
+const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage'));
+const OrderManagementPage = lazy(() => import('./pages/OrderManagementPage'));
+const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
+const ReportsPage = lazy(() => import('./pages/ReportsPage'));
+const ShippingConfigPage = lazy(() => import('./pages/ShippingConfigPage'));
 
 function LoadingFallback() {
   return (
@@ -31,7 +36,12 @@ function LoadingFallback() {
 export function AdminRoutes() {
   return (
     <ProtectedRoute requiredRole="ADMIN">
-      <Route path="dashboard" element={<div>Dashboard</div>} />
+      {/* Dashboard */}
+      <Route path="dashboard" element={
+        <Suspense fallback={<LoadingFallback />}>
+          <AdminDashboardPage />
+        </Suspense>
+      } />
       
       {/* Products */}
       <Route path="products" element={
@@ -57,7 +67,33 @@ export function AdminRoutes() {
         </Suspense>
       } />
       
-      <Route path="orders" element={<div>Order Management</div>} />
+      {/* Orders */}
+      <Route path="orders" element={
+        <Suspense fallback={<LoadingFallback />}>
+          <OrderManagementPage />
+        </Suspense>
+      } />
+      
+      {/* Analytics */}
+      <Route path="analytics" element={
+        <Suspense fallback={<LoadingFallback />}>
+          <AnalyticsPage />
+        </Suspense>
+      } />
+      
+      {/* Reports */}
+      <Route path="reports" element={
+        <Suspense fallback={<LoadingFallback />}>
+          <ReportsPage />
+        </Suspense>
+      } />
+      
+      {/* Settings */}
+      <Route path="settings/shipping" element={
+        <Suspense fallback={<LoadingFallback />}>
+          <ShippingConfigPage />
+        </Suspense>
+      } />
     </ProtectedRoute>
   );
 }

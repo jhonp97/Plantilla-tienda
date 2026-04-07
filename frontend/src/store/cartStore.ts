@@ -12,11 +12,14 @@ export interface CartItem {
 interface CartState {
   cartId: string | null;
   items: CartItem[];
+  isLoading: boolean;
   addItem: (item: Omit<CartItem, 'id'>) => void;
   removeItem: (productId: string) => void;
   clearCart: () => void;
   mergeCart: () => Promise<void>;
   getCartId: () => string | null;
+  setLoading: (loading: boolean) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
 }
 
 const CART_ID_KEY = 'cart_id';
@@ -44,8 +47,19 @@ function getOrCreateCartId(): string {
 export const useCartStore = create<CartState>((set, get) => ({
   cartId: getOrCreateCartId(),
   items: [],
+  isLoading: false,
 
   getCartId: () => get().cartId,
+
+  setLoading: (loading) => set({ isLoading: loading }),
+
+  updateQuantity: (productId, quantity) => {
+    set((state) => ({
+      items: state.items.map((i) =>
+        i.productId === productId ? { ...i, quantity } : i
+      ),
+    }));
+  },
 
   addItem: (item) => {
     const newItem: CartItem = {
