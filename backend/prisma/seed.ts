@@ -1,6 +1,24 @@
 import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
+import dotenv from 'dotenv';
+import { resolve } from 'path';
 
-const prisma = new PrismaClient();
+// Load env from backend directory
+dotenv.config({ path: resolve(__dirname, '../.env') });
+
+const DATABASE_URL = process.env.DATABASE_URL;
+if (!DATABASE_URL) {
+  throw new Error('DATABASE_URL not found in environment');
+}
+
+const pool = new Pool({ connectionString: DATABASE_URL });
+const adapter = new PrismaPg(pool);
+
+const prisma = new PrismaClient({
+  adapter,
+  log: ['query', 'error', 'warn'],
+});
 
 async function main() {
   console.log('🌱 Starting database seed...');
