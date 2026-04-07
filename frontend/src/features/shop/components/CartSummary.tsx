@@ -2,6 +2,7 @@
  * CartSummary - Cart totals and summary display
  */
 import { useCartStore } from '../../../store/cartStore';
+import styles from './CartSummary.module.css';
 
 export function CartSummary() {
   const { items } = useCartStore();
@@ -16,23 +17,23 @@ export function CartSummary() {
   const total = subtotal + shippingCost + tax;
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">
+    <div className={styles.cartSummary}>
+      <h2 className={styles.summaryTitle}>
         Resumen del Pedido
       </h2>
 
       {/* Subtotal */}
-      <div className="flex justify-between items-center mb-3">
-        <span className="text-gray-600">Subtotal</span>
-        <span className="text-gray-900">${subtotal.toFixed(2)}</span>
+      <div className={styles.summaryRow}>
+        <span className={styles.summaryLabel}>Subtotal</span>
+        <span className={styles.summaryValue}>${subtotal.toFixed(2)}</span>
       </div>
 
       {/* Shipping */}
-      <div className="flex justify-between items-center mb-3">
-        <span className="text-gray-600">Envío</span>
-        <span className="text-gray-900">
+      <div className={styles.summaryRow}>
+        <span className={styles.summaryLabel}>Envío</span>
+        <span className={styles.summaryValue}>
           {shippingCost === 0 ? (
-            <span className="text-green-600 font-medium">Gratis</span>
+            <span className={styles.freeShipping}>Gratis</span>
           ) : (
             `$${shippingCost.toFixed(2)}`
           )}
@@ -40,24 +41,24 @@ export function CartSummary() {
       </div>
 
       {/* Tax */}
-      <div className="flex justify-between items-center mb-3">
-        <span className="text-gray-600">Impuestos (16%)</span>
-        <span className="text-gray-900">${tax.toFixed(2)}</span>
+      <div className={styles.summaryRow}>
+        <span className={styles.summaryLabel}>Impuestos (16%)</span>
+        <span className={styles.summaryValue}>${tax.toFixed(2)}</span>
       </div>
 
       {/* Divider */}
-      <div className="border-t border-gray-200 my-4" />
+      <div className={styles.divider} />
 
       {/* Total */}
-      <div className="flex justify-between items-center mb-6">
-        <span className="text-lg font-semibold text-gray-900">Total</span>
-        <span className="text-2xl font-bold text-gray-900">
+      <div className={styles.totalRow}>
+        <span className={styles.totalLabel}>Total</span>
+        <span className={styles.totalValue}>
           ${total.toFixed(2)}
         </span>
       </div>
 
       {/* Shipping Calculator Note */}
-      <div className="bg-gray-50 rounded-md p-3 text-sm text-gray-600">
+      <div className={styles.shippingNote}>
         <p>
           {shippingCost === 0
             ? '¡Has desbloqueado envío gratis!'
@@ -66,7 +67,7 @@ export function CartSummary() {
       </div>
 
       {/* Tax Note */}
-      <p className="text-xs text-gray-500 mt-4">
+      <p className={styles.taxNote}>
         * Los impuestos se calculan según la dirección de envío
       </p>
     </div>

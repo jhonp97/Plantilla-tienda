@@ -29,9 +29,23 @@ export async function getProducts(filters?: ProductFilters): Promise<PaginatedPr
     if (filters.search) params.append('search', filters.search);
     if (filters.minPrice !== undefined) params.append('minPrice', filters.minPrice.toString());
     if (filters.maxPrice !== undefined) params.append('maxPrice', filters.maxPrice.toString());
-    if (filters.categorySlug) params.append('categorySlug', filters.categorySlug);
+    // Note: Backend expects categoryId, not categorySlug
+    // This will need to be handled differently
+    if (filters.categorySlug) params.append('categoryId', filters.categorySlug);
     if (filters.isActive !== undefined) params.append('isActive', filters.isActive.toString());
-    if (filters.sortBy) params.append('sortBy', filters.sortBy);
+    // Backend expects 'sort', not 'sortBy', and uses different format
+    // Map frontend sortBy to backend sort format
+    if (filters.sortBy) {
+      const sortMapping: Record<string, string> = {
+        'price_asc': 'priceAsc',
+        'price_desc': 'priceDesc',
+        'name_asc': 'nameAsc',
+        'name_desc': 'nameAsc', // Backend doesn't support nameDesc, use nameAsc
+        'newest': 'newest',
+      };
+      const backendSort = sortMapping[filters.sortBy] || filters.sortBy;
+      params.append('sort', backendSort);
+    }
     if (filters.page) params.append('page', filters.page.toString());
     if (filters.limit) params.append('limit', filters.limit.toString());
   }
@@ -47,7 +61,8 @@ export async function getProducts(filters?: ProductFilters): Promise<PaginatedPr
  * Get product by slug
  */
 export async function getProductBySlug(slug: string): Promise<Product> {
-  return apiGet<Product>(`/api/products/slug/${slug}`, {}, deps);
+  const response = await apiGet<{ success: boolean; data: Product }>(`/api/products/${slug}`, {}, deps);
+  return response.data;
 }
 
 /**

@@ -1,0 +1,209 @@
+/* CheckoutPaymentStep.module.css */
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-gray-900);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Order Summary */
+.orderSummary {
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: var(--color-gray-50);
+  border-radius: var(--radius-md);
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.summaryLabel {
+  color: var(--color-gray-600);
+}
+
+.summaryValue {
+  color: var(--color-gray-900);
+}
+
+.totalRow {
+  border-top: 1px solid var(--color-gray-200);
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.totalLabel {
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+
+.totalValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-gray-900);
+}
+
+/* Shipping Address Summary */
+.shippingSummary {
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: var(--color-gray-50);
+  border-radius: var(--radius-md);
+}
+
+.shippingSummaryTitle {
+  font-weight: 500;
+  color: var(--color-gray-900);
+  margin-bottom: var(--spacing-sm);
+}
+
+.shippingSummaryText {
+  color: var(--color-gray-600);
+  font-size: 0.875rem;
+}
+
+/* Payment Methods */
+.paymentMethods {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.paymentMethod {
+  display: flex;
+  align-items: flex-start;
+  padding: var(--spacing-md);
+  border: 2px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  background: var(--color-white);
+}
+
+.paymentMethod:hover {
+  border-color: var(--color-gray-300);
+}
+
+.paymentMethodSelected {
+  border-color: var(--color-primary);
+  background: #eff6ff;
+}
+
+.paymentMethodInput {
+  margin-top: var(--spacing-xs);
+  margin-right: var(--spacing-sm);
+  color: var(--color-primary);
+  accent-color: var(--color-primary);
+}
+
+.paymentMethodContent {
+  flex: 1;
+}
+
+.paymentMethodHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.paymentMethodTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.paymentMethodIcon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.paymentMethodName {
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+
+.paymentMethodDesc {
+  font-size: 0.875rem;
+  color: var(--color-gray-500);
+}
+
+/* Stripe Form Container */
+.stripeFormContainer {
+  margin-top: var(--spacing-md);
+}
+
+/* Navigation Buttons */
+.navButtons {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+}
+
+.backButton {
+  flex: 1;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border: 1px solid var(--color-gray-300);
+  color: var(--color-gray-700);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.backButton:hover {
+  background: var(--color-gray-50);
+}
+
+.submitButton {
+  flex: 1;
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-base);
+}
+
+.submitButton:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Trust Badges */
+.trustBadges {
+  margin-top: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  color: var(--color-gray-400);
+}
+
+.trustBadge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.trustBadge svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.trustBadgeText {
+  font-size: 0.75rem;
+}

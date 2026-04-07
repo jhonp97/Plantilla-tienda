@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useCheckoutStore } from '../../../store/checkoutStore';
 import { AddressForm } from './AddressForm';
 import type { Address, CreateAddressInput } from '../../../types/address.types';
+import styles from './CheckoutShippingStep.module.css';
 
 interface CheckoutShippingStepProps {
   onNext: () => void;
@@ -79,7 +80,7 @@ export function CheckoutShippingStep({ onNext, onBack }: CheckoutShippingStepPro
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">
+      <h2 className={styles.title}>
         Información de Envío
       </h2>
 
@@ -91,52 +92,52 @@ export function CheckoutShippingStep({ onNext, onBack }: CheckoutShippingStepPro
         />
 
         {/* Shipping Options Placeholder */}
-        <div className="mt-6 p-4 bg-gray-50 rounded-md border border-gray-200">
-          <h3 className="font-medium text-gray-900 mb-3">
+        <div className={styles.shippingOptions}>
+          <h3 className={styles.shippingOptionsTitle}>
             Método de Envío
           </h3>
-          <div className="space-y-2">
-            <label className="flex items-center p-3 border border-gray-200 rounded-md cursor-pointer hover:bg-white transition-colors">
+          <div className={styles.shippingOptionsList}>
+            <label className={styles.shippingOption}>
               <input
                 type="radio"
                 name="shippingOption"
                 defaultChecked
-                className="mr-3 text-blue-600 focus:ring-blue-500"
+                className={styles.shippingOptionInput}
               />
-              <div className="flex-1">
-                <p className="font-medium text-gray-900">Envío Estándar</p>
-                <p className="text-sm text-gray-500">3-5 días hábiles</p>
+              <div className={styles.shippingOptionInfo}>
+                <p className={styles.shippingOptionName}>Envío Estándar</p>
+                <p className={styles.shippingOptionTime}>3-5 días hábiles</p>
               </div>
-              <span className="font-medium text-gray-900">$9.99</span>
+              <span className={styles.shippingOptionPrice}>$9.99</span>
             </label>
-            <label className="flex items-center p-3 border border-gray-200 rounded-md cursor-pointer hover:bg-white transition-colors">
+            <label className={styles.shippingOption}>
               <input
                 type="radio"
                 name="shippingOption"
-                className="mr-3 text-blue-600 focus:ring-blue-500"
+                className={styles.shippingOptionInput}
               />
-              <div className="flex-1">
-                <p className="font-medium text-gray-900">Envío Express</p>
-                <p className="text-sm text-gray-500">1-2 días hábiles</p>
+              <div className={styles.shippingOptionInfo}>
+                <p className={styles.shippingOptionName}>Envío Express</p>
+                <p className={styles.shippingOptionTime}>1-2 días hábiles</p>
               </div>
-              <span className="font-medium text-gray-900">$19.99</span>
+              <span className={styles.shippingOptionPrice}>$19.99</span>
             </label>
           </div>
         </div>
 
         {/* Navigation Buttons */}
-        <div className="flex gap-4 mt-8">
+        <div className={styles.navButtons}>
           <button
             type="button"
             onClick={onBack}
-            className="flex-1 py-3 px-6 border border-gray-300 text-gray-700 font-semibold rounded-md hover:bg-gray-50 transition-colors"
+            className={styles.backButton}
           >
             Volver
           </button>
           <button
             type="submit"
             disabled={isLoading}
-            className="flex-1 py-3 px-6 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className={styles.continueButton}
           >
             {isLoading ? 'Procesando...' : 'Continuar con Pago'}
           </button>

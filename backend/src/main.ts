@@ -211,6 +211,7 @@ const productController = new ProductController(
   getProductBySlugUseCase,
   listProductsUseCase,
   updateStockUseCase,
+  categoryRepository,
 );
 
 const categoryController = new CategoryController(

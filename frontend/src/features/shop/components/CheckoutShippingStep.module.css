@@ -1,0 +1,113 @@
+/* CheckoutShippingStep.module.css */
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-gray-900);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Shipping Options */
+.shippingOptions {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: var(--color-gray-50);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-gray-200);
+}
+
+.shippingOptionsTitle {
+  font-weight: 500;
+  color: var(--color-gray-900);
+  margin-bottom: var(--spacing-sm);
+}
+
+.shippingOptionsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.shippingOption {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  background: var(--color-white);
+  transition: all var(--transition-fast);
+}
+
+.shippingOption:hover {
+  background: var(--color-gray-50);
+}
+
+.shippingOptionInput {
+  margin-right: var(--spacing-sm);
+  color: var(--color-primary);
+  accent-color: var(--color-primary);
+}
+
+.shippingOptionInfo {
+  flex: 1;
+}
+
+.shippingOptionName {
+  font-weight: 500;
+  color: var(--color-gray-900);
+}
+
+.shippingOptionTime {
+  font-size: 0.875rem;
+  color: var(--color-gray-500);
+}
+
+.shippingOptionPrice {
+  font-weight: 500;
+  color: var(--color-gray-900);
+}
+
+/* Navigation Buttons */
+.navButtons {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+}
+
+.backButton {
+  flex: 1;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border: 1px solid var(--color-gray-300);
+  color: var(--color-gray-700);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.backButton:hover {
+  background: var(--color-gray-50);
+}
+
+.continueButton {
+  flex: 1;
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-base);
+}
+
+.continueButton:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.continueButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

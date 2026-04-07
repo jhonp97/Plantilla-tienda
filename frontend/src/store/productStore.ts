@@ -92,7 +92,7 @@ export const useProductStore = create<ProductState>((set, get) => ({
       });
       
       set({
-        products: result.data,
+        products: result.items,
         pagination: {
           page: result.page,
           limit: result.limit,

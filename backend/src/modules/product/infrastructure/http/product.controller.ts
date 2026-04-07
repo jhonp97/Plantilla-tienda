@@ -6,6 +6,7 @@ import type { DeleteProductUseCase } from '../../application/use-cases/product';
 import type { GetProductBySlugUseCase } from '../../application/use-cases/product';
 import type { ListProductsUseCase } from '../../application/use-cases/product';
 import type { UpdateStockUseCase } from '../../application/use-cases/product';
+import type { ICategoryRepository } from '../../domain/repositories/ICategoryRepository';
 import { DomainError } from '@shared/errors/DomainError';
 import { createProductSchema } from '../../application/dto/CreateProductDto';
 import { updateProductSchema } from '../../application/dto/UpdateProductDto';
@@ -27,6 +28,7 @@ export class ProductController {
     private readonly getProductBySlugUseCase: GetProductBySlugUseCase,
     private readonly listProductsUseCase: ListProductsUseCase,
     private readonly updateStockUseCase: UpdateStockUseCase,
+    private readonly categoryRepository: ICategoryRepository,
   ) {}
 
   /**
@@ -67,10 +69,23 @@ export class ProductController {
    */
   list = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+      // Handle categorySlug -> categoryId conversion
+      let categoryId: string | undefined = undefined;
+      
+      if (req.query.categorySlug) {
+        const slug = String(req.query.categorySlug);
+        const category = await this.categoryRepository.findBySlug(slug);
+        if (category) {
+          categoryId = category.id;
+        }
+      } else if (req.query.categoryId) {
+        categoryId = String(req.query.categoryId);
+      }
+
       const queryParams = {
         page: req.query.page ? parseInt(String(req.query.page), 10) : undefined,
         limit: req.query.limit ? parseInt(String(req.query.limit), 10) : undefined,
-        categoryId: req.query.categoryId ? String(req.query.categoryId) : undefined,
+        categoryId: categoryId,
         minPrice: req.query.minPrice ? parseInt(String(req.query.minPrice), 10) : undefined,
         maxPrice: req.query.maxPrice ? parseInt(String(req.query.maxPrice), 10) : undefined,
         search: req.query.search ? String(req.query.search) : undefined,

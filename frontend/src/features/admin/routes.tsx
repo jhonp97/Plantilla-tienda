@@ -1,6 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Route } from 'react-router-dom';
-import { ProtectedRoute } from '@components/ProtectedRoute/ProtectedRoute';
+import { Routes, Route } from 'react-router-dom';
 
 const ProductManagement = lazy(() => import('./pages/ProductManagement'));
 const ProductCreate = lazy(() => import('./pages/ProductCreate'));
@@ -35,9 +34,9 @@ function LoadingFallback() {
 
 export function AdminRoutes() {
   return (
-    <ProtectedRoute requiredRole="ADMIN">
+    <Routes>
       {/* Dashboard */}
-      <Route path="dashboard" element={
+      <Route path="/" element={
         <Suspense fallback={<LoadingFallback />}>
           <AdminDashboardPage />
         </Suspense>
@@ -94,6 +93,6 @@ export function AdminRoutes() {
           <ShippingConfigPage />
         </Suspense>
       } />
-    </ProtectedRoute>
+    </Routes>
   );
 }

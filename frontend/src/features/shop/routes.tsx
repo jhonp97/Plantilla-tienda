@@ -1,8 +1,7 @@
 import { lazy, Suspense } from 'react';
-import { Route } from 'react-router-dom';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Layout } from '@components/Layout';
 
-const Login = lazy(() => import('./Login'));
-const Register = lazy(() => import('./Register'));
 const ProductList = lazy(() => import('./pages/ProductList'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail'));
 const CartPage = lazy(() => import('./pages/CartPage'));
@@ -32,57 +31,55 @@ function LoadingFallback() {
   );
 }
 
-import { Navigate } from 'react-router-dom';
+function ShopLayout() {
+  return (
+    <Layout>
+      <Outlet />
+    </Layout>
+  );
+}
 
 export function ShopRoutes() {
   return (
-    <>
-      <Route path="/" element={<Navigate to="/products" replace />} />
-      <Route path="login" element={
-        <Suspense fallback={<LoadingFallback />}>
-          <Login />
-        </Suspense>
-      } />
-      <Route path="register" element={
-        <Suspense fallback={<LoadingFallback />}>
-          <Register />
-        </Suspense>
-      } />
-      <Route path="products" element={
-        <Suspense fallback={<LoadingFallback />}>
-          <ProductList />
-        </Suspense>
-      } />
-      <Route path="products/:slug" element={
-        <Suspense fallback={<LoadingFallback />}>
-          <ProductDetail />
-        </Suspense>
-      } />
-      <Route path="cart" element={
-        <Suspense fallback={<LoadingFallback />}>
-          <CartPage />
-        </Suspense>
-      } />
-      <Route path="checkout" element={
-        <Suspense fallback={<LoadingFallback />}>
-          <CheckoutPage />
-        </Suspense>
-      } />
-      <Route path="checkout/success" element={
-        <Suspense fallback={<LoadingFallback />}>
-          <CheckoutSuccessPage />
-        </Suspense>
-      } />
-      <Route path="orders" element={
-        <Suspense fallback={<LoadingFallback />}>
-          <OrderHistoryPage />
-        </Suspense>
-      } />
-      <Route path="orders/:id" element={
-        <Suspense fallback={<LoadingFallback />}>
-          <OrderDetailPage />
-        </Suspense>
-      } />
-    </>
+    <Routes>
+      <Route element={<ShopLayout />}>
+        <Route path="/" element={<Navigate to="/products" replace />} />
+        <Route path="products" element={
+          <Suspense fallback={<LoadingFallback />}>
+            <ProductList />
+          </Suspense>
+        } />
+        <Route path="products/:slug" element={
+          <Suspense fallback={<LoadingFallback />}>
+            <ProductDetail />
+          </Suspense>
+        } />
+        <Route path="cart" element={
+          <Suspense fallback={<LoadingFallback />}>
+            <CartPage />
+          </Suspense>
+        } />
+        <Route path="checkout" element={
+          <Suspense fallback={<LoadingFallback />}>
+            <CheckoutPage />
+          </Suspense>
+        } />
+        <Route path="checkout/success" element={
+          <Suspense fallback={<LoadingFallback />}>
+            <CheckoutSuccessPage />
+          </Suspense>
+        } />
+        <Route path="orders" element={
+          <Suspense fallback={<LoadingFallback />}>
+            <OrderHistoryPage />
+          </Suspense>
+        } />
+        <Route path="orders/:id" element={
+          <Suspense fallback={<LoadingFallback />}>
+            <OrderDetailPage />
+          </Suspense>
+        } />
+      </Route>
+    </Routes>
   );
 }

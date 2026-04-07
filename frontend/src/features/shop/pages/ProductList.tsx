@@ -6,16 +6,17 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useProductStore } from '../../../store/productStore';
 import type { Category, Product, ProductFilters } from '../../../types/product.types';
+import styles from './ProductList.module.css';
 
 // Skeleton component for loading state
 function ProductCardSkeleton() {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
-      <div className="aspect-square bg-gray-200" />
-      <div className="p-4 space-y-3">
-        <div className="h-4 bg-gray-200 rounded w-3/4" />
-        <div className="h-4 bg-gray-200 rounded w-1/2" />
-        <div className="h-6 bg-gray-200 rounded w-1/3 mt-4" />
+    <div className={`${styles.skeleton} ${styles.animatePulse}`}>
+      <div className={styles.skeletonImage} />
+      <div className={styles.skeletonContent}>
+        <div className={styles.skeletonTitle} />
+        <div className={styles.skeletonSubtitle} />
+        <div className={styles.skeletonPrice} />
       </div>
     </div>
   );
@@ -32,44 +33,44 @@ function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       to={`/products/${product.slug}`}
-      className="group bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+      className={styles.productCard}
     >
-      <div className="aspect-square overflow-hidden bg-gray-100 relative">
+      <div className={styles.productCardImage}>
         {primaryImage ? (
           <img
             src={primaryImage.url}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className={styles.productImage}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-400">
+          <div className={styles.productImagePlaceholder}>
             <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
         )}
         {!product.isActive && (
-          <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+          <div className={styles.productBadge}>
             Agotado
           </div>
         )}
       </div>
-      <div className="p-4">
-        <h3 className="text-lg font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
+      <div className={styles.productCardContent}>
+        <h3 className={styles.productName}>
           {product.name}
         </h3>
         {product.category && (
-          <p className="text-sm text-gray-500 mt-1">{product.category.name}</p>
+          <p className={styles.productCategory}>{product.category.name}</p>
         )}
-        <div className="mt-3 flex items-center justify-between">
-          <span className="text-xl font-bold text-gray-900">
+        <div className={styles.productPriceRow}>
+          <span className={styles.productPrice}>
             ${product.price.toFixed(2)}
           </span>
-          <span className="text-sm text-gray-500">
+          <span className={styles.productStock}>
             {product.stock > 0 ? `${product.stock} disponibles` : 'Agotado'}
           </span>
         </div>
-        <button className="mt-4 w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+        <button className={styles.productButton}>
           Ver detalle
         </button>
       </div>
@@ -105,35 +106,35 @@ function FilterSidebar({
   };
 
   return (
-    <aside className="bg-white rounded-lg shadow-md p-4 sticky top-4">
-      <h2 className="text-lg font-semibold mb-4">Filtros</h2>
+    <aside className={styles.filterSidebar}>
+      <h2 className={styles.filterTitle}>Filtros</h2>
       
       {/* Categories Filter */}
-      <div className="mb-6">
-        <h3 className="font-medium text-gray-700 mb-3">Categorías</h3>
-        <div className="space-y-2">
-          <label className="flex items-center cursor-pointer">
+      <div className={styles.filterSection}>
+        <h3 className={styles.filterSectionTitle}>Categorías</h3>
+        <div className={styles.filterOptions}>
+          <label className={styles.filterLabel}>
             <input
               type="radio"
               name="category"
               checked={!selectedCategory}
               onChange={() => onCategoryChange(undefined)}
-              className="mr-2 text-blue-600 focus:ring-blue-500"
+              className={styles.filterInput}
             />
-            <span className="text-gray-600">Todas</span>
+            <span>Todas</span>
           </label>
           {categories && categories.map((category) => (
-            <label key={category.id} className="flex items-center cursor-pointer">
+            <label key={category.id} className={styles.filterLabel}>
               <input
                 type="radio"
                 name="category"
                 checked={selectedCategory === category.slug}
                 onChange={() => onCategoryChange(category.slug)}
-                className="mr-2 text-blue-600 focus:ring-blue-500"
+                className={styles.filterInput}
               />
-              <span className="text-gray-600">{category.name}</span>
+              <span>{category.name}</span>
               {category.productCount !== undefined && (
-                <span className="ml-auto text-xs text-gray-400">
+                <span className={styles.filterCount}>
                   ({category.productCount})
                 </span>
               )}
@@ -143,28 +144,28 @@ function FilterSidebar({
       </div>
 
       {/* Price Range Filter */}
-      <div className="mb-6">
-        <h3 className="font-medium text-gray-700 mb-3">Precio</h3>
-        <div className="flex gap-2 items-center">
+      <div className={styles.filterSection}>
+        <h3 className={styles.filterSectionTitle}>Precio</h3>
+        <div className={styles.priceInputs}>
           <input
             type="number"
             placeholder="Min"
             value={localMinPrice}
             onChange={(e) => setLocalMinPrice(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={styles.priceInput}
           />
-          <span className="text-gray-400">-</span>
+          <span className={styles.priceSeparator}>-</span>
           <input
             type="number"
             placeholder="Max"
             value={localMaxPrice}
             onChange={(e) => setLocalMaxPrice(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={styles.priceInput}
           />
         </div>
         <button
           onClick={handlePriceApply}
-          className="mt-2 w-full py-2 px-4 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm"
+          className={styles.applyButton}
         >
           Aplicar
         </button>
@@ -184,7 +185,7 @@ function SortDropdown({ value, onChange }: SortDropdownProps) {
     <select
       value={value || ''}
       onChange={(e) => onChange(e.target.value || undefined)}
-      className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+      className={styles.sortDropdown}
     >
       <option value="">Ordenar por...</option>
       <option value="price_asc">Precio: Menor a Mayor</option>
@@ -220,11 +221,11 @@ function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) 
   }
 
   return (
-    <div className="flex justify-center items-center gap-2 mt-8">
+    <div className={styles.pagination}>
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className={styles.pageButton}
       >
         Anterior
       </button>
@@ -232,32 +233,28 @@ function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) 
         <>
           <button
             onClick={() => onPageChange(1)}
-            className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100"
+            className={styles.pageButton}
           >
             1
           </button>
-          {startPage > 2 && <span className="px-2">...</span>}
+          {startPage > 2 && <span className={styles.ellipsis}>...</span>}
         </>
       )}
       {pages.map((page) => (
         <button
           key={page}
           onClick={() => onPageChange(page)}
-          className={`px-4 py-2 border rounded-md transition-colors ${
-            page === currentPage
-              ? 'bg-blue-600 text-white border-blue-600'
-              : 'border-gray-300 hover:bg-gray-100'
-          }`}
+          className={`${styles.pageButton} ${page === currentPage ? styles.pageButtonActive : ''}`}
         >
           {page}
         </button>
       ))}
       {endPage < totalPages && (
         <>
-          {endPage < totalPages - 1 && <span className="px-2">...</span>}
+          {endPage < totalPages - 1 && <span className={styles.ellipsis}>...</span>}
           <button
             onClick={() => onPageChange(totalPages)}
-            className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100"
+            className={styles.pageButton}
           >
             {totalPages}
           </button>
@@ -266,7 +263,7 @@ function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) 
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className={styles.pageButton}
       >
         Siguiente
       </button>
@@ -315,16 +312,16 @@ export default function ProductList() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-lg shadow-md text-center">
-          <svg className="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className={styles.errorContainer}>
+        <div className={styles.errorCard}>
+          <svg className={styles.errorIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Error</h2>
-          <p className="text-gray-600">{error}</p>
+          <h2 className={styles.errorTitle}>Error</h2>
+          <p className={styles.errorText}>{error}</p>
           <button
             onClick={() => fetchProducts()}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            className={styles.retryButton}
           >
             Reintentar
           </button>
@@ -334,13 +331,13 @@ export default function ProductList() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Catálogo de Productos</h1>
+    <div className={styles.pageContainer}>
+      <div className={styles.container}>
+        <h1 className={styles.pageTitle}>Catálogo de Productos</h1>
         
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className={styles.mainContent}>
           {/* Filters Sidebar */}
-          <div className="w-full lg:w-64 flex-shrink-0">
+          <div className={styles.sidebarContainer}>
             <FilterSidebar
               categories={categories}
               selectedCategory={selectedCategory}
@@ -352,10 +349,10 @@ export default function ProductList() {
           </div>
 
           {/* Products Grid */}
-          <div className="flex-1">
+          <div className={styles.productsContainer}>
             {/* Sort and Results Info */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-              <p className="text-gray-600">
+            <div className={styles.headerRow}>
+              <p className={styles.resultsText}>
                 {isLoading ? 'Cargando...' : `${pagination.total} productos encontrados`}
               </p>
               <SortDropdown value={filters.sortBy} onChange={handleSortChange} />
@@ -363,21 +360,21 @@ export default function ProductList() {
 
             {/* Products Grid */}
             {isLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className={styles.productsGrid}>
                 {[...Array(8)].map((_, i) => (
                   <ProductCardSkeleton key={i} />
                 ))}
               </div>
             ) : !products || products.length === 0 ? (
-              <div className="text-center py-16">
-                <svg className="w-24 h-24 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className={styles.emptyState}>
+                <svg className={styles.emptyIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                 </svg>
-                <h3 className="text-xl font-medium text-gray-900 mb-2">No se encontraron productos</h3>
-                <p className="text-gray-500">Intenta ajustar los filtros para encontrar lo que buscas</p>
+                <h3 className={styles.emptyTitle}>No se encontraron productos</h3>
+                <p className={styles.emptyText}>Intenta ajustar los filtros para encontrar lo que buscas</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className={styles.productsGrid}>
                 {products.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}

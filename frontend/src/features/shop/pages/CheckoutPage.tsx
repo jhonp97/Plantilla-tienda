@@ -9,6 +9,7 @@ import { CheckoutReviewStep } from '../components/CheckoutReviewStep';
 import { CheckoutShippingStep } from '../components/CheckoutShippingStep';
 import { CheckoutPaymentStep } from '../components/CheckoutPaymentStep';
 import CheckoutSuccessPage from './CheckoutSuccessPage';
+import styles from './CheckoutPage.module.css';
 
 const STEPS = [
   { id: 'review', label: 'Revisar', icon: '1' },
@@ -63,24 +64,24 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+    <div className={styles.pageContainer}>
+      <div className={styles.container}>
+        <h1 className={styles.pageTitle}>
           Finalizar Compra
         </h1>
 
         {/* Stepper */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
+        <div className={styles.stepperContainer}>
+          <div className={styles.stepper}>
             {STEPS.map((step, index) => (
-              <div key={step.id} className="flex-1 relative">
+              <div key={step.id} className={styles.step}>
                 {/* Connector Line */}
                 {index > 0 && (
                   <div
-                    className={`absolute top-5 left-[-50%] w-[100%] h-0.5 ${
+                    className={`${styles.connector} ${
                       index <= currentStepIndex
-                        ? 'bg-blue-600'
-                        : 'bg-gray-300'
+                        ? styles.connectorActive
+                        : styles.connectorInactive
                     }`}
                   />
                 )}
@@ -93,16 +94,16 @@ export default function CheckoutPage() {
                     }
                   }}
                   disabled={index > currentStepIndex}
-                  className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all duration-300 ${
+                  className={`${styles.stepButton} ${
                     index < currentStepIndex
-                      ? 'bg-blue-600 text-white'
+                      ? styles.stepButtonCompleted
                       : index === currentStepIndex
-                      ? 'bg-blue-600 text-white ring-4 ring-blue-200'
-                      : 'bg-gray-300 text-gray-500'
-                  }`}
+                      ? styles.stepButtonActive
+                      : styles.stepButtonPending
+                  } ${index === currentStepIndex ? styles.stepButtonActiveRing : ''}`}
                 >
                   {index < currentStepIndex ? (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className={styles.stepIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   ) : (
@@ -112,12 +113,12 @@ export default function CheckoutPage() {
 
                 {/* Step Label */}
                 <p
-                  className={`mt-2 text-xs sm:text-sm text-center ${
+                  className={`${styles.stepLabel} ${
                     index === currentStepIndex
-                      ? 'font-semibold text-blue-600'
+                      ? styles.stepLabelActive
                       : index < currentStepIndex
-                      ? 'text-gray-600'
-                      : 'text-gray-400'
+                      ? styles.stepLabelCompleted
+                      : styles.stepLabelPending
                   }`}
                 >
                   {step.label}
@@ -128,7 +129,7 @@ export default function CheckoutPage() {
         </div>
 
         {/* Step Content */}
-        <div className="bg-white rounded-lg shadow-md p-6 sm:p-8">
+        <div className={styles.stepContent}>
           {renderStep()}
         </div>
       </div>

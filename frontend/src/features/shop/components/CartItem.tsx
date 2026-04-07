@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCartStore, type CartItem as CartItemType } from '../../../store/cartStore';
+import styles from './CartItem.module.css';
 
 interface CartItemProps {
   item: CartItemType;
@@ -36,24 +37,24 @@ export function CartItem({ item }: CartItemProps) {
 
   return (
     <div
-      className={`bg-white rounded-lg shadow-md p-4 transition-all duration-300 ${
-        isRemoving ? 'opacity-0 scale-95' : 'opacity-100'
+      className={`${styles.cartItem} ${
+        isRemoving ? styles.cartItemRemoving : styles.cartItemVisible
       }`}
     >
-      <div className="flex gap-4">
+      <div className={styles.cartItemContent}>
         {/* Product Image */}
         <Link
           to={`/products/${item.productId}`}
-          className="w-24 h-24 flex-shrink-0 rounded-md overflow-hidden bg-gray-100"
+          className={styles.productImageLink}
         >
           {item.imageUrl ? (
             <img
               src={item.imageUrl}
               alt={item.name}
-              className="w-full h-full object-cover hover:scale-105 transition-transform"
+              className={styles.productImage}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400">
+            <div className={styles.productImagePlaceholder}>
               <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
@@ -67,16 +68,16 @@ export function CartItem({ item }: CartItemProps) {
         </Link>
 
         {/* Product Details */}
-        <div className="flex-1 min-w-0">
-          <div className="flex justify-between items-start">
-            <div className="min-w-0 flex-1">
+        <div className={styles.productDetails}>
+          <div className={styles.productHeader}>
+            <div className={styles.productInfo}>
               <Link
                 to={`/products/${item.productId}`}
-                className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors line-clamp-2"
+                className={styles.productName}
               >
                 {item.name}
               </Link>
-              <p className="text-gray-500 mt-1">
+              <p className={styles.productPrice}>
                 ${item.price.toFixed(2)} cada uno
               </p>
             </div>
@@ -84,7 +85,7 @@ export function CartItem({ item }: CartItemProps) {
             {/* Remove Button */}
             <button
               onClick={handleRemove}
-              className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+              className={styles.removeButton}
               aria-label="Eliminar del carrito"
             >
               <svg
@@ -103,25 +104,25 @@ export function CartItem({ item }: CartItemProps) {
             </button>
           </div>
 
-          <div className="flex items-center justify-between mt-4">
+          <div className={styles.productFooter}>
             {/* Quantity Stepper */}
-            <div className="flex items-center border border-gray-300 rounded-md">
+            <div className={styles.quantityControls}>
               <button
                 onClick={() => handleQuantityChange(quantity - 1)}
                 disabled={quantity <= 1}
-                className="px-3 py-2 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className={styles.quantityButton}
                 aria-label="Disminuir cantidad"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                 </svg>
               </button>
-              <span className="px-4 py-2 text-gray-900 font-medium min-w-[3rem] text-center">
+              <span className={styles.quantityValue}>
                 {quantity}
               </span>
               <button
                 onClick={() => handleQuantityChange(quantity + 1)}
-                className="px-3 py-2 text-gray-600 hover:bg-gray-100 transition-colors"
+                className={styles.quantityButton}
                 aria-label="Aumentar cantidad"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,8 +132,8 @@ export function CartItem({ item }: CartItemProps) {
             </div>
 
             {/* Item Total */}
-            <div className="text-right">
-              <p className="text-lg font-semibold text-gray-900">
+            <div className={styles.itemTotal}>
+              <p className={styles.itemTotalValue}>
                 ${itemTotal.toFixed(2)}
               </p>
             </div>

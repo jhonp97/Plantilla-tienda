@@ -1,0 +1,172 @@
+/* CheckoutSuccessPage.module.css - CSS Modules for CheckoutSuccessPage */
+
+/* ============ Main Container ============ */
+.pageContainer {
+  min-height: 100vh;
+  background: var(--color-gray-50);
+  padding: var(--spacing-xl) 0;
+}
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+/* ============ Success Card ============ */
+.successCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
+}
+
+/* ============ Success Icon ============ */
+.successIconContainer {
+  margin-bottom: var(--spacing-lg);
+}
+
+.successIconWrapper {
+  width: 5rem;
+  height: 5rem;
+  margin: 0 auto;
+  background: #dcfce7;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.successIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--color-success);
+}
+
+/* ============ Success Message ============ */
+.successTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--color-gray-900);
+  margin-bottom: var(--spacing-sm);
+}
+
+.successText {
+  color: var(--color-gray-600);
+  margin-bottom: var(--spacing-xs);
+}
+
+.successTextSecondary {
+  color: var(--color-gray-500);
+  font-size: 0.875rem;
+  margin-bottom: var(--spacing-lg);
+}
+
+.orderNumber {
+  font-family: monospace;
+  font-weight: 600;
+}
+
+/* ============ Email Notice ============ */
+.emailNotice {
+  background: #dbeafe;
+  border: 1px solid #93c5fd;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.emailNoticeContent {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+}
+
+.emailIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-primary);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.emailNoticeText {
+  text-align: left;
+}
+
+.emailNoticeTitle {
+  font-weight: 500;
+  color: var(--color-gray-900);
+}
+
+.emailNoticeText {
+  font-size: 0.875rem;
+  color: var(--color-gray-700);
+}
+
+/* ============ Order Summary ============ */
+.orderSummary {
+  border-top: 1px solid var(--color-gray-200);
+  border-bottom: 1px solid var(--color-gray-200);
+  padding: var(--spacing-lg) 0;
+  margin-bottom: var(--spacing-lg);
+}
+
+.orderSummaryText {
+  color: var(--color-gray-600);
+  margin-bottom: var(--spacing-md);
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+@media (min-width: 640px) {
+  .actionButtons {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+.primaryButton {
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  transition: background var(--transition-base);
+}
+
+.primaryButton:hover {
+  background: var(--color-primary-hover);
+}
+
+.secondaryButton {
+  padding: var(--spacing-md) var(--spacing-xl);
+  border: 1px solid var(--color-gray-300);
+  color: var(--color-gray-700);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  transition: all var(--transition-base);
+}
+
+.secondaryButton:hover {
+  background: var(--color-gray-50);
+}
+
+/* ============ Support Info ============ */
+.supportInfo {
+  font-size: 0.875rem;
+  color: var(--color-gray-500);
+}
+
+.supportLink {
+  color: var(--color-primary);
+}
+
+.supportLink:hover {
+  text-decoration: underline;
+}

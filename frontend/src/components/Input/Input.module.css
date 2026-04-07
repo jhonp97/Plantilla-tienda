@@ -11,6 +11,7 @@
 }
 
 .input {
+  width: 100%;
   padding: var(--spacing-sm) var(--spacing-md);
   border: 1px solid var(--surface-border);
   border-radius: var(--radius-md);
@@ -18,6 +19,7 @@
   color: var(--text-primary);
   font-size: var(--font-size-base);
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  box-sizing: border-box;
 }
 
 .input:focus {
@@ -45,5 +47,39 @@
 
 .helperText {
   font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+}
+
+/* Input container for icon positioning */
+.inputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputWithLeadingIcon {
+  padding-left: 40px;
+}
+
+.inputWithTrailingIcon {
+  padding-right: 40px;
+}
+
+.leadingIcon {
+  position: absolute;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.trailingIcon {
+  position: absolute;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--text-tertiary);
 }

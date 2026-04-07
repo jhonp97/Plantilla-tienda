@@ -79,7 +79,7 @@ export interface CreateCategoryInput {
 }
 
 export interface PaginatedProducts {
-  data: Product[];
+  items: Product[];
   total: number;
   page: number;
   limit: number;

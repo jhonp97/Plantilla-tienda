@@ -1,10 +1,33 @@
 // Seed usando la configuración existente del proyecto
 import { prisma } from '../src/shared/infra/prisma/client';
+import bcrypt from 'bcryptjs';
 
 async function main() {
   console.log('🌱 Starting database seed...');
 
   try {
+    // Create admin user
+    const adminPassword = await bcrypt.hash('admin123', 10);
+    await prisma.user.upsert({
+      where: { email: 'admin@tienda.com' },
+      update: {},
+      create: {
+        email: 'admin@tienda.com',
+        passwordHash: adminPassword,
+        fullName: 'Administrador',
+        nifCif: '12345678Z',
+        role: 'ADMIN',
+        address: {
+          street: 'Calle Admin 123',
+          postalCode: '28001',
+          city: 'Madrid',
+          province: 'Madrid',
+          country: 'España',
+        },
+      },
+    });
+    console.log('✅ Admin user created: admin@tienda.com / admin123');
+
     // Create categories
     const electronics = await prisma.category.upsert({
       where: { slug: 'electronica' },

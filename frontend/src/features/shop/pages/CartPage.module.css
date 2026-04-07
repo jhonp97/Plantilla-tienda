@@ -1,0 +1,275 @@
+/* CartPage.module.css - CSS Modules for CartPage */
+
+/* ============ Main Container ============ */
+.pageContainer {
+  min-height: 100vh;
+  background: var(--color-gray-50);
+  padding: var(--spacing-xl) 0;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.pageTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--color-gray-900);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* ============ Cart Grid ============ */
+.cartGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+}
+
+@media (min-width: 1024px) {
+  .cartGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.cartItems {
+  grid-column: span 1;
+}
+
+@media (min-width: 1024px) {
+  .cartItems {
+    grid-column: span 2;
+  }
+}
+
+.cartItemsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* ============ Empty State ============ */
+.emptyContainer {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.emptyState {
+  text-align: center;
+  padding: var(--spacing-2xl) 0;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.emptyIcon {
+  width: 6rem;
+  height: 6rem;
+  color: var(--color-gray-300);
+  margin: 0 auto var(--spacing-lg);
+}
+
+.emptyTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-gray-900);
+  margin-bottom: var(--spacing-sm);
+}
+
+.emptyText {
+  color: var(--color-gray-500);
+  margin-bottom: var(--spacing-xl);
+}
+
+.emptyButton {
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background var(--transition-base);
+}
+
+.emptyButton:hover {
+  background: var(--color-primary-hover);
+}
+
+/* ============ Promo Code Section ============ */
+.promoSection {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+}
+
+.promoTitle {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--color-gray-900);
+  margin-bottom: var(--spacing-sm);
+}
+
+.promoForm {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.promoInput {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.promoInput:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.promoButton {
+  padding: var(--spacing-sm) var(--spacing-xl);
+  background: var(--color-gray-800);
+  color: var(--color-white);
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-base);
+}
+
+.promoButton:hover {
+  background: var(--color-gray-900);
+}
+
+.promoError {
+  color: var(--color-danger);
+  font-size: 0.875rem;
+  margin-top: var(--spacing-sm);
+}
+
+/* ============ Free Shipping Progress ============ */
+.shippingProgress {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-lg);
+}
+
+.shippingTextRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.shippingText {
+  font-size: 0.875rem;
+  color: var(--color-gray-600);
+}
+
+.shippingAmount {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-gray-900);
+}
+
+.progressBar {
+  width: 100%;
+  background: var(--color-gray-200);
+  border-radius: 9999px;
+  height: 0.75rem;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: all var(--transition-base);
+}
+
+.progressFillComplete {
+  background: var(--color-success);
+}
+
+.progressFillProgress {
+  background: var(--color-primary);
+}
+
+/* ============ Summary Sidebar ============ */
+.summarySidebar {
+  grid-column: span 1;
+}
+
+@media (min-width: 1024px) {
+  .summarySidebar {
+    grid-column: span 1;
+  }
+}
+
+.summarySticky {
+  position: sticky;
+  top: var(--spacing-md);
+}
+
+/* ============ Trust Badges ============ */
+.trustBadges {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+}
+
+.badgesRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  color: var(--color-gray-500);
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.badge svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.badgeText {
+  font-size: 0.75rem;
+}
+
+/* ============ Checkout Button ============ */
+.checkoutButton {
+  width: 100%;
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-lg);
+}
+
+.checkoutButton:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.checkoutButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

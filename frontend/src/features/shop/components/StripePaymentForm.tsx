@@ -4,6 +4,7 @@
  */
 import { useState, useEffect } from 'react';
 import { useCheckoutStore } from '../../../store/checkoutStore';
+import styles from './StripePaymentForm.module.css';
 
 interface StripePaymentFormProps {
   amount: number;
@@ -23,13 +24,6 @@ export function StripePaymentForm({ amount, onSuccess }: StripePaymentFormProps)
   const [expiry, setExpiry] = useState('');
   const [cvc, setCvc] = useState('');
   const [cardErrors, setCardErrors] = useState<Record<string, string>>({});
-
-  // Note: In production, you would initialize Stripe Elements here
-  // import { loadStripe } from '@stripe/stripe-js';
-  // import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-  //
-  // const stripePromise = loadStripe('your-publishable-key');
-  // Then wrap this component with <Elements stripe={stripePromise}>
 
   const formatCardNumber = (value: string) => {
     const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
@@ -117,13 +111,13 @@ export function StripePaymentForm({ amount, onSuccess }: StripePaymentFormProps)
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className={styles.form}>
       {/* Card Number */}
-      <div>
-        <label htmlFor="cardNumber" className="block text-sm font-medium text-gray-700 mb-1">
+      <div className={styles.formGroup}>
+        <label htmlFor="cardNumber" className={styles.label}>
           Número de Tarjeta
         </label>
-        <div className="relative">
+        <div className={styles.cardInputWrapper}>
           <input
             type="text"
             id="cardNumber"
@@ -131,11 +125,9 @@ export function StripePaymentForm({ amount, onSuccess }: StripePaymentFormProps)
             onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
             maxLength={19}
             placeholder="4242 4242 4242 4242"
-            className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              cardErrors.cardNumber ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`${styles.input} ${cardErrors.cardNumber ? styles.inputError : ''}`}
           />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+          <div className={styles.cardIcon}>
             <svg className="h-8 w-auto" viewBox="0 0 50 20" fill="none">
               <rect width="50" height="20" rx="2" fill="#F1F5F9" />
               <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="8" fill="#64748B">VISA</text>
@@ -143,14 +135,14 @@ export function StripePaymentForm({ amount, onSuccess }: StripePaymentFormProps)
           </div>
         </div>
         {cardErrors.cardNumber && (
-          <p className="text-red-500 text-sm mt-1">{cardErrors.cardNumber}</p>
+          <p className={styles.errorText}>{cardErrors.cardNumber}</p>
         )}
       </div>
 
       {/* Expiry and CVC */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="expiry" className="block text-sm font-medium text-gray-700 mb-1">
+      <div className={styles.expiryCvcRow}>
+        <div className={styles.formGroup}>
+          <label htmlFor="expiry" className={styles.label}>
             Vencimiento
           </label>
           <input
@@ -160,16 +152,14 @@ export function StripePaymentForm({ amount, onSuccess }: StripePaymentFormProps)
             onChange={(e) => setExpiry(formatExpiry(e.target.value))}
             maxLength={5}
             placeholder="MM/YY"
-            className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              cardErrors.expiry ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`${styles.input} ${cardErrors.expiry ? styles.inputError : ''}`}
           />
           {cardErrors.expiry && (
-            <p className="text-red-500 text-sm mt-1">{cardErrors.expiry}</p>
+            <p className={styles.errorText}>{cardErrors.expiry}</p>
           )}
         </div>
-        <div>
-          <label htmlFor="cvc" className="block text-sm font-medium text-gray-700 mb-1">
+        <div className={styles.formGroup}>
+          <label htmlFor="cvc" className={styles.label}>
             CVC
           </label>
           <input
@@ -179,20 +169,18 @@ export function StripePaymentForm({ amount, onSuccess }: StripePaymentFormProps)
             onChange={(e) => setCvc(e.target.value.replace(/\D/g, '').slice(0, 4))}
             maxLength={4}
             placeholder="123"
-            className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              cardErrors.cvc ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`${styles.input} ${cardErrors.cvc ? styles.inputError : ''}`}
           />
           {cardErrors.cvc && (
-            <p className="text-red-500 text-sm mt-1">{cardErrors.cvc}</p>
+            <p className={styles.errorText}>{cardErrors.cvc}</p>
           )}
         </div>
       </div>
 
       {/* Error Message */}
       {error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-md">
-          <p className="text-red-600 text-sm">{error}</p>
+        <div className={styles.errorMessage}>
+          <p className={styles.errorMessageText}>{error}</p>
         </div>
       )}
 
@@ -200,11 +188,11 @@ export function StripePaymentForm({ amount, onSuccess }: StripePaymentFormProps)
       <button
         type="submit"
         disabled={isLoading || !cardNumber || !expiry || !cvc}
-        className="w-full py-3 px-6 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className={styles.submitButton}
       >
         {isLoading ? (
-          <span className="flex items-center justify-center gap-2">
-            <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+          <span className={styles.spinner}>
+            <svg className={styles.spinnerIcon} viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
             </svg>
@@ -216,21 +204,21 @@ export function StripePaymentForm({ amount, onSuccess }: StripePaymentFormProps)
       </button>
 
       {/* Test Cards Info */}
-      <div className="mt-4 p-3 bg-gray-50 rounded-md">
-        <p className="text-xs text-gray-500 mb-2">Tarjetas de prueba:</p>
-        <div className="flex flex-wrap gap-2">
+      <div className={styles.testCardsInfo}>
+        <p className={styles.testCardsLabel}>Tarjetas de prueba:</p>
+        <div className={styles.testCardsList}>
           {TEST_CARDS.map((card) => (
             <button
               key={card.number}
               type="button"
               onClick={() => setCardNumber(card.number)}
-              className="text-xs px-2 py-1 bg-white border border-gray-200 rounded hover:bg-gray-100"
+              className={styles.testCardButton}
             >
               {card.brand}
             </button>
           ))}
         </div>
-        <p className="text-xs text-gray-400 mt-2">
+        <p className={styles.testCardsHint}>
           Use cualquier fecha futura y CVC de 3 dígitos
         </p>
       </div>

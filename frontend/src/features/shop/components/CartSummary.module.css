@@ -1,0 +1,82 @@
+/* CartSummary.module.css - CSS Modules for CartSummary component */
+
+.cartSummary {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-lg);
+}
+
+.summaryTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-gray-900);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Summary Rows */
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.summaryLabel {
+  color: var(--color-gray-600);
+}
+
+.summaryValue {
+  color: var(--color-gray-900);
+}
+
+.freeShipping {
+  color: var(--color-success);
+  font-weight: 500;
+}
+
+/* Divider */
+.divider {
+  border-top: 1px solid var(--color-gray-200);
+  margin: var(--spacing-md) 0;
+}
+
+/* Total Row */
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.totalLabel {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+
+.totalValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-gray-900);
+}
+
+/* Shipping Calculator Note */
+.shippingNote {
+  background: var(--color-gray-50);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
+  font-size: 0.875rem;
+  color: var(--color-gray-600);
+}
+
+.shippingNote p {
+  margin: 0;
+}
+
+/* Tax Note */
+.taxNote {
+  font-size: 0.75rem;
+  color: var(--color-gray-500);
+  margin-top: var(--spacing-md);
+}

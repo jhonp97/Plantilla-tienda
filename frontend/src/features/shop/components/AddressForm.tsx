@@ -2,6 +2,7 @@
  * AddressForm - Reusable address form component
  */
 import type { CreateAddressInput } from '../../../types/address.types';
+import styles from './AddressForm.module.css';
 
 interface AddressFormProps {
   formData: CreateAddressInput;
@@ -18,11 +19,11 @@ export function AddressForm({ formData, setFormData, errors }: AddressFormProps)
   };
 
   return (
-    <div className="space-y-4">
+    <div className={styles.formContainer}>
       {/* Name Fields */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+      <div className={styles.nameFields}>
+        <div className={styles.formGroup}>
+          <label htmlFor="firstName" className={styles.label}>
             Nombre *
           </label>
           <input
@@ -31,17 +32,15 @@ export function AddressForm({ formData, setFormData, errors }: AddressFormProps)
             name="firstName"
             value={formData.firstName}
             onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.firstName ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`${styles.input} ${errors.firstName ? styles.inputError : ''}`}
             placeholder="Juan"
           />
           {errors.firstName && (
-            <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
+            <p className={styles.errorText}>{errors.firstName}</p>
           )}
         </div>
-        <div>
-          <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+        <div className={styles.formGroup}>
+          <label htmlFor="lastName" className={styles.label}>
             Apellidos *
           </label>
           <input
@@ -50,20 +49,18 @@ export function AddressForm({ formData, setFormData, errors }: AddressFormProps)
             name="lastName"
             value={formData.lastName}
             onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.lastName ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`${styles.input} ${errors.lastName ? styles.inputError : ''}`}
             placeholder="Pérez García"
           />
           {errors.lastName && (
-            <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
+            <p className={styles.errorText}>{errors.lastName}</p>
           )}
         </div>
       </div>
 
       {/* Company (Optional) */}
-      <div>
-        <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
+      <div className={styles.formGroup}>
+        <label htmlFor="company" className={styles.label}>
           Empresa (opcional)
         </label>
         <input
@@ -72,14 +69,14 @@ export function AddressForm({ formData, setFormData, errors }: AddressFormProps)
           name="company"
           value={formData.company || ''}
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={styles.input}
           placeholder="Empresa S.A. de C.V."
         />
       </div>
 
       {/* Address Fields */}
-      <div>
-        <label htmlFor="address1" className="block text-sm font-medium text-gray-700 mb-1">
+      <div className={styles.formGroup}>
+        <label htmlFor="address1" className={styles.label}>
           Dirección *
         </label>
         <input
@@ -88,18 +85,16 @@ export function AddressForm({ formData, setFormData, errors }: AddressFormProps)
           name="address1"
           value={formData.address1}
           onChange={handleChange}
-          className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            errors.address1 ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={`${styles.input} ${errors.address1 ? styles.inputError : ''}`}
           placeholder="Calle Principal 123"
         />
         {errors.address1 && (
-          <p className="text-red-500 text-sm mt-1">{errors.address1}</p>
+          <p className={styles.errorText}>{errors.address1}</p>
         )}
       </div>
 
-      <div>
-        <label htmlFor="address2" className="block text-sm font-medium text-gray-700 mb-1">
+      <div className={styles.formGroup}>
+        <label htmlFor="address2" className={styles.label}>
           Colonia/Referencia (opcional)
         </label>
         <input
@@ -108,15 +103,15 @@ export function AddressForm({ formData, setFormData, errors }: AddressFormProps)
           name="address2"
           value={formData.address2 || ''}
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={styles.input}
           placeholder="Colonia del Valle"
         />
       </div>
 
       {/* City, State, Postal Code */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div>
-          <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700 mb-1">
+      <div className={styles.locationFields}>
+        <div className={styles.formGroup}>
+          <label htmlFor="postalCode" className={styles.label}>
             Código Postal *
           </label>
           <input
@@ -125,17 +120,15 @@ export function AddressForm({ formData, setFormData, errors }: AddressFormProps)
             name="postalCode"
             value={formData.postalCode}
             onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.postalCode ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`${styles.input} ${errors.postalCode ? styles.inputError : ''}`}
             placeholder="03100"
           />
           {errors.postalCode && (
-            <p className="text-red-500 text-sm mt-1">{errors.postalCode}</p>
+            <p className={styles.errorText}>{errors.postalCode}</p>
           )}
         </div>
-        <div>
-          <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+        <div className={styles.formGroup}>
+          <label htmlFor="city" className={styles.label}>
             Ciudad *
           </label>
           <input
@@ -144,17 +137,15 @@ export function AddressForm({ formData, setFormData, errors }: AddressFormProps)
             name="city"
             value={formData.city}
             onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.city ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`${styles.input} ${errors.city ? styles.inputError : ''}`}
             placeholder="Ciudad de México"
           />
           {errors.city && (
-            <p className="text-red-500 text-sm mt-1">{errors.city}</p>
+            <p className={styles.errorText}>{errors.city}</p>
           )}
         </div>
-        <div>
-          <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
+        <div className={styles.formGroup}>
+          <label htmlFor="state" className={styles.label}>
             Estado *
           </label>
           <input
@@ -163,20 +154,18 @@ export function AddressForm({ formData, setFormData, errors }: AddressFormProps)
             name="state"
             value={formData.state}
             onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.state ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`${styles.input} ${errors.state ? styles.inputError : ''}`}
             placeholder="CDMX"
           />
           {errors.state && (
-            <p className="text-red-500 text-sm mt-1">{errors.state}</p>
+            <p className={styles.errorText}>{errors.state}</p>
           )}
         </div>
       </div>
 
       {/* Country */}
-      <div>
-        <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
+      <div className={styles.formGroup}>
+        <label htmlFor="country" className={styles.label}>
           País *
         </label>
         <select
@@ -184,9 +173,7 @@ export function AddressForm({ formData, setFormData, errors }: AddressFormProps)
           name="country"
           value={formData.country}
           onChange={handleChange}
-          className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            errors.country ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={`${styles.input} ${errors.country ? styles.inputError : ''}`}
         >
           <option value="MX">México</option>
           <option value="US">Estados Unidos</option>
@@ -197,13 +184,13 @@ export function AddressForm({ formData, setFormData, errors }: AddressFormProps)
           <option value="ES">España</option>
         </select>
         {errors.country && (
-          <p className="text-red-500 text-sm mt-1">{errors.country}</p>
+          <p className={styles.errorText}>{errors.country}</p>
         )}
       </div>
 
       {/* Phone */}
-      <div>
-        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+      <div className={styles.formGroup}>
+        <label htmlFor="phone" className={styles.label}>
           Teléfono (opcional)
         </label>
         <input
@@ -212,10 +199,10 @@ export function AddressForm({ formData, setFormData, errors }: AddressFormProps)
           name="phone"
           value={formData.phone || ''}
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={styles.input}
           placeholder="55 1234 5678"
         />
-        <p className="text-xs text-gray-500 mt-1">
+        <p className={styles.hint}>
           Incluir código de país si es fuera de México
         </p>
       </div>
