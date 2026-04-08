@@ -60,6 +60,16 @@
   background-color: var(--color-primary-light);
 }
 
+.adminLink {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.adminLink:hover {
+  color: var(--color-primary-hover);
+  background-color: var(--color-primary-light);
+}
+
 .auth {
   display: flex;
   align-items: center;

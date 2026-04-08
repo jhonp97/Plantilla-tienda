@@ -46,6 +46,15 @@ export function Header() {
               Mis Pedidos
             </NavLink>
           )}
+          {isAuthenticated && user?.role === 'ADMIN' && (
+            <NavLink 
+              to="/dashboard" 
+              className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''} ${styles.adminLink}`}
+              aria-label="Panel de administración"
+            >
+              Dashboard
+            </NavLink>
+          )}
         </nav>
 
         <div className={styles.auth}>
