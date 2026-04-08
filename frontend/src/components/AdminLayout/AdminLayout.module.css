@@ -1,0 +1,233 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-gray-50);
+}
+
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  background-color: var(--color-white);
+  border-right: 1px solid var(--color-gray-200);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 100;
+}
+
+.sidebarHeader {
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-primary);
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}
+
+.logo svg {
+  flex-shrink: 0;
+}
+
+/* Navigation */
+.navigation {
+  flex: 1;
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  overflow-y: auto;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.navLink:hover {
+  background-color: var(--color-gray-100);
+  color: var(--text-primary);
+}
+
+.navLinkActive {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.navLink svg {
+  flex-shrink: 0;
+}
+
+/* Sidebar Footer */
+.sidebarFooter {
+  padding: var(--spacing-md);
+  border-top: 1px solid var(--color-gray-200);
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.userAvatar {
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: var(--font-size-lg);
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.userName {
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+}
+
+.userRole {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.logoutButton:hover {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+/* Main Content */
+.main {
+  flex: 1;
+  margin-left: 260px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-gray-200);
+  padding: var(--spacing-lg) var(--spacing-2xl);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.pageTitle {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.content {
+  flex: 1;
+  padding: var(--spacing-2xl);
+  overflow-y: auto;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 70px;
+  }
+
+  .logo span,
+  .navLink span,
+  .userDetails,
+  .logoutButton span {
+    display: none;
+  }
+
+  .navigation {
+    align-items: center;
+  }
+
+  .navLink {
+    justify-content: center;
+    padding: var(--spacing-sm);
+  }
+
+  .userInfo {
+    justify-content: center;
+  }
+
+  .logoutButton {
+    padding: var(--spacing-sm);
+  }
+
+  .main {
+    margin-left: 70px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    transform: translateX(-100%);
+    width: 260px;
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+
+  .logo span,
+  .navLink span,
+  .userDetails,
+  .logoutButton span {
+    display: block;
+  }
+
+  .navLink {
+    justify-content: flex-start;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .main {
+    margin-left: 0;
+  }
+}

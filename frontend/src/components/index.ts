@@ -5,6 +5,7 @@ export type { InputProps } from './Input';
 export { PasswordInput } from './PasswordInput';
 export type { PasswordInputProps } from './PasswordInput';
 export { Layout, Header, Footer } from './Layout';
+export { AdminLayout } from './AdminLayout';
 export { Modal } from './Modal';
 export type { ModalProps } from './Modal';
 export { ProtectedRoute } from './ProtectedRoute';

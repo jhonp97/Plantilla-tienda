@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
-import { ProtectedRoute } from '@components/ProtectedRoute';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { AdminLayout } from './components/AdminLayout';
 import { ShopRoutes } from '@features/shop';
 import { AdminRoutes } from '@features/admin';
 
@@ -48,12 +49,14 @@ function App() {
             </Suspense>
           } />
           
-          {/* Admin routes - keep their structure */}
+          {/* Admin routes with AdminLayout */}
           <Route
             path="/dashboard/*"
             element={
               <ProtectedRoute requiredRole="ADMIN">
-                <AdminRoutes />
+                <AdminLayout>
+                  <AdminRoutes />
+                </AdminLayout>
               </ProtectedRoute>
             }
           />
