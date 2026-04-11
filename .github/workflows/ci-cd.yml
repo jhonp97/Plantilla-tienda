@@ -58,19 +58,19 @@ jobs:
       run: pnpm test
       env:
         DATABASE_URL: postgresql://admin:admin123@localhost:5432/tienda_db
-        JWT_SECRET: test-jwt-secret-must-be-at-least-32-chars
-        JWT_EXPIRES_IN: 24h
-        STRIPE_SECRET_KEY: sk_test_1234567890
-        STRIPE_WEBHOOK_SECRET: whsec_test_1234567890
-        STRIPE_PUBLISHABLE_KEY: pk_test_1234567890
-        VERIFACTU_API_KEY: vf_test_1234567890
-        RESEND_API_KEY: re_test_1234567890
-        EMAIL_FROM: test@tienda.com
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        JWT_EXPIRES_IN: 7d
+        STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+        STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+        STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
+        VERIFACTU_API_KEY: ${{ secrets.VERIFACTU_API_KEY }}
+        RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        EMAIL_FROM: noreply@tienda.com
         ADMIN_EMAIL: admin@tienda.com
         REPORTS_FOLDER: ./reports
-        CLOUDINARY_CLOUD_NAME: test-cloud
-        CLOUDINARY_API_KEY: 123456789012345
-        CLOUDINARY_API_SECRET: test-secret
+        CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+        CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+        CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
         NODE_ENV: test
 
   test-frontend:
@@ -160,19 +160,19 @@ jobs:
       run: pnpm start &
       env:
         DATABASE_URL: postgresql://admin:admin123@localhost:5432/tienda_db
-        JWT_SECRET: test-jwt-secret-must-be-at-least-32-chars
-        JWT_EXPIRES_IN: 24h
-        STRIPE_SECRET_KEY: sk_test_1234567890
-        STRIPE_WEBHOOK_SECRET: whsec_test_1234567890
-        STRIPE_PUBLISHABLE_KEY: pk_test_1234567890
-        VERIFACTU_API_KEY: vf_test_1234567890
-        RESEND_API_KEY: re_test_1234567890
-        EMAIL_FROM: test@tienda.com
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        JWT_EXPIRES_IN: 7d
+        STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+        STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+        STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
+        VERIFACTU_API_KEY: ${{ secrets.VERIFACTU_API_KEY }}
+        RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        EMAIL_FROM: noreply@tienda.com
         ADMIN_EMAIL: admin@tienda.com
         REPORTS_FOLDER: ./reports
-        CLOUDINARY_CLOUD_NAME: test-cloud
-        CLOUDINARY_API_KEY: 123456789012345
-        CLOUDINARY_API_SECRET: test-secret
+        CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+        CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+        CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
         NODE_ENV: test
         PORT: 3000
     
