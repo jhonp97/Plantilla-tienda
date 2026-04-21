@@ -126,7 +126,7 @@ export default function OrderManagementPage() {
       {/* Filters */}
       <div className={styles.filtersBar}>
         <div className={styles.filtersRow}>
-          <div style={{ flex: 1, minWidth: '12.5rem' }}>
+          <div className={styles.filterInput}>
             <input
               type="date"
               value={filters.startDate || ''}
@@ -134,7 +134,7 @@ export default function OrderManagementPage() {
               className={styles.filterInput}
             />
           </div>
-          <div style={{ flex: 1, minWidth: '12.5rem' }}>
+          <div className={styles.filterInput}>
             <input
               type="date"
               value={filters.endDate || ''}

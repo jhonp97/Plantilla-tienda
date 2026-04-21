@@ -4,7 +4,7 @@
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 import type { ReportType, ReportFormat } from '../../../types/reports.types';
-import { BaseModal } from '../shared';
+import { BaseModal } from './shared';
 import styles from './ReportPreview.module.css';
 
 interface ReportPreviewProps {

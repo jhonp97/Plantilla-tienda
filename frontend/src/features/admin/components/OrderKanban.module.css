@@ -48,12 +48,12 @@
 }
 
 .columnHeaderPurple {
-  background: #f3e8ff;
+  background: var(--status-purple-bg);
   border-color: #a855f7;
 }
 
 .columnHeaderIndigo {
-  background: #e0e7ff;
+  background: var(--status-processing-bg);
   border-color: #6366f1;
 }
 

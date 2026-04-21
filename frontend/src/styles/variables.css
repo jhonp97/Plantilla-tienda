@@ -78,6 +78,20 @@
   --transition-base: 250ms ease;
   --transition-slow: 350ms ease;
 
+  /* Status Colors */
+  --status-pending-text: #92400e;
+  --status-pending-bg: #fef3c7;
+  --status-success-text: #166534;
+  --status-success-bg: #dcfce7;
+  --status-error-text: #991b1b;
+  --status-error-bg: #fee2e2;
+  --status-info-text: #1e40af;
+  --status-info-bg: #dbeafe;
+  --status-processing-text: #4338ca;
+  --status-processing-bg: #e0e7ff;
+  --status-purple-text: #7c3aed;
+  --status-purple-bg: #f3e8ff;
+
   /* Z-index */
   --z-dropdown: 100;
   --z-sticky: 200;

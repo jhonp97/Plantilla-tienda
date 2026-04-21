@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { format, subDays } from 'date-fns';
 import type { ReportType, ReportFormat } from '../../../types/reports.types';
-import { FormInput } from '../shared';
+import { FormInput } from './shared';
 import styles from './ReportGenerator.module.css';
 
 interface ReportGeneratorProps {

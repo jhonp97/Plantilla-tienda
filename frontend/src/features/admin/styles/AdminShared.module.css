@@ -234,8 +234,8 @@
 }
 
 .statusActive {
-  background: var(--color-success-light);
-  color: #166534;
+  background: var(--status-success-bg);
+  color: var(--status-success-text);
 }
 
 .statusInactive {
@@ -244,18 +244,18 @@
 }
 
 .statusPending {
-  background: var(--color-warning-light);
-  color: #92400e;
+  background: var(--status-pending-bg);
+  color: var(--status-pending-text);
 }
 
 .statusSuccess {
-  background: var(--color-success-light);
-  color: #166534;
+  background: var(--status-success-bg);
+  color: var(--status-success-text);
 }
 
 .statusError {
-  background: var(--color-danger-light);
-  color: #991b1b;
+  background: var(--status-error-bg);
+  color: var(--status-error-text);
 }
 
 /* Action Buttons */

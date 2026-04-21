@@ -113,33 +113,33 @@
 
 /* Status Colors */
 .statusPending {
-  background: var(--color-warning-light);
-  color: #92400e;
+  background: var(--status-pending-bg);
+  color: var(--status-pending-text);
 }
 
 .statusConfirmed {
-  background: var(--color-primary-light);
-  color: #1e40af;
+  background: var(--status-info-bg);
+  color: var(--status-info-text);
 }
 
 .statusProcessing {
-  background: #f3e8ff;
-  color: #7c3aed;
+  background: var(--status-processing-bg);
+  color: var(--status-processing-text);
 }
 
 .statusShipped {
-  background: #e0e7ff;
-  color: #4338ca;
+  background: var(--status-processing-bg);
+  color: var(--status-processing-text);
 }
 
 .statusDelivered {
-  background: var(--color-success-light);
-  color: #166534;
+  background: var(--status-success-bg);
+  color: var(--status-success-text);
 }
 
 .statusCancelled {
-  background: var(--color-danger-light);
-  color: #991b1b;
+  background: var(--status-error-bg);
+  color: var(--status-error-text);
 }
 
 .statusRefunded {
