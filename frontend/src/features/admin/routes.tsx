@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import styles from './LoadingFallback.module.css';
 
 const ProductManagement = lazy(() => import('./pages/ProductManagement'));
 const ProductCreate = lazy(() => import('./pages/ProductCreate'));
@@ -13,21 +14,8 @@ const ShippingConfigPage = lazy(() => import('./pages/ShippingConfigPage'));
 
 function LoadingFallback() {
   return (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      minHeight: '50vh' 
-    }}>
-      <div style={{
-        width: '40px',
-        height: '40px',
-        border: '3px solid #e2e8f0',
-        borderTopColor: '#2563eb',
-        borderRadius: '50%',
-        animation: 'spin 0.8s linear infinite'
-      }} />
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    <div className={styles.container}>
+      <div className={styles.spinner} />
     </div>
   );
 }
