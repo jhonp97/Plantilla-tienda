@@ -1,0 +1,39 @@
+/* ConfirmModal.module.css - Confirmation dialog styles */
+
+.confirmButton {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  color: var(--color-white);
+}
+
+.confirmButton:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.confirmButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.confirmButtonDanger {
+  background: var(--color-danger);
+}
+
+.confirmButtonDanger:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.confirmButtonWarning {
+  background: var(--color-warning);
+}
+
+.confirmButtonPrimary {
+  background: var(--color-primary);
+}
+
+.confirmButtonPrimary:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}

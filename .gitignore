@@ -31,3 +31,15 @@ pnpm-debug.log*
 # Archivos del Sistema Operativo
 .DS_Store
 Thumbs.db
+
+# Editor de Código
+.vscode/
+.idea/
+
+# env
+.env
+.env.local
+
+node_modules/
+dist/
+

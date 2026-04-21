@@ -1,0 +1,126 @@
+/* CategoryManagement.module.css - Category management page styles */
+
+@import '../styles/AdminShared.module.css';
+
+/* Page Container */
+.pageContainer {
+  padding: var(--spacing-lg);
+}
+
+/* Category Info */
+.categoryInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.categoryIconContainer {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--color-primary-light);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.categoryIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-primary);
+}
+
+.categoryName {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.categorySlug {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+/* Category Description */
+.categoryDescription {
+  color: var(--text-secondary);
+}
+
+.descriptionText {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Skeleton Loading */
+.skeleton {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeletonIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--color-gray-200);
+  border-radius: var(--radius-lg);
+}
+
+.skeletonContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.skeletonLine {
+  height: 1rem;
+  background: var(--color-gray-200);
+  border-radius: var(--radius-sm);
+}
+
+.skeletonLineShort {
+  height: 1rem;
+  width: 6rem;
+  background: var(--color-gray-200);
+  border-radius: var(--radius-sm);
+}
+
+/* Empty State */
+.emptyRow {
+  text-align: center;
+}
+
+.emptyCell {
+  padding: var(--spacing-2xl);
+}
+
+.emptyIcon {
+  width: 3rem;
+  height: 3rem;
+  color: var(--text-tertiary);
+  margin: 0 auto var(--spacing-md);
+}
+
+.emptyText {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.emptyLink {
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.emptyLink:hover {
+  text-decoration: underline;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
