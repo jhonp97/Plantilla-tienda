@@ -15,6 +15,7 @@ import {
 } from 'recharts';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
+import styles from './SalesChart.module.css';
 
 interface SalesChartProps {
   data: Array<{
@@ -34,14 +35,14 @@ function CustomTooltip({ active, payload, label }: {
   if (!active || !payload?.length) return null;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-3">
-      <p className="text-sm font-medium text-gray-700 mb-2">
+    <div className={styles.tooltip}>
+      <p className={styles.tooltipTitle}>
         {label && format(parseISO(label), 'd MMM yyyy', { locale: es })}
       </p>
       {payload.map((entry, index) => (
-        <p key={index} className="text-sm" style={{ color: entry.color }}>
+        <p key={index} className={styles.tooltipValue} style={{ color: entry.color }}>
           {entry.dataKey === 'revenue' ? 'Ingresos' : 'Pedidos'}:{' '}
-          <span className="font-semibold">
+          <span className={styles.tooltipBold}>
             {entry.dataKey === 'revenue'
               ? `$${entry.value.toLocaleString('es-AR')}`
               : entry.value}
@@ -55,9 +56,9 @@ function CustomTooltip({ active, payload, label }: {
 export function SalesChart({ data, isLoading }: SalesChartProps) {
   if (isLoading) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <div className="h-4 bg-gray-200 rounded w-32 mb-4 animate-pulse" />
-        <div className="h-80 bg-gray-100 rounded animate-pulse" />
+      <div className={styles.skeletonContainer}>
+        <div className={`${styles.skeletonTitle}`} />
+        <div className={styles.skeletonChart} />
       </div>
     );
   }
@@ -79,25 +80,25 @@ export function SalesChart({ data, isLoading }: SalesChartProps) {
       ];
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className={styles.chartContainer}>
+      <div className={styles.chartHeader}>
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">Ventas Recientes</h3>
-          <p className="text-sm text-gray-500 mt-1">Ingresos y pedidos diarios</p>
+          <h3 className={styles.chartTitle}>Ventas Recientes</h3>
+          <p className={styles.chartSubtitle}>Ingresos y pedidos diarios</p>
         </div>
-        <div className="flex gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-blue-500" />
-            <span className="text-sm text-gray-600">Ingresos</span>
+        <div className={styles.legend}>
+          <div className={styles.legendItem}>
+            <div className={`${styles.legendDot} ${styles.legendDotPrimary}`} />
+            <span className={styles.legendLabel}>Ingresos</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-green-500" />
-            <span className="text-sm text-gray-600">Pedidos</span>
+          <div className={styles.legendItem}>
+            <div className={`${styles.legendDot} ${styles.legendDotSuccess}`} />
+            <span className={styles.legendLabel}>Pedidos</span>
           </div>
         </div>
       </div>
-      
-      <div className="h-80">
+
+      <div className={styles.chartArea}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />

@@ -1,0 +1,261 @@
+/* OrderTable.module.css - Table view for order management */
+
+/* Container */
+.tableContainer {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-gray-200);
+  overflow: hidden;
+}
+
+/* Bulk Actions Bar */
+.bulkActionsBar {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-primary-light);
+  border-bottom: 1px solid rgba(37, 99, 235, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bulkActionsText {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.bulkActionsButtons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.bulkActionButton {
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.bulkActionButton:hover {
+  background: rgba(37, 99, 235, 0.1);
+}
+
+/* Table */
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+}
+
+/* Table Header */
+.tableHeader {
+  background: var(--color-gray-50);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.tableHeaderCell {
+  padding: var(--spacing-md);
+  text-align: left;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Table Body */
+.tableBody {
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.tableRow {
+  transition: background var(--transition-fast);
+}
+
+.tableRow:hover {
+  background: var(--color-gray-50);
+}
+
+.tableCell {
+  padding: var(--spacing-md);
+}
+
+/* Checkbox */
+.checkbox {
+  width: 1rem;
+  height: 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-gray-300);
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+/* Order Info */
+.orderInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.orderNumber {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.orderItems {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+/* Customer Info */
+.customerInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.customerName {
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+}
+
+.customerCity {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+/* Status Badge */
+.statusBadge {
+  display: inline-flex;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+.statusPending {
+  background: var(--color-warning-light);
+  color: #92400e;
+}
+
+.statusConfirmed {
+  background: var(--color-primary-light);
+  color: #1e40af;
+}
+
+.statusProcessing {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+.statusShipped {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.statusDelivered {
+  background: var(--color-success-light);
+  color: #166534;
+}
+
+.statusCancelled {
+  background: var(--color-danger-light);
+  color: #991b1b;
+}
+
+.statusRefunded {
+  background: var(--color-gray-100);
+  color: var(--text-secondary);
+}
+
+/* Price */
+.priceValue {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Date */
+.dateValue {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.timeValue {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+}
+
+/* Actions */
+.actionsCell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.actionButton {
+  padding: var(--spacing-sm);
+  color: var(--color-primary);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.actionButton:hover {
+  background: var(--color-primary-light);
+}
+
+.actionButtonSecondary {
+  padding: var(--spacing-sm);
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.actionButtonSecondary:hover {
+  background: var(--color-gray-100);
+}
+
+.actionIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Empty State */
+.emptyRow {
+  text-align: center;
+}
+
+.emptyCell {
+  padding: var(--spacing-2xl);
+  color: var(--text-secondary);
+}
+
+/* Skeleton Loading */
+.skeletonContainer {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-gray-200);
+  overflow: hidden;
+}
+
+.skeletonContent {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.skeletonRow {
+  height: 4rem;
+  background: var(--color-gray-100);
+  border-radius: var(--radius-md);
+}

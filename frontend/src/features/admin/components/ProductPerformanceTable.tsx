@@ -3,6 +3,7 @@
  */
 import { useState, useMemo } from 'react';
 import type { TopProduct } from '../../../types/analytics.types';
+import styles from './ProductPerformanceTable.module.css';
 
 interface ProductPerformanceTableProps {
   products: TopProduct[];
@@ -27,7 +28,7 @@ export function ProductPerformanceTable({ products, isLoading }: ProductPerforma
   };
 
   const sortedProducts = useMemo(() => {
-    let filtered = products.filter(p => 
+    let filtered = products.filter(p =>
       p.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -47,7 +48,7 @@ export function ProductPerformanceTable({ products, isLoading }: ProductPerforma
   const SortIcon = ({ field }: { field: SortField }) => {
     if (sortField !== field) return null;
     return (
-      <span className="ml-1 inline-block">
+      <span className={styles.sortIcon}>
         {sortOrder === 'asc' ? '↑' : '↓'}
       </span>
     );
@@ -55,10 +56,10 @@ export function ProductPerformanceTable({ products, isLoading }: ProductPerforma
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div className="p-4 space-y-3">
+      <div className={styles.skeletonContainer}>
+        <div className={styles.skeletonContent}>
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-16 bg-gray-100 rounded animate-pulse" />
+            <div key={i} className={styles.skeletonRow} />
           ))}
         </div>
       </div>
@@ -66,59 +67,57 @@ export function ProductPerformanceTable({ products, isLoading }: ProductPerforma
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div className={styles.tableContainer}>
       {/* Search and Filters */}
-      <div className="p-4 border-b border-gray-200">
-        <div className="flex gap-4">
-          <div className="flex-1 relative">
-            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <input
-              type="text"
-              placeholder="Buscar productos..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-          </button>
+      <div className={styles.tableHeader}>
+        <div className={styles.searchContainer}>
+          <svg className={styles.searchIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Buscar productos..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={styles.searchInput}
+          />
         </div>
+        <button className={styles.exportButton}>
+          <svg className={styles.exportIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+        </button>
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
+      <div className={styles.tableWrapper}>
+        <table className={styles.table}>
+          <thead className={styles.tableHeaderRow}>
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className={styles.tableHeaderCell}>
                 Producto
               </th>
-              <th 
-                className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100"
+              <th
+                className={`${styles.tableHeaderCell} ${styles.tableHeaderCellSortable}`}
                 onClick={() => handleSort('totalSold')}
               >
                 Vendidos <SortIcon field="totalSold" />
               </th>
-              <th 
-                className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100"
+              <th
+                className={`${styles.tableHeaderCell} ${styles.tableHeaderCellSortable}`}
                 onClick={() => handleSort('revenue')}
               >
                 Ingresos <SortIcon field="revenue" />
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className={styles.tableHeaderCell}>
                 Rendimiento
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className={styles.tableBody}>
             {sortedProducts.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-4 py-12 text-center text-gray-500">
+                <td colSpan={4} className={styles.emptyCell}>
                   No se encontraron productos
                 </td>
               </tr>
@@ -126,42 +125,42 @@ export function ProductPerformanceTable({ products, isLoading }: ProductPerforma
               sortedProducts.map((product) => {
                 const maxRevenue = Math.max(...products.map(p => p.revenue), 1);
                 const performance = (product.revenue / maxRevenue) * 100;
-                
+
                 return (
-                  <tr key={product.productId} className="hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                  <tr key={product.productId} className={styles.tableRow}>
+                    <td className={styles.tableCell}>
+                      <div className={styles.productInfo}>
+                        <div className={styles.productImage}>
                           {product.imageUrl ? (
-                            <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+                            <img src={product.imageUrl} alt={product.name} className={styles.productImageImg} />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-400">
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className={styles.productImagePlaceholder}>
+                              <svg className={styles.productImagePlaceholderIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                               </svg>
                             </div>
                           )}
                         </div>
-                        <span className="font-medium text-gray-900">{product.name}</span>
+                        <span className={styles.productName}>{product.name}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3">
-                      <span className="text-gray-900">{product.totalSold}</span>
+                    <td className={styles.tableCell}>
+                      <span className={styles.valueText}>{product.totalSold}</span>
                     </td>
-                    <td className="px-4 py-3">
-                      <span className="font-medium text-gray-900">
+                    <td className={styles.tableCell}>
+                      <span className={`${styles.valueText} ${styles.valueBold}`}>
                         ${product.revenue.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-2">
-                        <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <td className={styles.tableCell}>
+                      <div className={styles.performanceContainer}>
+                        <div className={styles.performanceBar}>
                           <div
-                            className="h-full bg-green-500 rounded-full"
+                            className={styles.performanceFill}
                             style={{ width: `${performance}%` }}
                           />
                         </div>
-                        <span className="text-xs text-gray-500 w-12">
+                        <span className={styles.performanceValue}>
                           {performance.toFixed(0)}%
                         </span>
                       </div>

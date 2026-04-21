@@ -1,0 +1,237 @@
+/* OrderStatusModal.module.css - Modal for changing order status */
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+}
+
+/* Modal */
+.modal {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  max-width: 28rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Header */
+.modalHeader {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.modalTitle {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.modalSubtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-top: var(--spacing-xs);
+}
+
+/* Current Status */
+.currentStatusSection {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-gray-50);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.currentStatusLabel {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Status Badge */
+.statusBadge {
+  display: inline-flex;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+/* Status Options */
+.statusOptionsSection {
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.statusOptionsLabel {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.statusOptionsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-sm);
+}
+
+.statusButton {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  background: var(--color-gray-100);
+  color: var(--text-secondary);
+  border: none;
+  cursor: pointer;
+}
+
+.statusButton:hover:not(:disabled) {
+  background: var(--color-gray-200);
+}
+
+.statusButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.statusButtonDisabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.statusButtonSelected {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-primary);
+}
+
+/* Status Colors */
+.statusPending {
+  background: var(--color-warning-light);
+  color: #92400e;
+}
+
+.statusConfirmed {
+  background: var(--color-primary-light);
+  color: #1e40af;
+}
+
+.statusProcessing {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+.statusShipped {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.statusDelivered {
+  background: var(--color-success-light);
+  color: #166534;
+}
+
+.statusCancelled {
+  background: var(--color-danger-light);
+  color: #991b1b;
+}
+
+.statusRefunded {
+  background: var(--color-gray-100);
+  color: var(--text-secondary);
+}
+
+/* Actions */
+.modalActions {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-top: 1px solid var(--color-gray-200);
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+}
+
+.cancelButton {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-lg);
+  color: var(--text-secondary);
+  background: var(--color-white);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.cancelButton:hover:not(:disabled) {
+  background: var(--color-gray-50);
+}
+
+.cancelButton:disabled {
+  opacity: 0.5;
+}
+
+.confirmButton {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-radius: var(--radius-lg);
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.confirmButton:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.confirmButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Skeleton Loading */
+.skeletonContainer {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  max-width: 28rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.skeletonHeader {
+  height: 1rem;
+  background: var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  width: 60%;
+  margin-bottom: var(--spacing-sm);
+}
+
+.skeletonTitle {
+  height: 1rem;
+  background: var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  width: 40%;
+  margin-bottom: var(--spacing-md);
+}
+
+.skeletonSection {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-gray-50);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.skeletonContent {
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.skeletonRow {
+  height: 2rem;
+  background: var(--color-gray-100);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-sm);
+}

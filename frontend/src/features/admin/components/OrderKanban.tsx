@@ -5,6 +5,7 @@ import { useState, useRef } from 'react';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 import type { Order, OrderStatus } from '../../../types/order.types';
+import styles from './OrderKanban.module.css';
 
 interface OrderKanbanProps {
   orders: Order[];
@@ -13,12 +14,12 @@ interface OrderKanbanProps {
   onChangeStatus: (order: Order, newStatus: OrderStatus) => void;
 }
 
-const COLUMNS: { status: OrderStatus; label: string; color: string }[] = [
-  { status: 'PENDING', label: 'Pendiente', color: 'bg-yellow-100 border-yellow-300' },
-  { status: 'CONFIRMED', label: 'Confirmado', color: 'bg-blue-100 border-blue-300' },
-  { status: 'PROCESSING', label: 'Procesando', color: 'bg-purple-100 border-purple-300' },
-  { status: 'SHIPPED', label: 'Enviado', color: 'bg-indigo-100 border-indigo-300' },
-  { status: 'DELIVERED', label: 'Entregado', color: 'bg-green-100 border-green-300' },
+const COLUMNS: { status: OrderStatus; label: string; headerClass: string }[] = [
+  { status: 'PENDING', label: 'Pendiente', headerClass: styles.columnHeaderYellow },
+  { status: 'CONFIRMED', label: 'Confirmado', headerClass: styles.columnHeaderBlue },
+  { status: 'PROCESSING', label: 'Procesando', headerClass: styles.columnHeaderPurple },
+  { status: 'SHIPPED', label: 'Enviado', headerClass: styles.columnHeaderIndigo },
+  { status: 'DELIVERED', label: 'Entregado', headerClass: styles.columnHeaderGreen },
 ];
 
 function OrderCard({ order, onViewDetails, onDragStart, onDragEnd }: {
@@ -33,22 +34,22 @@ function OrderCard({ order, onViewDetails, onDragStart, onDragEnd }: {
       onDragStart={(e) => onDragStart(e, order.id)}
       onDragEnd={onDragEnd}
       onClick={() => onViewDetails(order)}
-      className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 cursor-pointer hover:shadow-md transition-shadow"
+      className={styles.orderCard}
     >
-      <div className="flex justify-between items-start mb-2">
-        <p className="font-medium text-gray-900 text-sm">#{order.orderNumber}</p>
-        <span className="text-xs text-gray-500">
+      <div className={styles.orderCardHeader}>
+        <p className={styles.orderNumber}>#{order.orderNumber}</p>
+        <span className={styles.orderDate}>
           {format(parseISO(order.createdAt), 'd MMM', { locale: es })}
         </span>
       </div>
-      <p className="text-xs text-gray-500 mb-2">
+      <p className={styles.orderCustomer}>
         {order.shippingAddress.firstName} {order.shippingAddress.lastName}
       </p>
-      <div className="flex justify-between items-center">
-        <p className="text-sm font-semibold text-gray-900">
+      <div className={styles.orderFooter}>
+        <p className={styles.orderTotal}>
           ${order.total.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
         </p>
-        <p className="text-xs text-gray-500">{order.items.length} items</p>
+        <p className={styles.orderItems}>{order.items.length} items</p>
       </div>
     </div>
   );
@@ -107,14 +108,14 @@ export function OrderKanban({
   const handleDrop = (e: React.DragEvent, newStatus: OrderStatus) => {
     e.preventDefault();
     const orderId = e.dataTransfer.getData('text/plain');
-    
+
     if (orderId && draggedOrderId) {
       const order = orders.find(o => o.id === orderId);
       if (order && order.status !== newStatus) {
         onChangeStatus(order, newStatus);
       }
     }
-    
+
     setDraggedOrderId(null);
     setDragOverColumn(null);
     dragCounter.current = {
@@ -134,14 +135,14 @@ export function OrderKanban({
 
   if (isLoading) {
     return (
-      <div className="flex gap-4 overflow-x-auto pb-4">
+      <div className={styles.skeletonContainer}>
         {COLUMNS.map((col) => (
-          <div key={col.status} className="flex-shrink-0 w-72">
-            <div className="bg-gray-100 rounded-lg p-4 h-96 animate-pulse">
-              <div className="h-4 bg-gray-200 rounded w-24 mb-2" />
-              <div className="space-y-2">
+          <div key={col.status} className={styles.skeletonColumn}>
+            <div className={styles.skeletonCard}>
+              <div className={styles.skeletonHeader} />
+              <div className={styles.skeletonItemList}>
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-24 bg-gray-200 rounded" />
+                  <div key={i} className={styles.skeletonItem} />
                 ))}
               </div>
             </div>
@@ -152,7 +153,7 @@ export function OrderKanban({
   }
 
   return (
-    <div className="flex gap-4 overflow-x-auto pb-4">
+    <div className={styles.kanbanContainer}>
       {COLUMNS.map((column) => {
         const columnOrders = orders.filter((o) => o.status === column.status);
         const isDragOver = dragOverColumn === column.status;
@@ -160,28 +161,26 @@ export function OrderKanban({
         return (
           <div
             key={column.status}
-            className={`flex-shrink-0 w-72 transition-colors rounded-lg ${
-              isDragOver ? 'bg-gray-100 ring-2 ring-blue-400' : 'bg-gray-50'
-            }`}
+            className={`${styles.column} ${isDragOver ? styles.columnDragOver : styles.columnDefault}`}
             onDragEnter={() => handleDragEnter(column.status)}
             onDragLeave={() => handleDragLeave(column.status)}
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, column.status)}
           >
             {/* Column Header */}
-            <div className={`p-3 rounded-t-lg border-b-2 ${column.color}`}>
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-gray-800">{column.label}</h3>
-                <span className="px-2 py-0.5 bg-white text-gray-700 text-sm font-medium rounded-full">
+            <div className={`${styles.columnHeader} ${column.headerClass}`}>
+              <div className={styles.columnHeaderContent}>
+                <h3 className={styles.columnTitle}>{column.label}</h3>
+                <span className={styles.columnCount}>
                   {columnOrders.length}
                 </span>
               </div>
             </div>
 
             {/* Column Content */}
-            <div className="p-2 space-y-2 min-h-96 max-h-[600px] overflow-y-auto">
+            <div className={styles.columnContent}>
               {columnOrders.length === 0 ? (
-                <div className="h-24 flex items-center justify-center text-gray-400 text-sm">
+                <div className={styles.emptyColumn}>
                   Sin órdenes
                 </div>
               ) : (

@@ -1,0 +1,229 @@
+/* AdminDashboardPage.module.css - Admin dashboard page styles */
+
+/* Page Container */
+.pageContainer {
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Header */
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+@media (min-width: 640px) {
+  .pageHeader {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.pageTitle {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.pageSubtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-top: var(--spacing-xs);
+}
+
+/* Time Filter */
+.headerActions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.timeFilter {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+  outline: none;
+  background: var(--color-white);
+  cursor: pointer;
+}
+
+.timeFilter:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* Grid Layout */
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+@media (min-width: 1024px) {
+  .contentGrid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.chartSection {
+  /* Takes 2/3 width on large screens */
+}
+
+.alertSection {
+  /* Takes 1/3 width on large screens */
+}
+
+/* Top Products Section */
+.topProductsSection {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-gray-200);
+  padding: var(--spacing-lg);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.sectionSubtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-top: var(--spacing-xs);
+}
+
+/* Table */
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+}
+
+.tableHeader {
+  background: var(--color-gray-50);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.tableHeaderCell {
+  padding: var(--spacing-md);
+  text-align: left;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.tableBody {
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.tableRow {
+  transition: background var(--transition-fast);
+}
+
+.tableRow:hover {
+  background: var(--color-gray-50);
+}
+
+.tableCell {
+  padding: var(--spacing-md);
+}
+
+.tableCellCenter {
+  text-align: center;
+}
+
+/* Row Number */
+.rowNumber {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+/* Product Info */
+.productInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.productImage {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--color-gray-100);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.productImageImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.productImagePlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+}
+
+.productImagePlaceholderIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.productName {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Value */
+.valueText {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.valueBold {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Empty State */
+.emptyRow {
+  text-align: center;
+}
+
+.emptyCell {
+  padding: var(--spacing-2xl);
+  color: var(--text-secondary);
+}
+
+/* Skeleton Loading */
+.skeletonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.skeletonRow {
+  height: 4rem;
+  background: var(--color-gray-100);
+  border-radius: var(--radius-md);
+}
