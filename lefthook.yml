@@ -1,10 +1,9 @@
-# Lefthook hooks configuration
-# https://github.com/evilmartians/lefthook
-
-# Install: npx lefthook install
-# Or add to package.json postinstall: npx lefthook install
-
 pre-commit:
   commands:
     check-env:
-      run: if git diff --cached --name-only | grep -q "\.env$"; then echo "ERROR: .env file is staged!"; exit 1; fi
+      run: >
+        $staged = git diff --cached --name-only
+        if ($staged -match '\.env$') { 
+          echo "ERROR: .env file is staged!" 
+          exit 1 
+        }
