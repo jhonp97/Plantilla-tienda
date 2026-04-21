@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client';
-import type { ITransactionManager } from './ITransactionManager';
 
 /**
  * Prisma middleware to enforce order immutability.
@@ -7,7 +6,9 @@ import type { ITransactionManager } from './ITransactionManager';
  * Only cancellation reason can be set, and tracking number can be updated until SHIPPED.
  */
 export function createOrderImmutabilityMiddleware() {
-  return async (params: Prisma.MiddlewareParams, next: (params: Prisma.MiddlewareParams) => Promise<any>) => {
+  // Prisma 7.x uses a different middleware signature
+  // Using generic params type for compatibility
+  return async (params: any, next: (params: any) => Promise<any>) => {
     // Only intercept UPDATE and DELETE operations on Order model
     if (params.model !== 'Order' || (params.action !== 'update' && params.action !== 'delete')) {
       return next(params);
@@ -84,15 +85,12 @@ export class OrderImmutabilityGuard {
    */
   static getAllowedTransitions(currentStatus: string): string[] {
     const transitions: Record<string, string[]> = {
-      DRAFT: ['PENDING_PAYMENT', 'CANCELLED'],
       PENDING: ['PAID', 'CANCELLED'],
-      PENDING_PAYMENT: ['PAID', 'CANCELLED'],
-      PAID: ['PROCESSING', 'CANCELLED', 'REFUNDED'],
-      PROCESSING: ['SHIPPED', 'CANCELLED', 'REFUNDED'],
-      SHIPPED: ['DELIVERED', 'REFUNDED'],
-      DELIVERED: ['REFUNDED'],
+      PAID: ['PROCESSING', 'CANCELLED'],
+      PROCESSING: ['SHIPPED', 'CANCELLED'],
+      SHIPPED: ['DELIVERED'],
+      DELIVERED: [],
       CANCELLED: [],
-      REFUNDED: [],
     };
 
     return transitions[currentStatus] || [];

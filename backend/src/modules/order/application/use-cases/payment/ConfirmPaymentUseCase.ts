@@ -33,7 +33,7 @@ export class ConfirmPaymentUseCase {
       const orderData = order.toJSON();
 
       // 2. Idempotency check - already processed
-      if (orderData.status !== 'DRAFT' && orderData.status !== 'PENDING_PAYMENT') {
+      if (orderData.status !== 'PENDING') {
         throw new ValidationError(
           `Order already processed. Current status: ${orderData.status}`
         );

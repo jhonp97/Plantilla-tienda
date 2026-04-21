@@ -1,7 +1,7 @@
 import type { IInvoiceRepository } from '@modules/order/domain/repositories/IInvoiceRepository';
 import type { IOrderRepository } from '@modules/order/domain/repositories/IOrderRepository';
 import type { CustomerSnapshot, InvoiceItemSnapshot } from '@modules/order/domain/entities/Invoice';
-import { NotFoundError, AlreadyExistsError } from '@shared/errors/DomainError';
+import { NotFoundError, ConflictError } from '@shared/errors/DomainError';
 
 export interface CreateInvoiceFromOrderInput {
   orderId: string;
@@ -22,7 +22,7 @@ export class CreateInvoiceFromOrderUseCase {
     // Check if invoice already exists for this order
     const existingInvoice = await this.invoiceRepository.findByOrderId(input.orderId);
     if (existingInvoice) {
-      throw new AlreadyExistsError('Invoice already exists for this order', 'Invoice');
+      throw new ConflictError('Invoice already exists for this order');
     }
 
     // Get the order with all related data
@@ -32,8 +32,9 @@ export class CreateInvoiceFromOrderUseCase {
     }
 
     // Build customer snapshot from order data
+    const customerName = order.shippingAddress?.street?.split(' ')[0] ?? 'Cliente';
     const customerSnapshot: CustomerSnapshot = {
-      name: order.guestFullName ?? order.userId,
+      name: customerName,
       email: '', // Would come from user or guest email
       nifCif: '', // Would come from order customerNif or guestNifCif
       address: {
@@ -55,7 +56,8 @@ export class CreateInvoiceFromOrderUseCase {
     }));
 
     // Calculate tax rate from order (using dominant rate or default)
-    const taxRate = itemsSnapshot.length > 0 ? itemsSnapshot[0].taxRate : 21;
+    const firstItem = itemsSnapshot[0];
+    const taxRate = firstItem ? firstItem.taxRate : 21;
 
     // Create the invoice
     const invoice = await this.invoiceRepository.create({

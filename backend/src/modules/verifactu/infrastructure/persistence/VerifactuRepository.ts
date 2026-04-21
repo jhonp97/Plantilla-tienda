@@ -85,8 +85,10 @@ export class VerifactuRepository implements IVerifactuRepository {
   }
 
   async updateOrderVerifactuData(orderId: string, data: VerifactuOrderUpdate): Promise<void> {
-    await this.prisma.order.update({
-      where: { id: orderId },
+    // Update the Invoice associated with this order, not the Order itself
+    // Verifactu data lives on Invoice per Phase 2 schema changes
+    await this.prisma.invoice.update({
+      where: { orderId },
       data: {
         verifactuUuid: data.verifactuUuid,
         verifactuQrCode: data.verifactuQrCode,

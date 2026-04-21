@@ -68,7 +68,7 @@ export class AddToCartUseCase {
   private async findUserCart(userId: string): Promise<Order | null> {
     const result = await this.orderRepo.findByUserId(userId, { page: 1, limit: 1 });
     
-    const draftOrder = result.items.find((order: Order) => order.status === 'DRAFT');
+    const draftOrder = result.items.find((order: Order) => order.status === 'PENDING');
     
     return draftOrder || null;
   }

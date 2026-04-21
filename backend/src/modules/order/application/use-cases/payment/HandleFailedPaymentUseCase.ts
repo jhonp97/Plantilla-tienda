@@ -18,7 +18,7 @@ export class HandleFailedPaymentUseCase {
     const orderData = order.toJSON();
 
     // 2. Idempotency check - only process if in pending status
-    if (orderData.status !== 'DRAFT' && orderData.status !== 'PENDING_PAYMENT') {
+    if (orderData.status !== 'PENDING') {
       // Order already processed or cancelled - idempotent return
       return;
     }

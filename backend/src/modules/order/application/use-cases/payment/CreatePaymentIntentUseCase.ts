@@ -33,7 +33,7 @@ export class CreatePaymentIntentUseCase {
     const orderData = order.toJSON();
 
     // 2. Validate order status
-    if (orderData.status !== 'PENDING_PAYMENT' && orderData.status !== 'DRAFT') {
+    if (orderData.status !== 'PENDING') {
       throw new ValidationError(
         `Order is not in pending payment status. Current status: ${orderData.status}`
       );

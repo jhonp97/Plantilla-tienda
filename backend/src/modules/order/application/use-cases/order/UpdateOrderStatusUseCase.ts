@@ -5,14 +5,12 @@ import type { UpdateOrderStatusDto } from '../../dto/UpdateOrderStatusDto';
 
 // Valid state transitions map
 const VALID_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
-  DRAFT: ['PENDING_PAYMENT', 'CANCELLED'],
-  PENDING_PAYMENT: ['PAID', 'CANCELLED'],
-  PAID: ['PROCESSING', 'REFUNDED', 'CANCELLED'],
-  PROCESSING: ['SHIPPED', 'REFUNDED', 'CANCELLED'],
-  SHIPPED: ['DELIVERED', 'REFUNDED'],
-  DELIVERED: ['REFUNDED'],
+  PENDING: ['PAID', 'CANCELLED'],
+  PAID: ['PROCESSING', 'CANCELLED'],
+  PROCESSING: ['SHIPPED', 'CANCELLED'],
+  SHIPPED: ['DELIVERED'],
+  DELIVERED: [],
   CANCELLED: [],
-  REFUNDED: [],
 };
 
 export class UpdateOrderStatusUseCase {
@@ -60,8 +58,6 @@ export class UpdateOrderStatusUseCase {
       case 'CANCELLED':
         updateData.cancelledAt = new Date();
         updateData.cancellationReason = dto.reason;
-        break;
-      case 'REFUNDED':
         break;
     }
 

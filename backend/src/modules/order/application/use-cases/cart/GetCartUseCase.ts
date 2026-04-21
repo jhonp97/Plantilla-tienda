@@ -13,7 +13,7 @@ export class GetCartUseCase {
   private async findUserCart(userId: string): Promise<Order | null> {
     const result = await this.orderRepo.findByUserId(userId, { page: 1, limit: 10 });
     
-    const draftOrder = result.items.find((order: Order) => order.status === 'DRAFT');
+    const draftOrder = result.items.find((order: Order) => order.status === 'PENDING');
     
     return draftOrder || null;
   }

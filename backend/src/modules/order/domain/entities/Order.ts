@@ -27,6 +27,10 @@ export type OrderProps = {
   billingAddress?: AddressProps;
   notes?: string;
   customerNif?: string;
+  guestFullName?: string;
+  guestEmail?: string;
+  guestPhone?: string;
+  guestNifCif?: string;
   items: OrderItemProps[];
   paidAt?: Date;
   shippedAt?: Date;
@@ -121,7 +125,7 @@ export class Order {
       id: crypto.randomUUID(),
       orderNumber,
       userId: input.userId,
-      status: 'DRAFT',
+      status: 'PENDING',
       subtotal: 0,
       taxAmount: 0,
       shippingCost: 0,
@@ -211,6 +215,22 @@ export class Order {
     return this.props.customerNif;
   }
 
+  get guestFullName(): string | undefined {
+    return this.props.guestFullName;
+  }
+
+  get guestEmail(): string | undefined {
+    return this.props.guestEmail;
+  }
+
+  get guestPhone(): string | undefined {
+    return this.props.guestPhone;
+  }
+
+  get guestNifCif(): string | undefined {
+    return this.props.guestNifCif;
+  }
+
   get items(): OrderItemProps[] {
     return this.props.items;
   }
@@ -296,9 +316,9 @@ export class Order {
   }
 
   markAsRefunded(): void {
-    this.validateStateTransition('REFUNDED');
-    this.props.status = 'REFUNDED';
-    this.props.updatedAt = new Date();
+    // REFUNDED is not a separate status in the simplified enum
+    // Treat as cancellation after delivery
+    this.markAsCancelled('Refunded after delivery');
   }
 
   setShippingCost(cost: number): void {
@@ -372,7 +392,10 @@ export class Order {
   }
 
   isRefunded(): boolean {
-    return this.props.status === 'REFUNDED';
+    // REFUNDED is treated as CANCELLED in the simplified model
+    // Check if cancelled with refund reason
+    return this.props.status === 'CANCELLED' && 
+           this.props.cancellationReason?.toLowerCase().includes('refund') === true;
   }
 
   toJSON(): OrderProps {
