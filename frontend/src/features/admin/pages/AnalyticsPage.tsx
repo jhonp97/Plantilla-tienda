@@ -7,6 +7,8 @@ import { es } from 'date-fns/locale';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import { useAnalyticsStore } from '../../../store/analyticsStore';
 import { ProductPerformanceTable } from '../components/ProductPerformanceTable';
+import { PageHeader } from '../components/shared';
+import styles from './AnalyticsPage.module.css';
 
 const DATE_PRESETS = [
   { label: 'Hoy', days: 0 },
@@ -79,64 +81,66 @@ export default function AnalyticsPage() {
     { name: 'Otros', value: 8 },
   ];
 
+  const exportButton = (
+    <button className={styles.exportButton}>
+      <svg className={styles.exportButtonIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+      </svg>
+      Exportar Reporte
+    </button>
+  );
+
   return (
-    <div className="p-6 space-y-6">
+    <div className={styles.pageContainer}>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Analytics</h1>
-          <p className="text-gray-500 mt-1">Análisis detallado de tu tienda</p>
-        </div>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-          </svg>
-          Exportar Reporte
-        </button>
-      </div>
+      <PageHeader
+        title="Analytics"
+        subtitle="Análisis detallado de tu tienda"
+        actions={exportButton}
+      />
 
       {/* Date Range Picker */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4">
-        <div className="flex flex-wrap gap-2">
+      <div className={styles.dateRangeCard}>
+        <div className={styles.presetButtons}>
           {DATE_PRESETS.map((preset) => (
             <button
               key={preset.label}
               onClick={() => handlePresetChange(preset)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`${styles.presetButton} ${
                 selectedPreset === preset.label
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? styles.presetButtonActive
+                  : styles.presetButtonInactive
               }`}
             >
               {preset.label}
             </button>
           ))}
         </div>
-        <div className="flex gap-4 mt-4">
-          <div className="flex-1">
-            <label className="block text-sm text-gray-500 mb-1">Desde</label>
+        <div className={styles.dateInputsRow}>
+          <div className={styles.dateInputGroup}>
+            <label className={styles.dateLabel}>Desde</label>
             <input
               type="date"
               value={startDate}
               onChange={(e) => setDateRange(e.target.value, endDate)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={styles.dateInput}
             />
           </div>
-          <div className="flex-1">
-            <label className="block text-sm text-gray-500 mb-1">Hasta</label>
+          <div className={styles.dateInputGroup}>
+            <label className={styles.dateLabel}>Hasta</label>
             <input
               type="date"
               value={endDate}
               onChange={(e) => setDateRange(startDate, e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={styles.dateInput}
             />
           </div>
-          <div className="w-40">
-            <label className="block text-sm text-gray-500 mb-1">Agrupar por</label>
+          <div className={`${styles.dateInputGroup} ${styles.dateInputGroupSmall}`}>
+            <label className={styles.dateLabel}>Agrupar por</label>
             <select
               value={groupBy}
               onChange={(e) => setGroupBy(e.target.value as 'day' | 'week' | 'month')}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={styles.dateInput}
             >
               <option value="day">Día</option>
               <option value="week">Semana</option>
@@ -147,75 +151,75 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className={styles.overviewGrid}>
+        <div className={styles.overviewCard}>
+          <div className={styles.overviewCardHeader}>
+            <div className={`${styles.overviewIconBox} ${styles.overviewIconBoxBlue}`}>
+              <svg className={`${styles.overviewIcon} ${styles.overviewIconBlue}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <span className="text-sm text-gray-500">Ingresos Totales</span>
+            <span className={styles.overviewLabel}>Ingresos Totales</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">
+          <p className={styles.overviewValue}>
             ${(overview?.totalRevenue || 0).toLocaleString('es-AR', { minimumFractionDigits: 2 })}
           </p>
-          <p className="text-sm text-green-600 mt-1">
+          <p className={styles.overviewGrowth}>
             ↑ {(overview?.revenueGrowth || 0).toFixed(1)}% vs período anterior
           </p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className={styles.overviewCard}>
+          <div className={styles.overviewCardHeader}>
+            <div className={`${styles.overviewIconBox} ${styles.overviewIconBoxGreen}`}>
+              <svg className={`${styles.overviewIcon} ${styles.overviewIconGreen}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
             </div>
-            <span className="text-sm text-gray-500">Pedidos Totales</span>
+            <span className={styles.overviewLabel}>Pedidos Totales</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{overview?.totalOrders || 0}</p>
-          <p className="text-sm text-green-600 mt-1">
+          <p className={styles.overviewValue}>{overview?.totalOrders || 0}</p>
+          <p className={styles.overviewGrowth}>
             ↑ {(overview?.ordersGrowth || 0).toFixed(1)}% vs período anterior
           </p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="p-2 bg-purple-100 rounded-lg">
-              <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className={styles.overviewCard}>
+          <div className={styles.overviewCardHeader}>
+            <div className={`${styles.overviewIconBox} ${styles.overviewIconBoxPurple}`}>
+              <svg className={`${styles.overviewIcon} ${styles.overviewIconPurple}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
-            <span className="text-sm text-gray-500">Clientes Nuevos</span>
+            <span className={styles.overviewLabel}>Clientes Nuevos</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{overview?.totalCustomers || 0}</p>
-          <p className="text-sm text-green-600 mt-1">
+          <p className={styles.overviewValue}>{overview?.totalCustomers || 0}</p>
+          <p className={styles.overviewGrowth}>
             ↑ {(overview?.customersGrowth || 0).toFixed(1)}% vs período anterior
           </p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="p-2 bg-orange-100 rounded-lg">
-              <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className={styles.overviewCard}>
+          <div className={styles.overviewCardHeader}>
+            <div className={`${styles.overviewIconBox} ${styles.overviewIconBoxOrange}`}>
+              <svg className={`${styles.overviewIcon} ${styles.overviewIconOrange}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
             </div>
-            <span className="text-sm text-gray-500">Ticket Promedio</span>
+            <span className={styles.overviewLabel}>Ticket Promedio</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">
+          <p className={styles.overviewValue}>
             ${(overview?.averageOrderValue || 0).toLocaleString('es-AR', { minimumFractionDigits: 2 })}
           </p>
         </div>
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className={styles.chartsRow}>
         {/* Revenue Chart */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Ingresos por Período</h3>
-          <div className="h-80">
+        <div className={styles.chartCard}>
+          <h3 className={styles.chartTitle}>Ingresos por Período</h3>
+          <div className={styles.chartContainer}>
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={revenueData}>
                 <defs>
@@ -255,9 +259,9 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Category Pie Chart */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Ventas por Categoría</h3>
-          <div className="h-80">
+        <div className={styles.categoryChartCard}>
+          <h3 className={styles.chartTitle}>Ventas por Categoría</h3>
+          <div className={styles.chartContainer}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
