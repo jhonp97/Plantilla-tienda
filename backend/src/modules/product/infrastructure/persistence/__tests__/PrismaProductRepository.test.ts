@@ -1,6 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { PrismaProductRepository } from '../PrismaProductRepository';
 
+// Helper to create a mock Decimal-like object
+const createDecimal = (value: number) => {
+  return {
+    toString: () => String(value),
+    toNumber: () => value,
+    [Symbol.toStringTag]: 'Decimal',
+  };
+};
+
 // Mock Prisma client
 const mockPrisma = {
   product: {
@@ -39,6 +48,7 @@ describe('PrismaProductRepository', () => {
         price: 9999,
         stockQuantity: 10,
         isActive: true,
+        taxRate: createDecimal(21),
         categoryId: 'cat-123',
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -50,14 +60,16 @@ describe('PrismaProductRepository', () => {
 
       expect(result.name).toBe('Test Product');
       expect(result.slug).toBe('test-product');
+      expect(result.taxRate).toBe(21);
       expect(mockPrisma.product.create).toHaveBeenCalledWith({
         data: {
           name: input.name,
-          slug: expect.any(String),
+          slug: 'test-product',
           description: input.description,
           price: input.price,
           stockQuantity: input.stockQuantity,
           isActive: true,
+          taxRate: 21,
           categoryId: input.categoryId,
         },
       });

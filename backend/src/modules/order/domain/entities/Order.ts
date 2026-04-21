@@ -1,15 +1,13 @@
 import type { OrderItemProps } from './OrderItem';
 import type { AddressProps } from './Address';
 
-export type OrderStatus = 
-  | 'DRAFT'
-  | 'PENDING_PAYMENT'
+export type OrderStatus =
+  | 'PENDING'
   | 'PAID'
   | 'PROCESSING'
   | 'SHIPPED'
   | 'DELIVERED'
-  | 'CANCELLED'
-  | 'REFUNDED';
+  | 'CANCELLED';
 
 export type PaymentMethod = 'CARD' | 'TRANSFER' | 'CASH';
 
@@ -60,16 +58,32 @@ export interface CreateOrderInput {
   customerNif?: string;
 }
 
-// Estado legal: transition map
+// ==========================================
+// Order State Machine (Legal Compliance)
+// ==========================================
+// Valid transitions:
+//   PENDING → PAID | CANCELLED
+//   PAID → PROCESSING | CANCELLED (if cancelled, creates credit note)
+//   PROCESSING → SHIPPED | CANCELLED (if cancelled, creates credit note)
+//   SHIPPED → DELIVERED
+//   DELIVERED → REFUNDED (post-delivery refund)
+//
+// Cancellation Rules:
+// - PENDING: Direct cancellation, no credit note needed
+// - PAID/PROCESSING: Cancellation creates credit note for tax purposes
+// - SHIPPED/DELIVERED: Cannot cancel, must refund
+//
+// Immutability:
+// - Once PAID, PROCESSING, SHIPPED, or DELIVERED: core order data is immutable
+// - Only tracking number can be updated after SHIPPING
+// ==========================================
 const VALID_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
-  DRAFT: ['PENDING_PAYMENT', 'CANCELLED'],
-  PENDING_PAYMENT: ['PAID', 'CANCELLED'],
-  PAID: ['PROCESSING', 'REFUNDED', 'CANCELLED'],
-  PROCESSING: ['SHIPPED', 'REFUNDED', 'CANCELLED'],
-  SHIPPED: ['DELIVERED', 'REFUNDED'],
-  DELIVERED: ['REFUNDED'],
+  PENDING: ['PAID', 'CANCELLED'],
+  PAID: ['PROCESSING', 'CANCELLED'],
+  PROCESSING: ['SHIPPED', 'CANCELLED'],
+  SHIPPED: ['DELIVERED'],
+  DELIVERED: [], // Only refund after delivery
   CANCELLED: [],
-  REFUNDED: [],
 };
 
 export class Order {

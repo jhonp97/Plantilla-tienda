@@ -70,6 +70,7 @@ async function main() {
         price: 9999,
         stockQuantity: 50,
         isActive: true,
+        taxRate: 21,
         categoryId: electronics.id,
       },
       {
@@ -79,6 +80,7 @@ async function main() {
         price: 59999,
         stockQuantity: 25,
         isActive: true,
+        taxRate: 21,
         categoryId: electronics.id,
       },
       {
@@ -88,6 +90,7 @@ async function main() {
         price: 89999,
         stockQuantity: 15,
         isActive: true,
+        taxRate: 21,
         categoryId: electronics.id,
       },
       {
@@ -97,6 +100,7 @@ async function main() {
         price: 2499,
         stockQuantity: 100,
         isActive: true,
+        taxRate: 21,
         categoryId: clothing.id,
       },
       {
@@ -106,6 +110,7 @@ async function main() {
         price: 7999,
         stockQuantity: 40,
         isActive: true,
+        taxRate: 21,
         categoryId: clothing.id,
       },
       {
@@ -115,6 +120,7 @@ async function main() {
         price: 5999,
         stockQuantity: 30,
         isActive: true,
+        taxRate: 21,
         categoryId: home.id,
       },
       {
@@ -124,6 +130,7 @@ async function main() {
         price: 4499,
         stockQuantity: 20,
         isActive: true,
+        taxRate: 21,
         categoryId: home.id,
       },
       {
@@ -133,6 +140,7 @@ async function main() {
         price: 14999,
         stockQuantity: 35,
         isActive: true,
+        taxRate: 21,
         categoryId: electronics.id,
       },
     ];

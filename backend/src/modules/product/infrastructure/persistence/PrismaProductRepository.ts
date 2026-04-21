@@ -30,6 +30,7 @@ export class PrismaProductRepository implements IProductRepository {
         price: input.price,
         stockQuantity: input.stockQuantity,
         isActive: input.isActive ?? true,
+        taxRate: input.taxRate ?? 21,
         categoryId: input.categoryId,
       },
     });
@@ -42,6 +43,7 @@ export class PrismaProductRepository implements IProductRepository {
       price: record.price,
       stockQuantity: record.stockQuantity,
       isActive: record.isActive,
+      taxRate: Number(record.taxRate),
       categoryId: record.categoryId,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
@@ -174,6 +176,9 @@ export class PrismaProductRepository implements IProductRepository {
     if (data.stockQuantity !== undefined) {
       updateData.stockQuantity = data.stockQuantity;
     }
+    if (data.taxRate !== undefined) {
+      updateData.taxRate = data.taxRate;
+    }
     if (data.categoryId !== undefined) {
       updateData.category = { connect: { id: data.categoryId } };
     }
@@ -278,6 +283,7 @@ export class PrismaProductRepository implements IProductRepository {
       price: prismaProduct.price,
       stockQuantity: prismaProduct.stockQuantity,
       isActive: prismaProduct.isActive,
+      taxRate: Number(prismaProduct.taxRate),
       categoryId: prismaProduct.categoryId,
       category: category?.toJSON(),
       images: images?.map(img => img.toJSON()),

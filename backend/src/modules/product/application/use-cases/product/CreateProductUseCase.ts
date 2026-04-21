@@ -13,6 +13,7 @@ export interface CreateProductInput {
   description: string;
   price: number;
   stockQuantity: number;
+  taxRate?: number; // 0, 4, 10, or 21
   categoryId: string;
   images?: Array<{
     url: string;
@@ -57,6 +58,7 @@ export class CreateProductUseCase {
       description: validated.description,
       price: validated.price,
       stockQuantity: validated.stockQuantity,
+      taxRate: validated.taxRate ?? 21,
       categoryId: validated.categoryId,
     });
 

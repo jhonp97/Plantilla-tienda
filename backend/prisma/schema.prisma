@@ -82,6 +82,7 @@ model Product {
   price         Int           // Price in cents (avoid float)
   stockQuantity Int           @default(0)
   isActive      Boolean       @default(true)
+  taxRate       Decimal       @default(21.00) @db.Decimal(5, 2)
   categoryId    String
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
@@ -168,14 +169,13 @@ model Order {
   shippedAt       DateTime?
   deliveredAt     DateTime?
 
-  // Verifactu fields
-  verifactuUuid        String?
-  verifactuQrCode      String?   @db.Text
-  verifactuUrl         String?
-  verifactuStatus      String?
-  verifactuRegisteredAt DateTime?
+  // Immutability: No Verifactu fields here anymore - they are in Invoice
+  // Cancellation tracking
+  cancelledAt     DateTime?
+  cancellationReason String?
 
   items           OrderItem[]
+  invoice         Invoice?
 
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
@@ -184,8 +184,6 @@ model Order {
   @@index([status])
   @@index([createdAt])
   @@index([orderNumber])
-  @@index([verifactuUuid])
-  @@index([verifactuStatus])
   @@map("orders")
 }
 
@@ -199,6 +197,7 @@ model OrderItem {
   productId   String
   productName String
   productPrice Int
+  taxRate     Decimal @default(21.00) @db.Decimal(5, 2)
   quantity    Int
 
   @@index([orderId])
@@ -248,4 +247,41 @@ model VerifactuInvoice {
   @@index([uuid])
   @@index([estado])
   @@map("verifactu_invoices")
+}
+
+// ==========================================
+// Invoice Model
+// ==========================================
+model Invoice {
+  id              String    @id @default(uuid())
+  orderId         String    @unique
+  order           Order     @relation(fields: [orderId], references: [id])
+
+  invoiceNumber   String    @unique
+
+  // Customer snapshot at purchase time
+  customerSnapshot Json     // { name, email, nifCif, address }
+
+  // Items snapshot at purchase time
+  itemsSnapshot   Json      // Array of { productId, productName, productPrice, quantity, taxRate }
+
+  // Financials
+  subtotal        Int       // cents
+  taxAmount       Int       // cents
+  total           Int       // cents
+  taxRate         Decimal   @db.Decimal(5, 2)
+
+  // Verifactu data
+  verifactuUuid   String?
+  verifactuQrCode String?   @db.Text
+  verifactuUrl    String?
+  verifactuStatus String?
+  verifactuRegisteredAt DateTime?
+
+  createdAt       DateTime  @default(now())
+
+  @@index([orderId])
+  @@index([invoiceNumber])
+  @@index([verifactuUuid])
+  @@map("invoices")
 }

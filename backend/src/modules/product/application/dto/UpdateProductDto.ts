@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+const taxRateValues = [0, 4, 10, 21] as const;
+
 export const updateProductSchema = z
   .object({
     name: z
@@ -21,6 +23,13 @@ export const updateProductSchema = z
       .number()
       .int('Stock quantity must be an integer')
       .min(0, 'Stock quantity cannot be negative')
+      .optional(),
+    taxRate: z
+      .number()
+      .int('Tax rate must be an integer')
+      .refine((val) => taxRateValues.includes(val as typeof taxRateValues[number]), {
+        message: 'Tax rate must be one of: 0, 4, 10, or 21',
+      })
       .optional(),
     categoryId: z.string().uuid('Invalid category ID format').optional(),
   })

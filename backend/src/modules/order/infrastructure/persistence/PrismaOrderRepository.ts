@@ -41,6 +41,7 @@ interface PrismaOrderRecord {
     productId: string;
     productName: string;
     productPrice: number;
+    taxRate: number;
     quantity: number;
   }>;
   shippingAddress: {
@@ -376,7 +377,7 @@ export class PrismaOrderRepository implements IOrderRepository {
       productSku: undefined,
       quantity: item.quantity,
       unitPrice: item.productPrice,
-      taxRate: 21,
+      taxRate: item.taxRate ?? 21,
       discountAmount: 0,
       createdAt: record.createdAt,
     }));
