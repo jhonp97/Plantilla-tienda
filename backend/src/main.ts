@@ -5,6 +5,8 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { env } from '@config/env';
 import { prisma } from '@shared/infra/prisma/client';
+import { ITransactionManager } from '@shared/ITransactionManager';
+import { PrismaTransactionManager } from '@shared/PrismaTransactionManager';
 import { AuthController } from '@modules/auth/infrastructure/authController';
 import { createAuthRouter } from '@modules/auth/infrastructure/authRouter';
 import { PrismaUserRepository } from '@modules/auth/infrastructure/PrismaUserRepository';
@@ -244,6 +246,9 @@ app.use('/api', imageRouter);
 // Import event bus
 import { eventBus } from '@shared/events/EventBus';
 
+// Transaction manager for ACID compliance
+const transactionManager: ITransactionManager = new PrismaTransactionManager();
+
 // Repositories
 const orderRepository = new PrismaOrderRepository(prisma);
 const addressRepository = new PrismaAddressRepository(prisma);
@@ -254,7 +259,7 @@ const stripeService = new StripeService();
 const emailService = new EmailService();
 
 // Order use cases
-const createOrderUseCase = new CreateOrderUseCase(orderRepository, productRepository, settingsRepository);
+const createOrderUseCase = new CreateOrderUseCase(orderRepository, productRepository, settingsRepository, transactionManager);
 const getOrderByIdUseCase = new GetOrderByIdUseCase(orderRepository);
 const getOrderByNumberUseCase = new GetOrderByNumberUseCase(orderRepository);
 const listUserOrdersUseCase = new ListUserOrdersUseCase(orderRepository);
@@ -267,7 +272,7 @@ const addToCartUseCase = new AddToCartUseCase(orderRepository, productRepository
 const updateCartItemUseCase = new UpdateCartItemUseCase(orderRepository, productRepository);
 const removeFromCartUseCase = new RemoveFromCartUseCase(orderRepository);
 const getCartUseCase = new GetCartUseCase(orderRepository);
-const mergeGuestCartUseCase = new MergeGuestCartUseCase(orderRepository);
+const mergeGuestCartUseCase = new MergeGuestCartUseCase(orderRepository, transactionManager);
 
 // Address use cases
 const createAddressUseCase = new CreateAddressUseCase(addressRepository);
@@ -367,7 +372,7 @@ const webhookHandler: WebhookHandler = {
 
 const createPaymentIntentUseCase = new CreatePaymentIntentUseCase(orderRepository, simpleStripeService);
 const handleWebhookUseCase = new HandleWebhookUseCase(webhookHandler);
-const confirmPaymentUseCase = new ConfirmPaymentUseCase(orderRepository, productRepository, settingsRepository, emailService, eventBus);
+const confirmPaymentUseCase = new ConfirmPaymentUseCase(orderRepository, productRepository, settingsRepository, emailService, eventBus, transactionManager);
 const handleFailedPaymentUseCase = new HandleFailedPaymentUseCase(orderRepository);
 
 // Analytics use cases

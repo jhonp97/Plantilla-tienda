@@ -1,72 +1,81 @@
 import type { IOrderRepository } from '@modules/order/domain/repositories/IOrderRepository';
+import type { ITransactionManager } from '@shared/ITransactionManager';
 import type { Order } from '@modules/order/domain/entities/Order';
 
 export class MergeGuestCartUseCase {
-  constructor(private orderRepo: IOrderRepository) {}
+  constructor(
+    private orderRepo: IOrderRepository,
+    private transactionManager: ITransactionManager
+  ) {}
 
   async execute(guestUserId: string, loggedInUserId: string): Promise<Order> {
-    const guestCart = await this.findCartByUserId(guestUserId);
-    
-    let userCart = await this.findCartByUserId(loggedInUserId);
-    
-    if (!guestCart) {
-      if (!userCart) {
-        userCart = await this.orderRepo.create({
-          userId: loggedInUserId,
-          shippingAddress: {
-            street: '',
-            postalCode: '',
-            city: '',
-            province: '',
-            country: 'España',
-          },
-          paymentMethod: 'CARD',
-        });
-      }
-      return userCart;
-    }
-
-    if (!userCart) {
-      const reassignedCart = await this.orderRepo.create({
-        userId: loggedInUserId,
-        shippingAddress: guestCart.shippingAddress,
-        paymentMethod: guestCart.paymentMethod,
-      });
+    // Wrap entire merge operation in a transaction
+    return this.transactionManager.execute(async (tx) => {
+      const guestCart = await this.findCartByUserId(guestUserId);
       
-      for (const item of guestCart.items) {
-        await this.orderRepo.addItem(reassignedCart.id, {
-          ...item,
+      let userCart = await this.findCartByUserId(loggedInUserId);
+      
+      if (!guestCart) {
+        if (!userCart) {
+          userCart = await this.orderRepo.create({
+            userId: loggedInUserId,
+            shippingAddress: {
+              street: '',
+              postalCode: '',
+              city: '',
+              province: '',
+              country: 'España',
+            },
+            paymentMethod: 'CARD',
+          });
+        }
+        return userCart;
+      }
+
+      if (!userCart) {
+        const reassignedCart = await this.orderRepo.create({
+          userId: loggedInUserId,
+          shippingAddress: guestCart.shippingAddress,
+          paymentMethod: guestCart.paymentMethod,
+        });
+        
+        for (const item of guestCart.items) {
+          await this.orderRepo.addItem(reassignedCart.id, {
+            ...item,
+            id: crypto.randomUUID(),
+            orderId: reassignedCart.id,
+            createdAt: new Date(),
+          });
+        }
+        
+        await this.orderRepo.cancel(guestCart.id, 'Merged with user cart on login');
+        
+        const finalCart = await this.orderRepo.findById(reassignedCart.id);
+        if (!finalCart) {
+          throw new Error('Failed to retrieve merged cart');
+        }
+        return finalCart;
+      }
+
+      // Transfer all items from guest cart to user cart
+      for (const guestItem of guestCart.items) {
+        await this.orderRepo.addItem(userCart.id, {
+          ...guestItem,
           id: crypto.randomUUID(),
-          orderId: reassignedCart.id,
+          orderId: userCart.id,
           createdAt: new Date(),
         });
       }
-      
+
+      // Cancel the guest cart
       await this.orderRepo.cancel(guestCart.id, 'Merged with user cart on login');
-      
-      const finalCart = await this.orderRepo.findById(reassignedCart.id);
+
+      const finalCart = await this.orderRepo.findById(userCart.id);
       if (!finalCart) {
         throw new Error('Failed to retrieve merged cart');
       }
       return finalCart;
-    }
-
-    for (const guestItem of guestCart.items) {
-      await this.orderRepo.addItem(userCart.id, {
-        ...guestItem,
-        id: crypto.randomUUID(),
-        orderId: userCart.id,
-        createdAt: new Date(),
-      });
-    }
-
-    await this.orderRepo.cancel(guestCart.id, 'Merged with user cart on login');
-
-    const finalCart = await this.orderRepo.findById(userCart.id);
-    if (!finalCart) {
-      throw new Error('Failed to retrieve merged cart');
-    }
-    return finalCart;
+    });
   }
 
   private async findCartByUserId(userId: string): Promise<Order | null> {
