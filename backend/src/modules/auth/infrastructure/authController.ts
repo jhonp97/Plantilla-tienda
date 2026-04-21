@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
-import type { RegisterResult } from '@modules/auth/application/RegisterUseCase';
-import { LoginUseCase } from '@modules/auth/application/LoginUseCase';
+import type { RegisterResult } from '@modules/auth/application/use-cases/RegisterUseCase';
+import { LoginUseCase } from '@modules/auth/application/use-cases/LoginUseCase';
 import { GetCurrentUserUseCase } from '@modules/auth/application/GetCurrentUserUseCase';
 import { LogoutUseCase } from '@modules/auth/application/LogoutUseCase';
 import { getCookieOptions, getClearCookieOptions } from '@config/cookie';

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { RegisterUseCase } from '../../RegisterUseCase';
+import { RegisterUseCase } from '../RegisterUseCase';
 
 // Mock bcrypt
 vi.mock('bcryptjs', () => ({

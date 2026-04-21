@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { LoginUseCase } from '../../LoginUseCase';
+import { LoginUseCase } from '../LoginUseCase';
 
 // Mock jwt
 vi.mock('jsonwebtoken', () => ({
