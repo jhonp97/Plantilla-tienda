@@ -413,3 +413,18 @@
 .retryButton:hover {
   background: var(--color-primary-hover);
 }
+
+/* Icon sizing utilities */
+.iconMd {
+  width: 24px;
+  height: 24px;
+}
+
+.iconSm {
+  width: 16px;
+  height: 16px;
+}
+
+.iconMarginLeft {
+  margin-left: 4px;
+}

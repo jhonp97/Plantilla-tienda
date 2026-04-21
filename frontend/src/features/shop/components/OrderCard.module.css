@@ -117,6 +117,12 @@
   height: 1.25rem;
 }
 
+/* Icon sizing utilities */
+.iconSm {
+  width: 20px;
+  height: 20px;
+}
+
 .moreItems {
   width: 3rem;
   height: 3rem;

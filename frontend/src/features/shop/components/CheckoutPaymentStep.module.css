@@ -207,3 +207,9 @@
 .trustBadgeText {
   font-size: 0.75rem;
 }
+
+/* Icon sizing utilities */
+.iconSm {
+  width: 16px;
+  height: 16px;
+}

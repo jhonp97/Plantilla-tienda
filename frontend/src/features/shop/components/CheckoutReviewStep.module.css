@@ -81,6 +81,12 @@
   height: 1.5rem;
 }
 
+/* Icon sizing utilities */
+.iconMd {
+  width: 24px;
+  height: 24px;
+}
+
 .cartItemInfo {
   flex: 1;
   min-width: 0;

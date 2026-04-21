@@ -128,7 +128,7 @@ export function StripePaymentForm({ amount, onSuccess }: StripePaymentFormProps)
             className={`${styles.input} ${cardErrors.cardNumber ? styles.inputError : ''}`}
           />
           <div className={styles.cardIcon}>
-            <svg className="h-8 w-auto" viewBox="0 0 50 20" fill="none">
+            <svg className={styles.iconAuto} viewBox="0 0 50 20" fill="none">
               <rect width="50" height="20" rx="2" fill="#F1F5F9" />
               <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="8" fill="#64748B">VISA</text>
             </svg>
@@ -193,8 +193,8 @@ export function StripePaymentForm({ amount, onSuccess }: StripePaymentFormProps)
         {isLoading ? (
           <span className={styles.spinner}>
             <svg className={styles.spinnerIcon} viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              <circle className={styles.spinnerCircle} cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className={styles.spinnerPath} fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
             </svg>
             Procesando pago...
           </span>

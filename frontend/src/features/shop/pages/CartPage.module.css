@@ -273,3 +273,9 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* Icon sizing utilities */
+.iconMd {
+  width: 20px;
+  height: 20px;
+}

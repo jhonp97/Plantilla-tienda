@@ -151,6 +151,22 @@
   height: 1rem;
 }
 
+/* Icon sizing utilities */
+.iconXl {
+  width: 40px;
+  height: 40px;
+}
+
+.iconSm {
+  width: 20px;
+  height: 20px;
+}
+
+.iconXs {
+  width: 16px;
+  height: 16px;
+}
+
 .quantityValue {
   padding: var(--spacing-sm) var(--spacing-md);
   color: var(--color-gray-900);

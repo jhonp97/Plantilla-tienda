@@ -55,7 +55,7 @@ export function CartItem({ item }: CartItemProps) {
             />
           ) : (
             <div className={styles.productImagePlaceholder}>
-              <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={styles.iconXl} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -89,7 +89,7 @@ export function CartItem({ item }: CartItemProps) {
               aria-label="Eliminar del carrito"
             >
               <svg
-                className="w-5 h-5"
+                className={styles.iconSm}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -113,7 +113,7 @@ export function CartItem({ item }: CartItemProps) {
                 className={styles.quantityButton}
                 aria-label="Disminuir cantidad"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={styles.iconXs} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                 </svg>
               </button>
@@ -125,7 +125,7 @@ export function CartItem({ item }: CartItemProps) {
                 className={styles.quantityButton}
                 aria-label="Aumentar cantidad"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={styles.iconXs} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
               </button>

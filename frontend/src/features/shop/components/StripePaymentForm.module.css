@@ -161,3 +161,17 @@
   color: var(--color-gray-400);
   margin-top: var(--spacing-xs);
 }
+
+/* Icon sizing utilities */
+.iconAuto {
+  width: auto;
+  height: 32px;
+}
+
+.spinnerCircle {
+  opacity: 0.25;
+}
+
+.spinnerPath {
+  opacity: 0.75;
+}

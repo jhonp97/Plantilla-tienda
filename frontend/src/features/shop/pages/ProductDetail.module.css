@@ -601,3 +601,32 @@
 .backButton:hover {
   background: var(--color-primary-hover);
 }
+
+/* Icon sizing utilities */
+.icon4xl {
+  width: 96px;
+  height: 96px;
+}
+
+.iconLg {
+  width: 32px;
+  height: 32px;
+}
+
+.iconXs {
+  width: 16px;
+  height: 16px;
+}
+
+.iconXl {
+  width: 48px;
+  height: 48px;
+}
+
+.spinnerCircle {
+  opacity: 0.25;
+}
+
+.spinnerPath {
+  opacity: 0.75;
+}
