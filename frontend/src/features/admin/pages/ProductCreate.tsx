@@ -7,6 +7,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useProductStore } from '../../../store/productStore';
 import { z } from 'zod';
 import type { Category } from '../../../types/product.types';
+import styles from './ProductCreate.module.css';
 
 // Validation schema
 const productSchema = z.object({
@@ -59,17 +60,13 @@ function ImageUpload({ images, previews, onImagesChange }: ImageUploadProps) {
   };
 
   return (
-    <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-700">
+    <div className={styles.imageUploadSection}>
+      <label className={styles.imageUploadLabel}>
         Imágenes del producto
       </label>
       
       <div
-        className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
-          isDragging 
-            ? 'border-blue-500 bg-blue-50' 
-            : 'border-gray-300 hover:border-gray-400'
-        }`}
+        className={`${styles.imageDropzone} ${isDragging ? styles.imageDropzoneActive : ''}`}
         onDragOver={(e) => {
           e.preventDefault();
           setIsDragging(true);
@@ -82,42 +79,42 @@ function ImageUpload({ images, previews, onImagesChange }: ImageUploadProps) {
           type="file"
           accept="image/*"
           multiple
-          className="hidden"
+          className={styles.hiddenInput}
           onChange={(e) => handleFileSelect(e.target.files)}
         />
         
         {previews.length === 0 ? (
-          <div className="space-y-2">
-            <svg className="w-12 h-12 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className={styles.imageDropzoneContent}>
+            <svg className={styles.imageDropzoneIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <p className="text-gray-500">
+            <p className={styles.imageDropzoneText}>
               Arrastra imágenes aquí o{' '}
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="text-blue-600 hover:underline"
+                className={styles.imageDropzoneLink}
               >
                 selecciona archivos
               </button>
             </p>
-            <p className="text-xs text-gray-400">PNG, JPG hasta 5MB</p>
+            <p className={styles.imageDropzoneHint}>PNG, JPG hasta 5MB</p>
           </div>
         ) : (
-          <div className="flex flex-wrap gap-2 justify-center">
+          <div className={styles.imagePreviews}>
             {previews.map((preview, index) => (
-              <div key={index} className="relative group">
+              <div key={index} className={styles.imagePreviewItem}>
                 <img
                   src={preview}
                   alt={`Preview ${index + 1}`}
-                  className="w-20 h-20 object-cover rounded-md"
+                  className={styles.imagePreview}
                 />
                 <button
                   type="button"
                   onClick={() => handleRemove(index)}
-                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className={styles.imageRemoveButton}
                 >
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className={styles.imageRemoveIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
@@ -127,9 +124,9 @@ function ImageUpload({ images, previews, onImagesChange }: ImageUploadProps) {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="w-20 h-20 border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors"
+                className={styles.imageAddButton}
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={styles.imageAddIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
               </button>
@@ -249,38 +246,38 @@ export default function ProductCreate() {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <div className="mb-6">
+    <div className={styles.pageContainer}>
+      <div className={styles.backLink}>
         <Link
           to="/dashboard/products"
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          className={styles.backLink}
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className={styles.backLinkIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           Volver a productos
         </Link>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Nuevo Producto</h1>
+      <div className={styles.formCard}>
+        <h1 className={styles.formTitle}>Nuevo Producto</h1>
 
         {submitError && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md text-red-700">
+          <div className={styles.alert}>
             {submitError}
           </div>
         )}
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md text-red-700">
+          <div className={styles.alert}>
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className={styles.form}>
           {/* Name */}
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className={styles.formGroup}>
+            <label htmlFor="name" className={styles.formLabel}>
               Nombre del producto *
             </label>
             <input
@@ -289,21 +286,17 @@ export default function ProductCreate() {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                fieldErrors.name 
-                  ? 'border-red-500 focus:ring-red-500' 
-                  : 'border-gray-300 focus:ring-blue-500'
-              }`}
+              className={`${styles.formInput} ${fieldErrors.name ? styles.formInputError : ''}`}
               placeholder="Nombre del producto"
             />
             {fieldErrors.name && (
-              <p className="mt-1 text-sm text-red-600">{fieldErrors.name}</p>
+              <p className={styles.formError}>{fieldErrors.name}</p>
             )}
           </div>
 
           {/* Description */}
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className={styles.formGroup}>
+            <label htmlFor="description" className={styles.formLabel}>
               Descripción *
             </label>
             <textarea
@@ -312,22 +305,18 @@ export default function ProductCreate() {
               value={formData.description}
               onChange={handleChange}
               rows={4}
-              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                fieldErrors.description 
-                  ? 'border-red-500 focus:ring-red-500' 
-                  : 'border-gray-300 focus:ring-blue-500'
-              }`}
+              className={`${styles.formTextarea} ${fieldErrors.description ? styles.formInputError : ''}`}
               placeholder="Descripción detallada del producto"
             />
             {fieldErrors.description && (
-              <p className="mt-1 text-sm text-red-600">{fieldErrors.description}</p>
+              <p className={styles.formError}>{fieldErrors.description}</p>
             )}
           </div>
 
           {/* Price & Stock */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className={styles.formRow}>
+            <div className={styles.formGroup}>
+              <label htmlFor="price" className={styles.formLabel}>
                 Precio (€) *
               </label>
               <input
@@ -338,19 +327,15 @@ export default function ProductCreate() {
                 min="0"
                 value={formData.price}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                  fieldErrors.price 
-                    ? 'border-red-500 focus:ring-red-500' 
-                    : 'border-gray-300 focus:ring-blue-500'
-                }`}
+                className={`${styles.formInput} ${fieldErrors.price ? styles.formInputError : ''}`}
                 placeholder="0.00"
               />
               {fieldErrors.price && (
-                <p className="mt-1 text-sm text-red-600">{fieldErrors.price}</p>
+                <p className={styles.formError}>{fieldErrors.price}</p>
               )}
             </div>
-            <div>
-              <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className={styles.formGroup}>
+              <label htmlFor="stock" className={styles.formLabel}>
                 Stock *
               </label>
               <input
@@ -360,23 +345,19 @@ export default function ProductCreate() {
                 min="0"
                 value={formData.stock}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                  fieldErrors.stock 
-                    ? 'border-red-500 focus:ring-red-500' 
-                    : 'border-gray-300 focus:ring-blue-500'
-                }`}
+                className={`${styles.formInput} ${fieldErrors.stock ? styles.formInputError : ''}`}
                 placeholder="0"
               />
               {fieldErrors.stock && (
-                <p className="mt-1 text-sm text-red-600">{fieldErrors.stock}</p>
+                <p className={styles.formError}>{fieldErrors.stock}</p>
               )}
             </div>
           </div>
 
           {/* Tax Rate & Category */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="taxRate" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className={styles.formRow}>
+            <div className={styles.formGroup}>
+              <label htmlFor="taxRate" className={styles.formLabel}>
                 Tasa de Impuesto (%)
               </label>
               <input
@@ -387,12 +368,12 @@ export default function ProductCreate() {
                 max="100"
                 value={formData.taxRate}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={styles.formInput}
                 placeholder="21"
               />
             </div>
-            <div>
-              <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className={styles.formGroup}>
+              <label htmlFor="categoryId" className={styles.formLabel}>
                 Categoría
               </label>
               <select
@@ -400,7 +381,7 @@ export default function ProductCreate() {
                 name="categoryId"
                 value={formData.categoryId}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={styles.formSelect}
               >
                 <option value="">Sin categoría</option>
                 {categories.map((cat: Category) => (
@@ -411,16 +392,16 @@ export default function ProductCreate() {
           </div>
 
           {/* Is Active */}
-          <div>
-            <label className="flex items-center cursor-pointer">
+          <div className={styles.formGroup}>
+            <label className={styles.checkboxLabel}>
               <input
                 type="checkbox"
                 name="isActive"
                 checked={formData.isActive}
                 onChange={handleChange}
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                className={styles.checkboxInput}
               />
-              <span className="ml-2 text-sm text-gray-700">Producto activo (visible en tienda)</span>
+              <span className={styles.checkboxText}>Producto activo (visible en tienda)</span>
             </label>
           </div>
 
@@ -432,17 +413,17 @@ export default function ProductCreate() {
           />
 
           {/* Submit */}
-          <div className="flex gap-3 justify-end pt-4 border-t border-gray-200">
+          <div className={styles.formActions}>
             <Link
               to="/dashboard/products"
-              className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+              className={styles.cancelButton}
             >
               Cancelar
             </Link>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className={styles.submitButton}
             >
               {isSubmitting ? 'Creando...' : 'Crear producto'}
             </button>

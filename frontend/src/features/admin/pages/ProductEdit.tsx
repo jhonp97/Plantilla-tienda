@@ -7,6 +7,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useProductStore } from '../../../store/productStore';
 import { z } from 'zod';
 import type { Category } from '../../../types/product.types';
+import styles from './ProductEdit.module.css';
 
 // Validation schema (same as create)
 const productSchema = z.object({
@@ -30,26 +31,24 @@ interface ExistingImageProps {
 
 function ExistingImage({ id, url, isPrimary, onDelete, onSetPrimary }: ExistingImageProps) {
   return (
-    <div className="relative group">
+    <div className={styles.existingImageItem}>
       <img
         src={url}
         alt="Imagen del producto"
-        className="w-20 h-20 object-cover rounded-md"
+        className={styles.existingImage}
       />
       {isPrimary && (
-        <span className="absolute top-0 left-0 bg-blue-500 text-white text-xs px-1 rounded-tl-md">
-          Principal
-        </span>
+        <span className={styles.existingImagePrimary}>Principal</span>
       )}
-      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 rounded-md">
+      <div className={styles.existingImageOverlay}>
         {!isPrimary && (
           <button
             type="button"
             onClick={() => onSetPrimary(id)}
-            className="p-1 bg-white text-gray-700 rounded-full hover:bg-gray-200"
+            className={styles.existingImageButton}
             title="Establecer como principal"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className={styles.existingImageIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </button>
@@ -57,10 +56,10 @@ function ExistingImage({ id, url, isPrimary, onDelete, onSetPrimary }: ExistingI
         <button
           type="button"
           onClick={() => onDelete(id)}
-          className="p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+          className={styles.existingImageButtonDanger}
           title="Eliminar"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className={styles.existingImageIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
@@ -120,14 +119,14 @@ function ImageUpload({
   const totalImages = existingImages.length + newImages.length;
 
   return (
-    <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-700">
+    <div className={styles.imageUploadSection}>
+      <label className={styles.imageUploadLabel}>
         Imágenes del producto
       </label>
       
       {/* Existing Images */}
       {existingImages.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className={styles.existingImages}>
           {existingImages.map((img) => (
             <ExistingImage
               key={img.id}
@@ -143,11 +142,7 @@ function ImageUpload({
 
       {/* New Images Dropzone */}
       <div
-        className={`border-2 border-dashed rounded-lg p-4 text-center transition-colors ${
-          isDragging 
-            ? 'border-blue-500 bg-blue-50' 
-            : 'border-gray-300 hover:border-gray-400'
-        }`}
+        className={`${styles.imageDropzone} ${isDragging ? styles.imageDropzoneActive : ''}`}
         onDragOver={(e) => {
           e.preventDefault();
           setIsDragging(true);
@@ -160,41 +155,41 @@ function ImageUpload({
           type="file"
           accept="image/*"
           multiple
-          className="hidden"
+          className={styles.hiddenInput}
           onChange={(e) => handleFileSelect(e.target.files)}
         />
         
         {totalImages === 0 ? (
-          <div className="space-y-2">
-            <svg className="w-10 h-10 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className={styles.imageDropzoneContent}>
+            <svg className={styles.imageDropzoneIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <p className="text-gray-500 text-sm">
+            <p className={styles.imageDropzoneText}>
               Arrastra imágenes aquí o{' '}
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="text-blue-600 hover:underline"
+                className={styles.imageDropzoneLink}
               >
                 selecciona archivos
               </button>
             </p>
           </div>
         ) : (
-          <div className="flex flex-wrap gap-2 justify-center">
+          <div className={styles.imagePreviews}>
             {newPreviews.map((preview, index) => (
-              <div key={index} className="relative group">
+              <div key={index} className={styles.imagePreviewItem}>
                 <img
                   src={preview}
                   alt={`Nueva imagen ${index + 1}`}
-                  className="w-16 h-16 object-cover rounded-md"
+                  className={styles.imagePreview}
                 />
                 <button
                   type="button"
                   onClick={() => handleRemoveNew(index)}
-                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className={styles.imageRemoveButton}
                 >
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className={styles.imageRemoveIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
@@ -204,9 +199,9 @@ function ImageUpload({
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="w-16 h-16 border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors"
+                className={styles.imageAddButton}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={styles.imageAddIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
               </button>
@@ -385,48 +380,46 @@ export default function ProductEdit() {
 
   if (isLoading && !selectedProduct) {
     return (
-      <div className="p-6 max-w-3xl mx-auto">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/3" />
-          <div className="h-64 bg-gray-200 rounded" />
-        </div>
+      <div className={styles.skeletonContainer}>
+        <div className={styles.skeletonTitle} />
+        <div className={styles.skeletonCard} />
       </div>
     );
   }
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <div className="mb-6">
+    <div className={styles.pageContainer}>
+      <div className={styles.backLink}>
         <Link
           to="/dashboard/products"
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          className={styles.backLink}
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className={styles.backLinkIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           Volver a productos
         </Link>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Editar Producto</h1>
+      <div className={styles.formCard}>
+        <h1 className={styles.formTitle}>Editar Producto</h1>
 
         {submitError && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md text-red-700">
+          <div className={styles.alert}>
             {submitError}
           </div>
         )}
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md text-red-700">
+          <div className={styles.alert}>
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className={styles.form}>
           {/* Name */}
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className={styles.formGroup}>
+            <label htmlFor="name" className={styles.formLabel}>
               Nombre del producto *
             </label>
             <input
@@ -435,20 +428,16 @@ export default function ProductEdit() {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                fieldErrors.name 
-                  ? 'border-red-500 focus:ring-red-500' 
-                  : 'border-gray-300 focus:ring-blue-500'
-              }`}
+              className={`${styles.formInput} ${fieldErrors.name ? styles.formInputError : ''}`}
             />
             {fieldErrors.name && (
-              <p className="mt-1 text-sm text-red-600">{fieldErrors.name}</p>
+              <p className={styles.formError}>{fieldErrors.name}</p>
             )}
           </div>
 
           {/* Description */}
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className={styles.formGroup}>
+            <label htmlFor="description" className={styles.formLabel}>
               Descripción *
             </label>
             <textarea
@@ -457,21 +446,17 @@ export default function ProductEdit() {
               value={formData.description}
               onChange={handleChange}
               rows={4}
-              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                fieldErrors.description 
-                  ? 'border-red-500 focus:ring-red-500' 
-                  : 'border-gray-300 focus:ring-blue-500'
-              }`}
+              className={`${styles.formTextarea} ${fieldErrors.description ? styles.formInputError : ''}`}
             />
             {fieldErrors.description && (
-              <p className="mt-1 text-sm text-red-600">{fieldErrors.description}</p>
+              <p className={styles.formError}>{fieldErrors.description}</p>
             )}
           </div>
 
           {/* Price & Stock */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className={styles.formRow}>
+            <div className={styles.formGroup}>
+              <label htmlFor="price" className={styles.formLabel}>
                 Precio (€) *
               </label>
               <input
@@ -482,18 +467,14 @@ export default function ProductEdit() {
                 min="0"
                 value={formData.price}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                  fieldErrors.price 
-                    ? 'border-red-500 focus:ring-red-500' 
-                    : 'border-gray-300 focus:ring-blue-500'
-                }`}
+                className={`${styles.formInput} ${fieldErrors.price ? styles.formInputError : ''}`}
               />
               {fieldErrors.price && (
-                <p className="mt-1 text-sm text-red-600">{fieldErrors.price}</p>
+                <p className={styles.formError}>{fieldErrors.price}</p>
               )}
             </div>
-            <div>
-              <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className={styles.formGroup}>
+              <label htmlFor="stock" className={styles.formLabel}>
                 Stock *
               </label>
               <input
@@ -503,22 +484,18 @@ export default function ProductEdit() {
                 min="0"
                 value={formData.stock}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                  fieldErrors.stock 
-                    ? 'border-red-500 focus:ring-red-500' 
-                    : 'border-gray-300 focus:ring-blue-500'
-                }`}
+                className={`${styles.formInput} ${fieldErrors.stock ? styles.formInputError : ''}`}
               />
               {fieldErrors.stock && (
-                <p className="mt-1 text-sm text-red-600">{fieldErrors.stock}</p>
+                <p className={styles.formError}>{fieldErrors.stock}</p>
               )}
             </div>
           </div>
 
           {/* Tax Rate & Category */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="taxRate" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className={styles.formRow}>
+            <div className={styles.formGroup}>
+              <label htmlFor="taxRate" className={styles.formLabel}>
                 Tasa de Impuesto (%)
               </label>
               <input
@@ -529,11 +506,11 @@ export default function ProductEdit() {
                 max="100"
                 value={formData.taxRate}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={styles.formInput}
               />
             </div>
-            <div>
-              <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className={styles.formGroup}>
+              <label htmlFor="categoryId" className={styles.formLabel}>
                 Categoría
               </label>
               <select
@@ -541,7 +518,7 @@ export default function ProductEdit() {
                 name="categoryId"
                 value={formData.categoryId}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={styles.formSelect}
               >
                 <option value="">Sin categoría</option>
                 {categories.map((cat: Category) => (
@@ -552,16 +529,16 @@ export default function ProductEdit() {
           </div>
 
           {/* Is Active */}
-          <div>
-            <label className="flex items-center cursor-pointer">
+          <div className={styles.formGroup}>
+            <label className={styles.checkboxLabel}>
               <input
                 type="checkbox"
                 name="isActive"
                 checked={formData.isActive}
                 onChange={handleChange}
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                className={styles.checkboxInput}
               />
-              <span className="ml-2 text-sm text-gray-700">Producto activo (visible en tienda)</span>
+              <span className={styles.checkboxText}>Producto activo (visible en tienda)</span>
             </label>
           </div>
 
@@ -576,17 +553,17 @@ export default function ProductEdit() {
           />
 
           {/* Submit */}
-          <div className="flex gap-3 justify-end pt-4 border-t border-gray-200">
+          <div className={styles.formActions}>
             <Link
               to="/dashboard/products"
-              className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+              className={styles.cancelButton}
             >
               Cancelar
             </Link>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className={styles.submitButton}
             >
               {isSubmitting ? 'Guardando...' : 'Guardar cambios'}
             </button>
