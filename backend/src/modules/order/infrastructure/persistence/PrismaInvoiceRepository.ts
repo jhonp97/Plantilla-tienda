@@ -16,6 +16,8 @@ type InvoicePrismaRecord = Prisma.InvoiceGetPayload<{
   };
 }>;
 
+type InvoicePrismaRecordWithoutOrder = Omit<InvoicePrismaRecord, 'order'>;
+
 export class PrismaInvoiceRepository implements IInvoiceRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
@@ -24,8 +26,8 @@ export class PrismaInvoiceRepository implements IInvoiceRepository {
       data: {
         orderId: input.orderId,
         invoiceNumber: InvoiceEntity.generateInvoiceNumber(new Date()),
-        customerSnapshot: input.customerSnapshot as Prisma.InputJsonValue,
-        itemsSnapshot: input.itemsSnapshot as Prisma.InputJsonValue,
+        customerSnapshot: input.customerSnapshot as unknown as Prisma.InputJsonValue,
+        itemsSnapshot: input.itemsSnapshot as unknown as Prisma.InputJsonValue,
         subtotal: input.subtotal,
         taxAmount: input.taxAmount,
         total: input.total,
@@ -33,7 +35,24 @@ export class PrismaInvoiceRepository implements IInvoiceRepository {
       },
     });
 
-    return this.toDomain(record);
+    // For create, we don't have the order relation, so create domain directly
+    return InvoiceEntity.fromPrisma({
+      id: record.id,
+      orderId: record.orderId,
+      invoiceNumber: record.invoiceNumber,
+      customerSnapshot: input.customerSnapshot,
+      itemsSnapshot: input.itemsSnapshot,
+      subtotal: record.subtotal,
+      taxAmount: record.taxAmount,
+      total: record.total,
+      taxRate: Number(record.taxRate),
+      verifactuUuid: undefined,
+      verifactuQrCode: undefined,
+      verifactuUrl: undefined,
+      verifactuStatus: undefined,
+      verifactuRegisteredAt: undefined,
+      createdAt: record.createdAt,
+    });
   }
 
   async findById(id: string): Promise<Invoice | null> {
@@ -120,6 +139,29 @@ export class PrismaInvoiceRepository implements IInvoiceRepository {
     return this.toDomain(record);
   }
 
+  async findAll(options?: { skip?: number; take?: number }): Promise<Invoice[]> {
+    const records = await this.prisma.invoice.findMany({
+      skip: options?.skip,
+      take: options?.take,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        order: {
+          include: {
+            user: true,
+            shippingAddress: true,
+            items: true,
+          },
+        },
+      },
+    });
+
+    return records.map(record => this.toDomain(record));
+  }
+
+  async count(): Promise<number> {
+    return this.prisma.invoice.count();
+  }
+
   async existsByOrderId(orderId: string): Promise<boolean> {
     const count = await this.prisma.invoice.count({
       where: { orderId },
@@ -128,8 +170,8 @@ export class PrismaInvoiceRepository implements IInvoiceRepository {
   }
 
   private toDomain(record: InvoicePrismaRecord): Invoice {
-    const customerSnapshot = record.customerSnapshot as CustomerSnapshot;
-    const itemsSnapshot = record.itemsSnapshot as InvoiceItemSnapshot[];
+    const customerSnapshot = record.customerSnapshot as unknown as CustomerSnapshot;
+    const itemsSnapshot = record.itemsSnapshot as unknown as InvoiceItemSnapshot[];
 
     return InvoiceEntity.fromPrisma({
       id: record.id,

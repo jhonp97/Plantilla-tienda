@@ -7,3 +7,4 @@ export { createPaymentRouter } from './payment.routes';
 export { createWebhookRouter } from './webhook.routes';
 export { createAnalyticsRouter } from './analytics.routes';
 export { createReportsRouter } from './reports.routes';
+export { createInvoiceRouter } from './invoice.routes';

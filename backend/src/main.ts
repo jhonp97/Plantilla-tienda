@@ -46,6 +46,7 @@ import { ReorderImagesUseCase } from '@modules/product/application/use-cases/ima
 import { PrismaOrderRepository } from '@modules/order/infrastructure/persistence/PrismaOrderRepository';
 import { PrismaAddressRepository } from '@modules/order/infrastructure/persistence/PrismaAddressRepository';
 import { PrismaStoreSettingsRepository } from '@modules/order/infrastructure/persistence/PrismaStoreSettingsRepository';
+import { PrismaInvoiceRepository } from '@modules/order/infrastructure/persistence/PrismaInvoiceRepository';
 import { StripeService } from '@modules/order/infrastructure/services/StripeService';
 import { EmailService } from '@modules/order/infrastructure/services/EmailService';
 
@@ -57,6 +58,9 @@ import { ListUserOrdersUseCase } from '@modules/order/application/use-cases/orde
 import { ListAdminOrdersUseCase } from '@modules/order/application/use-cases/order/ListAdminOrdersUseCase';
 import { UpdateOrderStatusUseCase } from '@modules/order/application/use-cases/order/UpdateOrderStatusUseCase';
 import { CancelOrderUseCase } from '@modules/order/application/use-cases/order/CancelOrderUseCase';
+import { GetInvoiceByIdUseCase } from '@modules/order/application/use-cases/order/GetInvoiceByIdUseCase';
+import { GetInvoiceByOrderIdUseCase } from '@modules/order/application/use-cases/order/GetInvoiceByOrderIdUseCase';
+import { ListInvoicesUseCase } from '@modules/order/application/use-cases/order/ListInvoicesUseCase';
 
 // Cart use cases
 import { AddToCartUseCase } from '@modules/order/application/use-cases/cart/AddToCartUseCase';
@@ -104,6 +108,7 @@ import { PaymentController } from '@modules/order/infrastructure/http/PaymentCon
 import { WebhookController } from '@modules/order/infrastructure/http/WebhookController';
 import { AnalyticsController } from '@modules/order/infrastructure/http/AnalyticsController';
 import { ReportsController } from '@modules/order/infrastructure/http/ReportsController';
+import { InvoiceController } from '@modules/order/infrastructure/http/InvoiceController';
 
 // Order routes
 import { createOrderRouter } from '@modules/order/infrastructure/routes/order.routes';
@@ -114,6 +119,7 @@ import { createPaymentRouter } from '@modules/order/infrastructure/routes/paymen
 import { createWebhookRouter } from '@modules/order/infrastructure/routes/webhook.routes';
 import { createAnalyticsRouter } from '@modules/order/infrastructure/routes/analytics.routes';
 import { createReportsRouter } from '@modules/order/infrastructure/routes/reports.routes';
+import { createInvoiceRouter } from '@modules/order/infrastructure/routes/invoice.routes';
 
 // Verifactu module imports
 import { VerifactuApiService } from '@modules/verifactu/infrastructure/services/VerifactuApiService';
@@ -253,6 +259,7 @@ const transactionManager: ITransactionManager = new PrismaTransactionManager();
 const orderRepository = new PrismaOrderRepository(prisma);
 const addressRepository = new PrismaAddressRepository(prisma);
 const settingsRepository = new PrismaStoreSettingsRepository(prisma);
+const invoiceRepository = new PrismaInvoiceRepository(prisma);
 
 // Services
 const stripeService = new StripeService();
@@ -266,6 +273,11 @@ const listUserOrdersUseCase = new ListUserOrdersUseCase(orderRepository);
 const listAdminOrdersUseCase = new ListAdminOrdersUseCase(orderRepository);
 const updateOrderStatusUseCase = new UpdateOrderStatusUseCase(orderRepository);
 const cancelOrderUseCase = new CancelOrderUseCase(orderRepository);
+
+// Invoice use cases
+const getInvoiceByIdUseCase = new GetInvoiceByIdUseCase(invoiceRepository);
+const getInvoiceByOrderIdUseCase = new GetInvoiceByOrderIdUseCase(invoiceRepository);
+const listInvoicesUseCase = new ListInvoicesUseCase(invoiceRepository);
 
 // Cart use cases
 const addToCartUseCase = new AddToCartUseCase(orderRepository, productRepository);
@@ -450,8 +462,14 @@ const reportsController = new ReportsController(
   generatePDFReportUseCase,
 );
 
+const invoiceController = new InvoiceController(
+  getInvoiceByIdUseCase,
+  getInvoiceByOrderIdUseCase,
+  listInvoicesUseCase,
+);
+
 // Routes
-const orderRouter = createOrderRouter(orderController);
+const orderRouter = createOrderRouter(orderController, invoiceController);
 const cartRouter = createCartRouter(cartController);
 const addressRouter = createAddressRouter(addressController);
 const shippingRouter = createShippingRouter(shippingController);
@@ -459,9 +477,11 @@ const paymentRouter = createPaymentRouter(paymentController);
 const webhookRouter = createWebhookRouter(webhookController);
 const analyticsRouter = createAnalyticsRouter(analyticsController);
 const reportsRouter = createReportsRouter(reportsController);
+const invoiceRouter = createInvoiceRouter(invoiceController);
 
 // Mount order module routes
 app.use('/api/orders', orderRouter);
+app.use('/api/invoices', invoiceRouter);
 app.use('/api/cart', cartRouter);
 app.use('/api/addresses', addressRouter);
 app.use('/api/shipping', shippingRouter);
