@@ -49,12 +49,12 @@
 
 .columnHeaderPurple {
   background: var(--status-purple-bg);
-  border-color: #a855f7;
+  border-color: var(--status-purple-border);
 }
 
 .columnHeaderIndigo {
   background: var(--status-processing-bg);
-  border-color: #6366f1;
+  border-color: var(--status-processing-border);
 }
 
 .columnHeaderContent {

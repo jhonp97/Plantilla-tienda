@@ -248,7 +248,7 @@
 }
 
 .existingImageButtonDanger:hover {
-  background: #b91c1c;
+  background: var(--status-error-hover);
 }
 
 .existingImageIcon {

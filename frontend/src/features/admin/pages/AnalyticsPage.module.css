@@ -191,11 +191,11 @@
 }
 
 .overviewIconBoxPurple {
-  background: #f3e8ff;
+  background: var(--status-purple-bg);
 }
 
 .overviewIconBoxOrange {
-  background: #ffedd5;
+  background: var(--status-warning-bg);
 }
 
 .overviewIcon {
@@ -212,11 +212,11 @@
 }
 
 .overviewIconPurple {
-  color: #9333ea;
+  color: var(--status-purple-icon);
 }
 
 .overviewIconOrange {
-  color: #ea580c;
+  color: var(--status-orange-icon);
 }
 
 .overviewLabel {

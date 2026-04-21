@@ -129,21 +129,21 @@
 }
 
 .toggleButtonActive {
-  background: #ffedd5;
-  color: #c2410c;
+  background: var(--status-warning-bg);
+  color: var(--status-warning-text);
 }
 
 .toggleButtonActive:hover {
-  background: #fed7aa;
+  background: var(--status-warning-hover);
 }
 
 .toggleButtonInactive {
   background: var(--color-success-light);
-  color: #166534;
+  color: var(--status-success-text);
 }
 
 .toggleButtonInactive:hover {
-  background: #bbf7d0;
+  background: var(--status-success-hover);
 }
 
 .deleteButton {

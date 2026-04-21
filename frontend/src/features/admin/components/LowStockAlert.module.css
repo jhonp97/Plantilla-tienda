@@ -173,7 +173,7 @@
 }
 
 .viewAllLink:hover {
-  color: #b91c1c;
+  color: var(--status-error-hover);
   text-decoration: underline;
 }
 

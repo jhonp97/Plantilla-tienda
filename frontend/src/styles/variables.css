@@ -83,14 +83,23 @@
   --status-pending-bg: #fef3c7;
   --status-success-text: #166534;
   --status-success-bg: #dcfce7;
+  --status-success-hover: #bbf7d0;
   --status-error-text: #991b1b;
   --status-error-bg: #fee2e2;
+  --status-error-hover: #b91c1c;
   --status-info-text: #1e40af;
   --status-info-bg: #dbeafe;
   --status-processing-text: #4338ca;
   --status-processing-bg: #e0e7ff;
+  --status-processing-border: #6366f1;
   --status-purple-text: #7c3aed;
   --status-purple-bg: #f3e8ff;
+  --status-purple-border: #a855f7;
+  --status-warning-text: #c2410c;
+  --status-warning-bg: #ffedd5;
+  --status-warning-hover: #fed7aa;
+  --status-orange-icon: #ea580c;
+  --status-purple-icon: #9333ea;
 
   /* Z-index */
   --z-dropdown: 100;

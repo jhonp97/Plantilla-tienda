@@ -219,7 +219,7 @@
 
 .statusActive {
   background: var(--color-success-light);
-  color: #166534;
+  color: var(--status-success-text);
 }
 
 .statusInactive {
@@ -398,7 +398,7 @@
 }
 
 .deleteButton:hover:not(:disabled) {
-  background: #b91c1c;
+  background: var(--status-error-hover);
 }
 
 .deleteButton:disabled {
