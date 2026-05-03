@@ -20,6 +20,9 @@ const envSchema = z.object({
   // Verifactu configuration
   VERIFACTU_API_KEY: z.string().optional(),
   VERIFACTU_BASE_URL: z.string().default('https://api.verifacti.com'),
+
+  // Google Maps configuration
+  GOOGLE_MAPS_API_KEY: z.string().optional(),
 });
 
 export const env = envSchema.parse(process.env);

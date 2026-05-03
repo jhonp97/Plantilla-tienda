@@ -58,6 +58,7 @@ export interface CreateOrderInput {
   shippingAddressId: string;
   billingAddressId: string;
   paymentIntentId?: string;
+  couponCode?: string;
   notes?: string;
 }
 

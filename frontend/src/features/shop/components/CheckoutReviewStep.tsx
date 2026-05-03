@@ -1,5 +1,6 @@
 /**
  * CheckoutReviewStep - Review cart items before checkout
+ * Shows applied coupon discount if present
  */
 import { useState } from 'react';
 import { useCartStore } from '../../../store/cartStore';
@@ -12,7 +13,7 @@ interface CheckoutReviewStepProps {
 }
 
 export function CheckoutReviewStep({ onNext }: CheckoutReviewStepProps) {
-  const { items } = useCartStore();
+  const { items, coupon } = useCartStore();
   const { nextStep } = useCheckoutStore();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -20,6 +21,9 @@ export function CheckoutReviewStep({ onNext }: CheckoutReviewStepProps) {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  const discountAmount = coupon?.discountAmount ?? 0;
+  const totalAfterDiscount = Math.max(0, subtotal - discountAmount);
 
   const handleContinue = () => {
     onNext();
@@ -92,6 +96,18 @@ export function CheckoutReviewStep({ onNext }: CheckoutReviewStepProps) {
           <span className={styles.summaryLabel}>Subtotal</span>
           <span className={styles.summaryValue}>{formatPrice(subtotal)}</span>
         </div>
+
+        {coupon && (
+          <div className={styles.summaryRow}>
+            <span className={styles.summaryLabel}>
+              Descuento ({coupon.code})
+            </span>
+            <span className={styles.summaryDiscount}>
+              -{formatPrice(discountAmount)}
+            </span>
+          </div>
+        )}
+
         <div className={styles.summaryRow}>
           <span className={styles.summaryLabel}>Envío</span>
           <span className={styles.summaryPending}>
@@ -104,6 +120,17 @@ export function CheckoutReviewStep({ onNext }: CheckoutReviewStepProps) {
             Se calculará en el siguiente paso
           </span>
         </div>
+
+        {coupon && (
+          <div className={styles.summaryTotalRow}>
+            <span className={styles.summaryTotalLabel}>
+              Total con descuento
+            </span>
+            <span className={styles.summaryTotalValue}>
+              {formatPrice(totalAfterDiscount)}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Continue Button */}

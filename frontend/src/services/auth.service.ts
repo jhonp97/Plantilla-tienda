@@ -48,3 +48,11 @@ export async function getMe(): Promise<User | null> {
     return null;
   }
 }
+
+export async function forgotPassword(email: string): Promise<{ message: string }> {
+  return apiPost<{ message: string }>('/api/auth/forgot-password', { email }, {}, deps);
+}
+
+export async function resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
+  return apiPost<{ message: string }>('/api/auth/reset-password', { token, newPassword }, {}, deps);
+}

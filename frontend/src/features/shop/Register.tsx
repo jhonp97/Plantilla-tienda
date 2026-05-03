@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@hooks/useAuth';
 import { Button } from '@components/Button';
 import { Input } from '@components/Input';
@@ -15,6 +16,7 @@ interface RegisterFormData {
 }
 
 export default function Register() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<RegisterFormData>({
     email: '',
     password: '',
@@ -42,13 +44,13 @@ export default function Register() {
 
   const validateForm = (): string => {
     if (formData.password !== formData.confirmPassword) {
-      return 'Las contraseñas no coinciden';
+      return t('auth.passwordsDoNotMatch');
     }
     if (formData.password.length < 8) {
-      return 'La contraseña debe tener al menos 8 caracteres';
+      return t('auth.passwordMinLength');
     }
     if (!formData.email.includes('@')) {
-      return 'Email inválido';
+      return t('auth.invalidEmail');
     }
     return '';
   };
@@ -75,7 +77,7 @@ export default function Register() {
       setSuccess(true);
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear la cuenta');
+      setError(err instanceof Error ? err.message : t('auth.registerError'));
     } finally {
       setIsLoading(false);
     }
@@ -90,19 +92,19 @@ export default function Register() {
           <line x1="3" y1="6" x2="21" y2="6"></line>
           <path d="M16 10a4 4 0 0 1-8 0"></path>
         </svg>
-        <span>MiTienda</span>
+        <span>{t('header.storeName')}</span>
       </Link>
 
       <div className={styles.form}>
         <div className={styles.header}>
-          <h1 className={styles.title}>Crear Cuenta</h1>
-          <p className={styles.subtitle}>Únete a nuestra tienda online</p>
+          <h1 className={styles.title}>{t('auth.registerTitle')}</h1>
+          <p className={styles.subtitle}>{t('auth.registerSubtitle')}</p>
         </div>
 
         {error && <div className={styles.error}>{error}</div>}
         {success && (
           <div className={styles.success}>
-            ¡Cuenta creada exitosamente! Redirigiendo...
+            {t('auth.registerSuccess')}
           </div>
         )}
 
@@ -110,60 +112,60 @@ export default function Register() {
           <div className={styles.formGrid}>
             <div className={styles.inputGroup}>
               <Input
-                label="Nombre completo"
+                label={t('auth.fullName')}
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="Juan Pérez"
+                placeholder={t('auth.fullNamePlaceholder')}
                 required
               />
             </div>
 
             <div className={styles.inputGroup}>
               <Input
-                label="NIF/CIF"
+                label={t('auth.nifCif')}
                 type="text"
                 name="nifCif"
                 value={formData.nifCif}
                 onChange={handleChange}
-                placeholder="12345678A"
-                helperText="Para facturación"
+                placeholder={t('auth.nifCifPlaceholder')}
+                helperText={t('auth.nifCifHelper')}
                 required
               />
             </div>
 
             <div className={styles.inputGroupFull}>
               <Input
-                label="Email"
+                label={t('auth.email')}
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="tu@email.com"
+                placeholder={t('auth.emailPlaceholder')}
                 required
               />
             </div>
 
             <div className={styles.inputGroup}>
               <PasswordInput
-                label="Contraseña"
+                label={t('auth.password')}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="••••••••"
-                helperText="Mínimo 8 caracteres"
+                placeholder={t('auth.passwordPlaceholder')}
+                helperText={t('auth.passwordMinLength')}
                 required
               />
             </div>
 
             <div className={styles.inputGroup}>
               <PasswordInput
-                label="Confirmar contraseña"
+                label={t('auth.confirmPassword')}
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                placeholder="••••••••"
+                placeholder={t('auth.confirmPasswordPlaceholder')}
                 required
               />
             </div>
@@ -176,13 +178,13 @@ export default function Register() {
             isLoading={isLoading}
             className={styles.submitBtn}
           >
-            {isLoading ? 'Creando cuenta...' : 'Crear cuenta'}
+            {isLoading ? t('auth.registering') : t('auth.registerButton')}
           </Button>
         </form>
 
         <p className={styles.loginLink}>
-          ¿Ya tienes cuenta?{' '}
-          <Link to="/login">Iniciar sesión</Link>
+          {t('auth.hasAccount')}{' '}
+          <Link to="/login">{t('auth.loginLink')}</Link>
         </p>
       </div>
     </div>

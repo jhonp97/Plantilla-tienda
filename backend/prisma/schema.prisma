@@ -167,6 +167,8 @@ model Order {
   shippingCost    Int
   taxAmount       Int
   totalAmount     Int
+  couponCode      String?
+  discountAmount  Int       @default(0)
 
   shippingAddressId String
   shippingAddress Address @relation("ShippingAddress", fields: [shippingAddressId], references: [id])

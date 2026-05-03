@@ -274,6 +274,120 @@
   cursor: not-allowed;
 }
 
+/* ============ Applied Coupon Display ============ */
+.couponApplied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+}
+
+.couponAppliedInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.couponCheckIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #166534;
+  flex-shrink: 0;
+}
+
+.couponAppliedCode {
+  display: block;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #166534;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.couponAppliedDiscount {
+  display: block;
+  font-size: 0.75rem;
+  color: #15803d;
+  margin-top: 0.125rem;
+}
+
+.couponRemoveButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  color: #166534;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.couponRemoveButton:hover {
+  background: #dcfce7;
+  color: #991b1b;
+}
+
+.couponRemoveIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ============ Discount Summary ============ */
+.discountSummary {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+}
+
+.discountRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xs) 0;
+}
+
+.discountLabel {
+  font-size: 0.875rem;
+  color: var(--color-gray-600);
+}
+
+.discountValue {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-gray-900);
+}
+
+.discountAmount {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #16a34a;
+}
+
+.discountTotalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+  border-top: 1px solid var(--color-gray-200);
+}
+
+.discountTotalLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+
+.discountTotalValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
 /* Icon sizing utilities */
 .iconMd {
   width: 20px;

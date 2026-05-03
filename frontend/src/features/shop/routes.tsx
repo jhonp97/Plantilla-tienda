@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { Layout } from '@components/Layout';
+import { PageTransition } from '@components/PageTransition';
 
 const ProductList = lazy(() => import('./pages/ProductList'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail'));
@@ -9,6 +10,12 @@ const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
 const CheckoutSuccessPage = lazy(() => import('./pages/CheckoutSuccessPage'));
 const OrderHistoryPage = lazy(() => import('./pages/OrderHistoryPage'));
 const OrderDetailPage = lazy(() => import('./pages/OrderDetailPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
+const FaqPage = lazy(() => import('./pages/FaqPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
 
 function LoadingFallback() {
   return (
@@ -39,45 +46,58 @@ function ShopLayout() {
   );
 }
 
+/** Wraps children in Suspense + PageTransition */
+function AnimatedRoute({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <PageTransition>{children}</PageTransition>
+    </Suspense>
+  );
+}
+
 export function ShopRoutes() {
   return (
     <Routes>
       <Route element={<ShopLayout />}>
         <Route path="/" element={<Navigate to="/products" replace />} />
         <Route path="products" element={
-          <Suspense fallback={<LoadingFallback />}>
-            <ProductList />
-          </Suspense>
+          <AnimatedRoute><ProductList /></AnimatedRoute>
         } />
         <Route path="products/:slug" element={
-          <Suspense fallback={<LoadingFallback />}>
-            <ProductDetail />
-          </Suspense>
+          <AnimatedRoute><ProductDetail /></AnimatedRoute>
         } />
         <Route path="cart" element={
-          <Suspense fallback={<LoadingFallback />}>
-            <CartPage />
-          </Suspense>
+          <AnimatedRoute><CartPage /></AnimatedRoute>
         } />
         <Route path="checkout" element={
-          <Suspense fallback={<LoadingFallback />}>
-            <CheckoutPage />
-          </Suspense>
+          <AnimatedRoute><CheckoutPage /></AnimatedRoute>
         } />
         <Route path="checkout/success" element={
-          <Suspense fallback={<LoadingFallback />}>
-            <CheckoutSuccessPage />
-          </Suspense>
+          <AnimatedRoute><CheckoutSuccessPage /></AnimatedRoute>
         } />
         <Route path="orders" element={
-          <Suspense fallback={<LoadingFallback />}>
-            <OrderHistoryPage />
-          </Suspense>
+          <AnimatedRoute><OrderHistoryPage /></AnimatedRoute>
         } />
         <Route path="orders/:id" element={
-          <Suspense fallback={<LoadingFallback />}>
-            <OrderDetailPage />
-          </Suspense>
+          <AnimatedRoute><OrderDetailPage /></AnimatedRoute>
+        } />
+        <Route path="about" element={
+          <AnimatedRoute><AboutPage /></AnimatedRoute>
+        } />
+        <Route path="contact" element={
+          <AnimatedRoute><ContactPage /></AnimatedRoute>
+        } />
+        <Route path="faq" element={
+          <AnimatedRoute><FaqPage /></AnimatedRoute>
+        } />
+        <Route path="forgot-password" element={
+          <AnimatedRoute><ForgotPasswordPage /></AnimatedRoute>
+        } />
+        <Route path="reset-password" element={
+          <AnimatedRoute><ResetPasswordPage /></AnimatedRoute>
+        } />
+        <Route path="*" element={
+          <AnimatedRoute><NotFoundPage /></AnimatedRoute>
         } />
       </Route>
     </Routes>

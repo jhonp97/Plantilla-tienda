@@ -22,6 +22,8 @@ interface PrismaOrderRecord {
   shippingCost: number;
   taxAmount: number;
   totalAmount: number;
+  couponCode: string | null;
+  discountAmount: number;
   paymentMethod: string;
   stripePaymentIntentId: string | null;
   shippingAddressId: string;
@@ -104,6 +106,8 @@ export class PrismaOrderRepository implements IOrderRepository {
         shippingCost: 0,
         taxAmount: 0,
         totalAmount: 0,
+        couponCode: input.couponCode ?? null,
+        discountAmount: input.discountAmount ?? 0,
         paymentMethod: input.paymentMethod,
         shippingAddressId: shippingAddress.id,
         billingAddressId,
@@ -390,7 +394,7 @@ export class PrismaOrderRepository implements IOrderRepository {
       subtotal: record.subtotal,
       taxAmount: record.taxAmount,
       shippingCost: record.shippingCost,
-      discountAmount: 0,
+      discountAmount: record.discountAmount ?? 0,
       totalAmount: record.totalAmount,
       paymentMethod: record.paymentMethod as any,
       paymentIntentId: record.stripePaymentIntentId ?? undefined,

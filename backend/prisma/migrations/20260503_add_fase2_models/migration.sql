@@ -117,6 +117,18 @@ BEGIN
     END IF;
 END $$;
 
+-- Step 11: Add couponCode and discountAmount to orders table
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'orders' AND column_name = 'couponCode'
+    ) THEN
+        ALTER TABLE "orders" ADD COLUMN "couponCode" TEXT;
+        ALTER TABLE "orders" ADD COLUMN "discountAmount" INTEGER NOT NULL DEFAULT 0;
+    END IF;
+END $$;
+
 COMMENT ON TABLE "password_reset_tokens" IS 'Password reset tokens with bcrypt hash';
 COMMENT ON TABLE "coupons" IS 'Discount coupons for the e-commerce';
 COMMENT ON TABLE "reviews" IS 'Product reviews from customers';

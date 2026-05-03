@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { AuthController } from '@modules/auth/infrastructure/authController';
 import { authMiddleware } from '@shared/infra/middleware/authMiddleware';
+import { forgotPasswordRateLimiter } from '@shared/infra/middleware/rateLimiter';
 
 export function createAuthRouter(controller: AuthController): Router {
   const router = Router();
@@ -8,6 +9,10 @@ export function createAuthRouter(controller: AuthController): Router {
   router.post('/register', controller.register);
   router.post('/logout', controller.logout);
   router.get('/me', authMiddleware, controller.getMe);
+
+  // Forgot/reset password routes (rate-limited)
+  router.post('/forgot-password', forgotPasswordRateLimiter, controller.forgotPassword);
+  router.post('/reset-password', controller.resetPassword);
 
   return router;
 }

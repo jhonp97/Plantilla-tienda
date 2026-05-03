@@ -2,11 +2,13 @@
  * ProductList - Public product catalog with filters and pagination
  */
 
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useProductStore } from '../../../store/productStore';
 import type { Category, Product, ProductFilters } from '../../../types/product.types';
 import { formatPrice } from '../../../utils';
+import { SEO } from '@components/SEO';
+import { useGSAPAnimation } from '@hooks/useGSAPAnimation';
 import styles from './ProductList.module.css';
 
 // Skeleton component for loading state
@@ -35,6 +37,7 @@ function ProductCard({ product }: ProductCardProps) {
     <Link
       to={`/products/${product.slug}`}
       className={styles.productCard}
+      data-animate="true"
     >
       <div className={styles.productCardImage}>
         {primaryImage ? (
@@ -290,11 +293,23 @@ export default function ProductList() {
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
   const [minPrice, setMinPrice] = useState<number | undefined>();
   const [maxPrice, setMaxPrice] = useState<number | undefined>();
+  const gridRef = useRef<HTMLDivElement>(null);
+  const { staggerIn } = useGSAPAnimation();
 
   useEffect(() => {
     fetchCategories();
     fetchProducts();
   }, []);
+
+  // Stagger animation when products load
+  useEffect(() => {
+    if (!isLoading && products && products.length > 0 && gridRef.current) {
+      const cards = gridRef.current.querySelectorAll('[data-animate="true"]');
+      if (cards.length > 0) {
+        staggerIn({ targets: cards, stagger: 0.05 });
+      }
+    }
+  }, [isLoading, products, staggerIn]);
 
   const handleCategoryChange = (slug: string | undefined) => {
     setSelectedCategory(slug);
@@ -310,6 +325,10 @@ export default function ProductList() {
   const handleSortChange = (sortBy: string | undefined) => {
     setFilters({ sortBy: sortBy as ProductFilters['sortBy'] });
   };
+
+  const [searchParams] = useSearchParams();
+  const queryString = searchParams.toString();
+  const canonicalPath = `/products${queryString ? `?${queryString}` : ''}`;
 
   if (error) {
     return (
@@ -332,7 +351,13 @@ export default function ProductList() {
   }
 
   return (
-    <div className={styles.pageContainer}>
+    <>
+      <SEO
+        title="Catálogo de Productos"
+        description="Descubre nuestra colección completa de productos. Calidad, variedad y los mejores precios."
+        pathname={canonicalPath}
+      />
+      <div className={styles.pageContainer}>
       <div className={styles.container}>
         <h1 className={styles.pageTitle}>Catálogo de Productos</h1>
         
@@ -375,7 +400,7 @@ export default function ProductList() {
                 <p className={styles.emptyText}>Intenta ajustar los filtros para encontrar lo que buscas</p>
               </div>
             ) : (
-              <div className={styles.productsGrid}>
+              <div className={styles.productsGrid} ref={gridRef}>
                 {products.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
@@ -394,5 +419,6 @@ export default function ProductList() {
         </div>
       </div>
     </div>
+    </>
   );
 }

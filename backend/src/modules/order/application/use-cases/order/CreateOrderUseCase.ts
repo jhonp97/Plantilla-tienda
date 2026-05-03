@@ -7,6 +7,7 @@ import type { Order, OrderStatus, CreateOrderInput } from '@modules/order/domain
 import type { OrderItemProps } from '@modules/order/domain/entities/OrderItem';
 import type { StoreSettings } from '@modules/order/domain/entities/StoreSettings';
 import type { CreateOrderDto } from '../../dto/CreateOrderDto';
+import { ValidateCouponUseCase } from '@modules/coupon/application/validate-coupon.use-case';
 
 interface OrderItemInput {
   productId: string;
@@ -22,10 +23,23 @@ export class CreateOrderUseCase {
     private orderRepo: IOrderRepository,
     private productRepo: IProductRepository,
     private settingsRepo: IStoreSettingsRepository,
-    private transactionManager: ITransactionManager
+    private transactionManager: ITransactionManager,
+    private validateCouponUseCase?: ValidateCouponUseCase,
   ) {}
 
   async execute(dto: CreateOrderDto, userId?: string): Promise<Order> {
+    // Validate coupon upfront if provided
+    let couponResult: { id: string; discountAmount: number; code: string; discountType: string; discountValue: number } | null = null;
+
+    if (dto.couponCode) {
+      // Calculate subtotal upfront for coupon validation
+      const subtotalForCoupon = await this.calculateSubtotal(dto.items);
+      couponResult = await this.validateCouponUseCase!.execute({
+        code: dto.couponCode,
+        orderAmount: subtotalForCoupon,
+      });
+    }
+
     // Wrap entire order creation in a transaction with retry logic
     return this.transactionManager.execute(async (tx) => {
       // 1. Validate items and check stock using atomic update with optimistic locking
@@ -95,8 +109,14 @@ export class CreateOrderUseCase {
       // Calculate tax (21% VAT)
       const taxAmount = Math.round(subtotal * 0.21);
       
-      // Total
-      const total = subtotal + shippingCost + taxAmount;
+      // Apply coupon discount if validated
+      const discountAmount = couponResult?.discountAmount ?? 0;
+      if (discountAmount > subtotal) {
+        throw new ValidationError('Discount cannot exceed order subtotal');
+      }
+      
+      // Total: subtotal + shipping + tax - discount
+      const total = subtotal + shippingCost + taxAmount - discountAmount;
 
       // 3. Generate order number
       const orderNumber = await this.generateOrderNumber();
@@ -120,7 +140,7 @@ export class CreateOrderUseCase {
             country: dto.billingAddress!.country ?? 'España',
           };
 
-      // 5. Create order input
+      // 5. Create order input with coupon info
       const createInput: CreateOrderInput = {
         userId: userId || 'guest',
         shippingAddress: shippingAddressData,
@@ -128,6 +148,8 @@ export class CreateOrderUseCase {
         paymentMethod: dto.paymentMethod,
         notes: dto.notes,
         customerNif: dto.nifCif,
+        couponCode: couponResult?.code ?? undefined,
+        discountAmount,
       };
 
       // 6. Create order using repository (within transaction)
@@ -151,7 +173,15 @@ export class CreateOrderUseCase {
         await this.orderRepo.addItem(createdOrder.id, orderItemInput);
       }
 
-      // 8. Return the created order with items
+      // 8. Increment coupon usage count if coupon was applied
+      if (couponResult) {
+        await tx.coupon.update({
+          where: { id: couponResult.id },
+          data: { usageCount: { increment: 1 } },
+        });
+      }
+
+      // 9. Return the created order with items
       const finalOrder = await this.orderRepo.findById(createdOrder.id);
       
       if (!finalOrder) {
@@ -160,6 +190,17 @@ export class CreateOrderUseCase {
       
       return finalOrder;
     });
+  }
+
+  private async calculateSubtotal(items: Array<{ productId: string; quantity: number }>): Promise<number> {
+    let subtotal = 0;
+    for (const item of items) {
+      const product = await this.productRepo.findById(item.productId);
+      if (product) {
+        subtotal += product.price * item.quantity;
+      }
+    }
+    return subtotal;
   }
 
   private calculateShipping(subtotal: number, settings: StoreSettings): number {

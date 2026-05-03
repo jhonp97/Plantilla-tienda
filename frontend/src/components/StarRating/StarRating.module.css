@@ -1,0 +1,85 @@
+/* StarRating.module.css */
+
+.container {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+/* Sizes */
+.sm .starSvg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.md .starSvg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.lg .starSvg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+/* Interactive vs read-only */
+.interactive .star {
+  cursor: pointer;
+}
+
+.readOnly .star {
+  cursor: default;
+}
+
+/* Star button base */
+.star {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+  outline: none;
+  color: var(--color-gray-300);
+}
+
+.interactive .star:hover {
+  transform: scale(1.15);
+}
+
+.interactive .star:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Star states */
+.starFilled {
+  color: #f59e0b;
+}
+
+.starHalf {
+  color: #f59e0b;
+}
+
+.starEmpty {
+  color: var(--color-gray-300);
+}
+
+/* Half star container */
+.halfStarContainer {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.halfStarOverlay {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  width: 50%;
+}

@@ -38,6 +38,14 @@ export const createOrderSchema = z.object({
   // Optional notes
   notes: z.string().max(1000, { error: 'Notes must be at most 1000 characters' }).optional(),
 
+  // Optional coupon code
+  couponCode: z
+    .string()
+    .min(1, 'Coupon code is required')
+    .max(50, 'Coupon code must be at most 50 characters')
+    .transform((val) => val.toUpperCase())
+    .optional(),
+
   // Create account after order (for guest checkout)
   createAccount: z.boolean().default(false),
 }).refine((data) => {

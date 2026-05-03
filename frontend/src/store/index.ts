@@ -5,3 +5,5 @@ export type { CartItem } from './cartStore';
 export { useCheckoutStore } from './checkoutStore';
 export type { CheckoutStep } from './checkoutStore';
 export { useOrderStore } from './orderStore';
+export { useToastStore } from './toastStore';
+export type { Toast, ToastType } from './toastStore';

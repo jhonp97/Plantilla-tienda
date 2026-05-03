@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import styles from './Footer.module.css';
 
 /**
@@ -6,6 +7,7 @@ import styles from './Footer.module.css';
  * @component
  */
 export function Footer() {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -13,37 +15,37 @@ export function Footer() {
       <div className={styles.container}>
         <div className={styles.grid}>
           <div className={styles.column}>
-            <h3 className={styles.columnTitle}>MiTienda</h3>
+            <h3 className={styles.columnTitle}>{t('footer.storeName')}</h3>
             <p className={styles.columnText}>
-              Tu tienda online de confianza con los mejores productos.
+              {t('footer.tagline')}
             </p>
           </div>
 
           <div className={styles.column}>
-            <h3 className={styles.columnTitle}>Comprar</h3>
-            <Link to="/products" className={styles.link}>Productos</Link>
-            <Link to="/cart" className={styles.link}>Carrito</Link>
-            <Link to="/orders" className={styles.link}>Mis Pedidos</Link>
+            <h3 className={styles.columnTitle}>{t('footer.shop')}</h3>
+            <Link to="/products" className={styles.link}>{t('footer.products')}</Link>
+            <Link to="/cart" className={styles.link}>{t('footer.cart')}</Link>
+            <Link to="/orders" className={styles.link}>{t('footer.myOrders')}</Link>
           </div>
 
           <div className={styles.column}>
-            <h3 className={styles.columnTitle}>Ayuda</h3>
-            <Link to="/faq" className={styles.link}>Preguntas Frecuentes</Link>
-            <Link to="/shipping" className={styles.link}>Envíos</Link>
-            <Link to="/returns" className={styles.link}>Devoluciones</Link>
+            <h3 className={styles.columnTitle}>{t('footer.help')}</h3>
+            <Link to="/faq" className={styles.link}>{t('footer.faq')}</Link>
+            <Link to="/shipping" className={styles.link}>{t('footer.shipping')}</Link>
+            <Link to="/returns" className={styles.link}>{t('footer.returns')}</Link>
           </div>
 
           <div className={styles.column}>
-            <h3 className={styles.columnTitle}>Legal</h3>
-            <Link to="/terms" className={styles.link}>Términos y Condiciones</Link>
-            <Link to="/privacy" className={styles.link}>Política de Privacidad</Link>
-            <Link to="/cookies" className={styles.link}>Política de Cookies</Link>
+            <h3 className={styles.columnTitle}>{t('footer.legal')}</h3>
+            <Link to="/terms" className={styles.link}>{t('footer.terms')}</Link>
+            <Link to="/privacy" className={styles.link}>{t('footer.privacy')}</Link>
+            <Link to="/cookies" className={styles.link}>{t('footer.cookies')}</Link>
           </div>
         </div>
 
         <div className={styles.bottom}>
           <p className={styles.copyright}>
-            © {currentYear} MiTienda. Todos los derechos reservados.
+            {t('footer.copyright', { year: currentYear })}
           </p>
         </div>
       </div>

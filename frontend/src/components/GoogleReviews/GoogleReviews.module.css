@@ -1,0 +1,163 @@
+/* GoogleReviews.module.css */
+
+.container {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-gray-100);
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.googleIcon {
+  width: 2rem;
+  height: 2rem;
+  color: #4285f4;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+
+.cacheBadge {
+  font-size: 0.6875rem;
+  color: var(--color-gray-500);
+  background: var(--color-gray-100);
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-2xl);
+}
+
+.spinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid var(--color-gray-200);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loadingText {
+  font-size: 0.875rem;
+  color: var(--color-gray-500);
+}
+
+/* Empty state */
+.emptyState {
+  text-align: center;
+  padding: var(--spacing-2xl);
+}
+
+.emptyIcon {
+  width: 3rem;
+  height: 3rem;
+  color: var(--color-gray-300);
+  margin: 0 auto var(--spacing-md);
+}
+
+.emptyText {
+  font-size: 0.875rem;
+  color: var(--color-gray-500);
+  margin: 0;
+}
+
+/* Reviews List */
+.reviewsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--color-gray-100);
+}
+
+.reviewCard {
+  background: var(--color-white);
+  padding: var(--spacing-lg);
+  transition: background var(--transition-fast);
+}
+
+.reviewCard:hover {
+  background: var(--color-gray-50);
+}
+
+.reviewCardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.reviewAvatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background: #4285f4;
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.reviewMeta {
+  flex: 1;
+  min-width: 0;
+}
+
+.reviewAuthor {
+  display: block;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--color-gray-900);
+}
+
+.reviewDate {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-gray-500);
+  margin-top: 0.125rem;
+}
+
+.reviewRating {
+  flex-shrink: 0;
+}
+
+.reviewText {
+  font-size: 0.875rem;
+  color: var(--color-gray-700);
+  line-height: 1.625;
+  margin: 0;
+  white-space: pre-wrap;
+}

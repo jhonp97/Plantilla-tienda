@@ -60,6 +60,8 @@ export interface CreateOrderInput {
   paymentMethod: PaymentMethod;
   notes?: string;
   customerNif?: string;
+  couponCode?: string;
+  discountAmount?: number;
 }
 
 // ==========================================

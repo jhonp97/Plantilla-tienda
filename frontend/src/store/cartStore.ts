@@ -9,10 +9,18 @@ export interface CartItem {
   imageUrl?: string;
 }
 
+export interface AppliedCoupon {
+  code: string;
+  discountType: 'PERCENTAGE' | 'FIXED';
+  discountValue: number;
+  discountAmount: number;
+}
+
 interface CartState {
   cartId: string | null;
   items: CartItem[];
   isLoading: boolean;
+  coupon: AppliedCoupon | null;
   addItem: (item: Omit<CartItem, 'id'>) => void;
   removeItem: (productId: string) => void;
   clearCart: () => void;
@@ -20,6 +28,8 @@ interface CartState {
   getCartId: () => string | null;
   setLoading: (loading: boolean) => void;
   updateQuantity: (productId: string, quantity: number) => void;
+  setCoupon: (coupon: AppliedCoupon | null) => void;
+  getCouponCode: () => string | null;
 }
 
 const CART_ID_KEY = 'cart_id';
@@ -48,8 +58,13 @@ export const useCartStore = create<CartState>((set, get) => ({
   cartId: getOrCreateCartId(),
   items: [],
   isLoading: false,
+  coupon: null,
 
   getCartId: () => get().cartId,
+
+  getCouponCode: () => get().coupon?.code ?? null,
+
+  setCoupon: (coupon) => set({ coupon }),
 
   setLoading: (loading) => set({ isLoading: loading }),
 
@@ -89,7 +104,7 @@ export const useCartStore = create<CartState>((set, get) => ({
   },
 
   clearCart: () => {
-    set({ items: [], cartId: null });
+    set({ items: [], cartId: null, coupon: null });
     localStorage.removeItem(CART_ID_KEY);
   },
 

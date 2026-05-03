@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@hooks/useAuth';
 import { Button } from '@components/Button';
 import { Input } from '@components/Input';
@@ -7,6 +8,7 @@ import { PasswordInput } from '@components/PasswordInput';
 import styles from './Login.module.css';
 
 export default function Login() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +31,7 @@ export default function Login() {
       await login({ email, password });
       navigate('/');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al iniciar sesión');
+      setError(err instanceof Error ? err.message : t('auth.loginError'));
     } finally {
       setIsLoading(false);
     }
@@ -44,13 +46,13 @@ export default function Login() {
           <line x1="3" y1="6" x2="21" y2="6"></line>
           <path d="M16 10a4 4 0 0 1-8 0"></path>
         </svg>
-        <span>MiTienda</span>
+        <span>{t('header.storeName')}</span>
       </Link>
 
       <div className={styles.form}>
         <div className={styles.header}>
-          <h1 className={styles.title}>Bienvenido</h1>
-          <p className={styles.subtitle}>Ingresa a tu cuenta para continuar</p>
+          <h1 className={styles.title}>{t('auth.welcomeBack')}</h1>
+          <p className={styles.subtitle}>{t('auth.loginSubtitle')}</p>
         </div>
 
         {error && <div className={styles.error}>{error}</div>}
@@ -58,25 +60,25 @@ export default function Login() {
         <form onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
             <Input
-              label="Email"
+              label={t('auth.email')}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="tu@email.com"
+              placeholder={t('auth.emailPlaceholder')}
               required
             />
           </div>
 
           <div className={styles.inputGroup}>
             <PasswordInput
-              label="Contraseña"
+              label={t('auth.password')}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder={t('auth.passwordPlaceholder')}
               required
             />
             <Link to="/forgot-password" className={styles.forgotPassword}>
-              ¿Olvidaste tu contraseña?
+              {t('auth.forgotPassword')}
             </Link>
           </div>
 
@@ -87,17 +89,17 @@ export default function Login() {
             isLoading={isLoading}
             className={styles.submitBtn}
           >
-            {isLoading ? 'Iniciando...' : 'Entrar'}
+            {isLoading ? t('auth.loggingIn') : t('auth.loginButton')}
           </Button>
         </form>
 
         <div className={styles.divider}>
-          <span>o</span>
+          <span>{t('auth.or')}</span>
         </div>
 
         <p className={styles.registerLink}>
-          ¿No tienes cuenta?{' '}
-          <Link to="/register">Crear cuenta</Link>
+          {t('auth.noAccount')}{' '}
+          <Link to="/register">{t('auth.createAccount')}</Link>
         </p>
       </div>
     </div>

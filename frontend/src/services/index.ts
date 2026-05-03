@@ -8,3 +8,5 @@ export * from './payment.service';
 export * from './shipping.service';
 export * from './analytics.service';
 export * from './reports.service';
+export * from './coupon.service';
+export * from './review.service';

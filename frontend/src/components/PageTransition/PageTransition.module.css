@@ -1,0 +1,6 @@
+/* PageTransition.module.css */
+
+.pageWrapper {
+  opacity: 0;
+  will-change: opacity, transform;
+}

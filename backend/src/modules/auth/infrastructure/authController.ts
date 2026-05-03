@@ -3,6 +3,8 @@ import type { RegisterResult } from '@modules/auth/application/use-cases/Registe
 import { LoginUseCase } from '@modules/auth/application/use-cases/LoginUseCase';
 import { GetCurrentUserUseCase } from '@modules/auth/application/GetCurrentUserUseCase';
 import { LogoutUseCase } from '@modules/auth/application/LogoutUseCase';
+import { RequestPasswordResetUseCase } from '@modules/auth/application/use-cases/RequestPasswordResetUseCase';
+import { ResetPasswordUseCase } from '@modules/auth/application/use-cases/ResetPasswordUseCase';
 import { getCookieOptions, getClearCookieOptions } from '@config/cookie';
 
 interface AuthRequest extends Request {
@@ -19,6 +21,8 @@ export class AuthController {
     private readonly loginUseCase: LoginUseCase,
     private readonly getCurrentUserUseCase: GetCurrentUserUseCase,
     private readonly logoutUseCase: LogoutUseCase,
+    private readonly requestPasswordResetUseCase?: RequestPasswordResetUseCase,
+    private readonly resetPasswordUseCase?: ResetPasswordUseCase,
   ) {}
 
   register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -83,6 +87,46 @@ export class AuthController {
       res.status(200).json({
         success: true,
         data: user,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  forgotPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      if (!this.requestPasswordResetUseCase) {
+        res.status(200).json({
+          success: true,
+          message: 'If the email exists, a reset link has been sent.',
+        });
+        return;
+      }
+      // Always return 200 regardless of outcome (anti-enumeration)
+      await this.requestPasswordResetUseCase.execute(req.body);
+      res.status(200).json({
+        success: true,
+        message: 'If the email exists, a reset link has been sent.',
+      });
+    } catch (error) {
+      // Even on error, return 200 to prevent email enumeration
+      console.error('[ForgotPassword] Unexpected error:', error);
+      res.status(200).json({
+        success: true,
+        message: 'If the email exists, a reset link has been sent.',
+      });
+    }
+  };
+
+  resetPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      if (!this.resetPasswordUseCase) {
+        throw new Error('Password reset is not configured');
+      }
+      await this.resetPasswordUseCase.execute(req.body);
+      res.status(200).json({
+        success: true,
+        message: 'Password has been reset successfully.',
       });
     } catch (error) {
       next(error);

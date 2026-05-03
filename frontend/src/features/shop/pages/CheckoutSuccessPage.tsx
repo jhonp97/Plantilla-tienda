@@ -1,15 +1,15 @@
 /**
  * CheckoutSuccessPage - Order confirmation after successful payment
  */
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useCheckoutStore } from '../../../store/checkoutStore';
 import styles from './CheckoutSuccessPage.module.css';
 
 export default function CheckoutSuccessPage() {
-  const navigate = useNavigate();
+  const { t } = useTranslation();
   const { order, reset } = useCheckoutStore();
-  const [showConfetti, setShowConfetti] = useState(true);
 
   useEffect(() => {
     // Reset checkout state on mount
@@ -46,13 +46,13 @@ export default function CheckoutSuccessPage() {
 
           {/* Success Message */}
           <h1 className={styles.successTitle}>
-            ¡Pedido Confirmado!
+            {t('checkout.orderConfirmed')}
           </h1>
           <p className={styles.successText}>
-            Gracias por tu compra. Tu pedido ha sido procesado exitosamente.
+            {t('checkout.orderSuccess')}
           </p>
           <p className={styles.successTextSecondary}>
-            Número de pedido: <span className={styles.orderNumber}>{orderNumber}</span>
+            {t('checkout.orderNumber', { number: orderNumber })}
           </p>
 
           {/* Email Notice */}
@@ -63,10 +63,10 @@ export default function CheckoutSuccessPage() {
               </svg>
               <div className={styles.emailNoticeText}>
                 <p className={styles.emailNoticeTitle}>
-                  Revisa tu correo electrónico
+                  {t('checkout.checkEmail')}
                 </p>
                 <p className={styles.emailNoticeText}>
-                  Te hemos enviado un correo de confirmación con los detalles de tu pedido.
+                  {t('checkout.checkEmailDesc')}
                 </p>
               </div>
             </div>
@@ -75,20 +75,20 @@ export default function CheckoutSuccessPage() {
           {/* Order Summary */}
           <div className={styles.orderSummary}>
             <p className={styles.orderSummaryText}>
-              ¿Tienes preguntas sobre tu pedido?
+              {t('checkout.orderQuestions')}
             </p>
             <div className={styles.actionButtons}>
               <Link
                 to="/orders"
                 className={styles.primaryButton}
               >
-                Ver Mis Pedidos
+                {t('checkout.viewOrders')}
               </Link>
               <Link
                 to="/products"
                 className={styles.secondaryButton}
               >
-                Seguir Comprando
+                {t('checkout.continueShopping')}
               </Link>
             </div>
           </div>
@@ -96,9 +96,9 @@ export default function CheckoutSuccessPage() {
           {/* Support Info */}
           <div className={styles.supportInfo}>
             <p>
-              ¿Necesitas ayuda?{' '}
+              {t('checkout.needHelp')}{' '}
               <a href="mailto:soporte@tienda.com" className={styles.supportLink}>
-                Contáctanos
+                {t('checkout.contactUs')}
               </a>
             </p>
           </div>

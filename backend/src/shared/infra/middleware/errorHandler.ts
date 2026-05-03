@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import { env } from '@config/env';
+import { DomainError } from '@shared/errors/DomainError';
 
 export function errorHandler(
   err: Error,
@@ -19,6 +20,16 @@ export function errorHandler(
         field: issue.path.join('.'),
         message: issue.message,
       })),
+    });
+    return;
+  }
+
+  // Domain errors with typed status codes
+  if (err instanceof DomainError) {
+    res.status(err.statusCode).json({
+      success: false,
+      error: err.message,
+      code: err.code,
     });
     return;
   }

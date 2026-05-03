@@ -11,6 +11,7 @@ const OrderManagementPage = lazy(() => import('./pages/OrderManagementPage'));
 const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
 const ReportsPage = lazy(() => import('./pages/ReportsPage'));
 const ShippingConfigPage = lazy(() => import('./pages/ShippingConfigPage'));
+const CouponManagement = lazy(() => import('./pages/CouponManagement'));
 
 function LoadingFallback() {
   return (
@@ -75,6 +76,13 @@ export function AdminRoutes() {
         </Suspense>
       } />
       
+      {/* Coupons */}
+      <Route path="coupons" element={
+        <Suspense fallback={<LoadingFallback />}>
+          <CouponManagement />
+        </Suspense>
+      } />
+
       {/* Settings */}
       <Route path="settings/shipping" element={
         <Suspense fallback={<LoadingFallback />}>

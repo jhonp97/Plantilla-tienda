@@ -1,13 +1,22 @@
 /**
- * ProductDetail - Product detail page with gallery, info, and add to cart
+ * ProductDetail - Product detail page with gallery, info, add to cart, and reviews
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useProductStore } from '../../../store/productStore';
 import { useCartStore } from '../../../store/cartStore';
+import { useAuth } from '@hooks/useAuth';
+import { useToastStore } from '@store/toastStore';
+import { usePagination } from '@hooks/usePagination';
+import { useGSAPAnimation } from '@hooks/useGSAPAnimation';
+import { reviewService, type Review, type PaginatedReviews } from '@services/review.service';
+import { StarRating } from '@components/StarRating';
+import { Button } from '@components/Button';
+import { Textarea } from '@components/Textarea';
 import type { Product } from '../../../types/product.types';
 import { formatPrice } from '../../../utils';
+import { SEO, buildProductJsonLd } from '@components/SEO';
 import styles from './ProductDetail.module.css';
 
 // Image Gallery Component
@@ -136,6 +145,7 @@ function RelatedProducts({ products }: RelatedProductsProps) {
               key={product.id}
               to={`/products/${product.slug}`}
               className={styles.relatedCard}
+              data-animate="true"
             >
               <div className={styles.relatedCardImage}>
                 {primaryImage ? (
@@ -167,15 +177,110 @@ function RelatedProducts({ products }: RelatedProductsProps) {
   );
 }
 
+// Review List Component
+interface ReviewListProps {
+  reviews: Review[];
+}
+
+function ReviewList({ reviews }: ReviewListProps) {
+  if (reviews.length === 0) return null;
+
+  return (
+    <div className={styles.reviewList}>
+      {reviews.map((review) => (
+        <div key={review.id} className={styles.reviewCard}>
+          <div className={styles.reviewHeader}>
+            <div className={styles.reviewAvatar}>
+              {review.user?.name?.charAt(0).toUpperCase() || 'A'}
+            </div>
+            <div className={styles.reviewMeta}>
+              <span className={styles.reviewAuthor}>
+                {review.user?.name || 'Anónimo'}
+              </span>
+              <span className={styles.reviewDate}>
+                {new Date(review.createdAt).toLocaleDateString('es-ES', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </span>
+            </div>
+            {review.isVerifiedPurchase && (
+              <span className={styles.verifiedBadge} title="Compra verificada">
+                <svg className={styles.verifiedIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                Verificada
+              </span>
+            )}
+          </div>
+          <div className={styles.reviewRating}>
+            <StarRating rating={review.rating} readOnly size="sm" />
+          </div>
+          {review.comment && (
+            <p className={styles.reviewComment}>{review.comment}</p>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // Main ProductDetail Component
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
   const { selectedProduct, relatedProducts, isLoading, error, fetchProductBySlug, clearSelectedProduct } = useProductStore();
   const { addItem } = useCartStore();
+  const { isAuthenticated, user } = useAuth();
+  const toast = useToastStore();
   
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
+
+  // GSAP animation refs
+  const imageRef = useRef<HTMLDivElement>(null);
+  const infoRef = useRef<HTMLDivElement>(null);
+  const relatedRef = useRef<HTMLDivElement>(null);
+  const reviewsRef = useRef<HTMLElement>(null);
+  const { fadeIn, slideUp, staggerIn } = useGSAPAnimation();
+
+  // Reviews state
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [averageRating, setAverageRating] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
+  const [totalReviewPages, setTotalReviewPages] = useState(0);
+  const [isReviewsLoading, setIsReviewsLoading] = useState(false);
+  const [reviewError, setReviewError] = useState<string | null>(null);
+  const [reviewFormVisible, setReviewFormVisible] = useState(false);
+  const [newRating, setNewRating] = useState(0);
+  const [newComment, setNewComment] = useState('');
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+  const [hasReviewed, setHasReviewed] = useState(false);
+
+  const {
+    currentPage: reviewPage,
+    setPage: setReviewPage,
+    hasNext: hasNextReviewPage,
+    hasPrev: hasPrevReviewPage,
+  } = usePagination({ totalItems: reviewCount, pageSize: 10 });
+
+  const fetchReviews = useCallback(async () => {
+    if (!slug) return;
+    setIsReviewsLoading(true);
+    setReviewError(null);
+    try {
+      const result = await reviewService.getProductReviews(slug, { page: reviewPage, limit: 10 });
+      setReviews(result.data);
+      setAverageRating(result.averageRating);
+      setReviewCount(result.reviewCount);
+      setTotalReviewPages(result.totalPages);
+    } catch (err) {
+      setReviewError('Error al cargar reseñas');
+    } finally {
+      setIsReviewsLoading(false);
+    }
+  }, [slug, reviewPage]);
 
   useEffect(() => {
     if (slug) {
@@ -186,6 +291,69 @@ export default function ProductDetail() {
       clearSelectedProduct();
     };
   }, [slug]);
+
+  // GSAP animations when product loads
+  useEffect(() => {
+    if (!isLoading && selectedProduct) {
+      // Animate image gallery - fade in
+      if (imageRef.current) fadeIn(imageRef.current);
+
+      // Animate product info - slide up with delay
+      if (infoRef.current) slideUp(infoRef.current, { delay: 0.15 });
+
+      // Animate related products
+      if (relatedRef.current) {
+        const relatedCards = relatedRef.current.querySelectorAll('[data-animate="true"]');
+        if (relatedCards.length > 0) {
+          staggerIn({ targets: relatedCards, stagger: 0.08, baseDelay: 0.3 });
+        }
+      }
+
+      // Animate reviews section
+      if (reviewsRef.current) slideUp(reviewsRef.current, { delay: 0.3 });
+    }
+  }, [isLoading, selectedProduct, fadeIn, slideUp, staggerIn]);
+
+  useEffect(() => {
+    if (slug) {
+      fetchReviews();
+    }
+  }, [slug, fetchReviews]);
+
+  useEffect(() => {
+    if (reviews.length > 0 && user) {
+      setHasReviewed(reviews.some((r) => r.userId === user.id));
+    }
+  }, [reviews, user]);
+
+  // Check if user already reviewed when review form opens
+  useEffect(() => {
+    if (reviewFormVisible && user && reviews.length > 0) {
+      setHasReviewed(reviews.some((r) => r.userId === user.id));
+    }
+  }, [reviewFormVisible, user, reviews]);
+
+  const handleSubmitReview = async () => {
+    if (!slug || newRating === 0) return;
+    setIsSubmittingReview(true);
+    try {
+      await reviewService.createReview(slug, {
+        rating: newRating,
+        comment: newComment.trim() || undefined,
+      });
+      toast.success('Reseña publicada correctamente');
+      setNewRating(0);
+      setNewComment('');
+      setReviewFormVisible(false);
+      setHasReviewed(true);
+      fetchReviews();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Error al publicar reseña';
+      toast.error(message);
+    } finally {
+      setIsSubmittingReview(false);
+    }
+  };
 
   const handleAddToCart = async () => {
     if (!selectedProduct || selectedProduct.stock < quantity) return;
@@ -250,7 +418,25 @@ export default function ProductDetail() {
 
   const totalPrice = selectedProduct.price * quantity;
 
+  const primaryImage = selectedProduct.images.find((img) => img.isPrimary) || selectedProduct.images[0];
+
   return (
+    <>
+      <SEO
+        title={selectedProduct.name}
+        description={selectedProduct.description.slice(0, 160)}
+        image={primaryImage?.url}
+        type="product"
+        pathname={`/products/${selectedProduct.slug}`}
+        jsonLd={buildProductJsonLd({
+          name: selectedProduct.name,
+          description: selectedProduct.description,
+          image: primaryImage?.url,
+          price: selectedProduct.price,
+          sku: selectedProduct.id,
+          availability: selectedProduct.stock > 0 ? 'InStock' : 'OutOfStock',
+        })}
+      />
     <div className={styles.pageContainer}>
       <div className={styles.container}>
         {/* Breadcrumb */}
@@ -284,12 +470,12 @@ export default function ProductDetail() {
         {/* Product Detail */}
         <div className={styles.productGrid}>
           {/* Image Gallery */}
-          <div>
+          <div ref={imageRef}>
             <ImageGallery images={selectedProduct.images} productName={selectedProduct.name} />
           </div>
 
           {/* Product Info */}
-          <div className={styles.productInfo}>
+          <div className={styles.productInfo} ref={infoRef}>
             <div>
               {selectedProduct.category && (
                 <p className={styles.productCategory}>
@@ -394,8 +580,174 @@ export default function ProductDetail() {
         </div>
 
         {/* Related Products */}
-        <RelatedProducts products={relatedProducts} />
+        <div ref={relatedRef}>
+          <RelatedProducts products={relatedProducts} />
+        </div>
+
+        {/* Reviews Section */}
+        <section className={styles.reviewsSection} ref={reviewsRef}>
+          <div className={styles.reviewsHeader}>
+            <div className={styles.reviewsTitleRow}>
+              <h2 className={styles.reviewsTitle}>Reseñas</h2>
+              {reviewCount > 0 && (
+                <div className={styles.reviewsSummary}>
+                  <StarRating rating={averageRating} readOnly size="md" />
+                  <span className={styles.reviewsAverage}>
+                    {averageRating.toFixed(1)}
+                  </span>
+                  <span className={styles.reviewsCount}>
+                    ({reviewCount} {reviewCount === 1 ? 'reseña' : 'reseñas'})
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {isAuthenticated && !hasReviewed && (
+              <button
+                onClick={() => setReviewFormVisible(!reviewFormVisible)}
+                className={styles.writeReviewButton}
+              >
+                <svg className={styles.writeReviewIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                {reviewFormVisible ? 'Cancelar' : 'Escribir reseña'}
+              </button>
+            )}
+          </div>
+
+          {/* Review Form */}
+          {reviewFormVisible && (
+            <div className={styles.reviewForm}>
+              <h3 className={styles.reviewFormTitle}>Tu opinión</h3>
+              <div className={styles.reviewFormRating}>
+                <label className={styles.reviewFormLabel}>Calificación</label>
+                <StarRating
+                  rating={newRating}
+                  onChange={setNewRating}
+                  size="lg"
+                />
+                {newRating === 0 && (
+                  <p className={styles.reviewFormHint}>Selecciona una calificación</p>
+                )}
+              </div>
+              <div className={styles.reviewFormComment}>
+                <Textarea
+                  label="Comentario (opcional)"
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="Comparte tu experiencia con este producto..."
+                  maxLength={500}
+                  rows={4}
+                />
+                <p className={styles.reviewFormCharCount}>
+                  {newComment.length}/500
+                </p>
+              </div>
+              <div className={styles.reviewFormActions}>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setReviewFormVisible(false);
+                    setNewRating(0);
+                    setNewComment('');
+                  }}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  variant="primary"
+                  onClick={handleSubmitReview}
+                  disabled={newRating === 0}
+                  isLoading={isSubmittingReview}
+                >
+                  Publicar reseña
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Error State */}
+          {reviewError && (
+            <div className={styles.reviewError}>
+              <p>{reviewError}</p>
+              <button onClick={fetchReviews} className={styles.reviewRetryButton}>
+                Reintentar
+              </button>
+            </div>
+          )}
+
+          {/* Loading State */}
+          {isReviewsLoading && (
+            <div className={styles.reviewsLoading}>
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className={styles.reviewSkeleton}>
+                  <div className={styles.reviewSkeletonHeader}>
+                    <div className={styles.reviewSkeletonAvatar} />
+                    <div className={styles.reviewSkeletonLines}>
+                      <div className={styles.reviewSkeletonLine1} />
+                      <div className={styles.reviewSkeletonLine2} />
+                    </div>
+                  </div>
+                  <div className={styles.reviewSkeletonStars} />
+                  <div className={styles.reviewSkeletonText} />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Review List */}
+          {!isReviewsLoading && !reviewError && (
+            <>
+              {reviews.length === 0 ? (
+                <div className={styles.reviewsEmpty}>
+                  <svg className={styles.reviewsEmptyIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                  </svg>
+                  <p className={styles.reviewsEmptyText}>
+                    {isAuthenticated
+                      ? 'Sé el primero en reseñar este producto'
+                      : 'No hay reseñas aún. Inicia sesión para escribir una.'}
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <ReviewList reviews={reviews} />
+
+                  {/* Reviews Pagination */}
+                  {totalReviewPages > 1 && (
+                    <div className={styles.reviewsPagination}>
+                      <button
+                        onClick={() => setReviewPage(reviewPage - 1)}
+                        disabled={!hasPrevReviewPage}
+                        className={styles.reviewsPageButton}
+                      >
+                        <svg className={styles.reviewsPageIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Anteriores
+                      </button>
+                      <span className={styles.reviewsPageInfo}>
+                        Página {reviewPage} de {totalReviewPages}
+                      </span>
+                      <button
+                        onClick={() => setReviewPage(reviewPage + 1)}
+                        disabled={!hasNextReviewPage}
+                        className={styles.reviewsPageButton}
+                      >
+                        Siguientes
+                        <svg className={styles.reviewsPageIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </>
+          )}
+        </section>
       </div>
     </div>
+    </>
   );
 }
