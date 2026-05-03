@@ -4,7 +4,7 @@ import type { IProductRepository } from '../../domain/repositories/IProductRepos
 
 describe('GetProductBySlugUseCase', () => {
   let useCase: GetProductBySlugUseCase;
-  let mockProductRepo: jest.Mocked<IProductRepository>;
+  let mockProductRepo: vi.Mocked<IProductRepository>;
 
   beforeEach(() => {
     mockProductRepo = {
@@ -16,7 +16,7 @@ describe('GetProductBySlugUseCase', () => {
       update: vi.fn(),
       deactivate: vi.fn(),
       count: vi.fn(),
-    } as unknown as jest.Mocked<IProductRepository>;
+    } as unknown as vi.Mocked<IProductRepository>;
 
     useCase = new GetProductBySlugUseCase(mockProductRepo);
   });

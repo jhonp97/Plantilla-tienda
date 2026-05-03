@@ -6,8 +6,8 @@ import type { ICloudinaryService } from '../../domain/services/ICloudinaryServic
 
 describe('CreateProductUseCase', () => {
   let useCase: CreateProductUseCase;
-  let mockProductRepo: jest.Mocked<IProductRepository>;
-  let mockCategoryRepo: jest.Mocked<ICategoryRepository>;
+  let mockProductRepo: vi.Mocked<IProductRepository>;
+  let mockCategoryRepo: vi.Mocked<ICategoryRepository>;
   let mockCloudinaryService: ICloudinaryService;
 
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('CreateProductUseCase', () => {
       update: vi.fn(),
       deactivate: vi.fn(),
       count: vi.fn(),
-    } as unknown as jest.Mocked<IProductRepository>;
+    } as unknown as vi.Mocked<IProductRepository>;
 
     mockCategoryRepo = {
       create: vi.fn(),
@@ -31,7 +31,7 @@ describe('CreateProductUseCase', () => {
       delete: vi.fn(),
       existsBySlug: vi.fn(),
       existsByName: vi.fn(),
-    } as unknown as jest.Mocked<ICategoryRepository>;
+    } as unknown as vi.Mocked<ICategoryRepository>;
 
     mockCloudinaryService = {
       uploadImages: vi.fn(),

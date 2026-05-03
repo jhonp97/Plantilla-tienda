@@ -4,7 +4,7 @@ import type { IProductRepository, SortOption } from '../../domain/repositories/I
 
 describe('ListProductsUseCase', () => {
   let useCase: ListProductsUseCase;
-  let mockProductRepo: jest.Mocked<IProductRepository>;
+  let mockProductRepo: vi.Mocked<IProductRepository>;
 
   beforeEach(() => {
     mockProductRepo = {
@@ -16,7 +16,7 @@ describe('ListProductsUseCase', () => {
       update: vi.fn(),
       deactivate: vi.fn(),
       count: vi.fn(),
-    } as unknown as jest.Mocked<IProductRepository>;
+    } as unknown as vi.Mocked<IProductRepository>;
 
     useCase = new ListProductsUseCase(mockProductRepo);
   });

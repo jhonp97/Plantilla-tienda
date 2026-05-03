@@ -5,8 +5,8 @@ import type { ICloudinaryService } from '../../domain/services/ICloudinaryServic
 
 describe('DeleteImagesUseCase', () => {
   let useCase: DeleteImagesUseCase;
-  let mockImageRepo: jest.Mocked<IProductImageRepository>;
-  let mockCloudinaryService: jest.Mocked<ICloudinaryService>;
+  let mockImageRepo: vi.Mocked<IProductImageRepository>;
+  let mockCloudinaryService: vi.Mocked<ICloudinaryService>;
 
   beforeEach(() => {
     mockImageRepo = {
@@ -19,12 +19,12 @@ describe('DeleteImagesUseCase', () => {
       deleteMany: vi.fn(),
       deleteByProductId: vi.fn(),
       countByProductId: vi.fn(),
-    } as unknown as jest.Mocked<IProductImageRepository>;
+    } as unknown as vi.Mocked<IProductImageRepository>;
 
     mockCloudinaryService = {
       uploadImages: vi.fn(),
       deleteImages: vi.fn(),
-    } as unknown as jest.Mocked<ICloudinaryService>;
+    } as unknown as vi.Mocked<ICloudinaryService>;
 
     useCase = new DeleteImagesUseCase(mockImageRepo, mockCloudinaryService);
   });

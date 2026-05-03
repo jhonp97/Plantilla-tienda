@@ -4,7 +4,7 @@ import type { ICategoryRepository } from '../../domain/repositories/ICategoryRep
 
 describe('CreateCategoryUseCase', () => {
   let useCase: CreateCategoryUseCase;
-  let mockCategoryRepo: jest.Mocked<ICategoryRepository>;
+  let mockCategoryRepo: vi.Mocked<ICategoryRepository>;
 
   beforeEach(() => {
     mockCategoryRepo = {
@@ -16,7 +16,7 @@ describe('CreateCategoryUseCase', () => {
       delete: vi.fn(),
       existsBySlug: vi.fn(),
       existsByName: vi.fn(),
-    } as unknown as jest.Mocked<ICategoryRepository>;
+    } as unknown as vi.Mocked<ICategoryRepository>;
 
     useCase = new CreateCategoryUseCase(mockCategoryRepo);
   });
