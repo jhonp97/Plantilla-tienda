@@ -130,6 +130,32 @@ import { GenerateInvoiceFromOrder } from '@modules/verifactu/application/use-cas
 import { RegisterInvoiceUseCase } from '@modules/verifactu/application/use-cases/RegisterInvoiceUseCase';
 import { CheckInvoiceStatusUseCase } from '@modules/verifactu/application/use-cases/CheckInvoiceStatusUseCase';
 
+// ==========================================
+// Fase 2: New Module Imports
+// ==========================================
+
+// Auth use cases (Phase 3)
+import { RequestPasswordResetUseCase } from '@modules/auth/application/use-cases/RequestPasswordResetUseCase';
+import { ResetPasswordUseCase } from '@modules/auth/application/use-cases/ResetPasswordUseCase';
+
+// Coupon module
+import { ValidateCouponUseCase } from '@modules/coupon/application/validate-coupon.use-case';
+import { CouponController } from '@modules/coupon/infrastructure/coupon.controller';
+import { createCouponRouter, createCouponValidateRouter } from '@modules/coupon/infrastructure/coupon.routes';
+
+// Review module
+import { CreateReviewUseCase } from '@modules/review/application/create-review.use-case';
+import { GetProductReviewsUseCase } from '@modules/review/application/get-product-reviews.use-case';
+import { DeleteReviewUseCase } from '@modules/review/application/delete-review.use-case';
+import { ReviewController } from '@modules/review/infrastructure/review.controller';
+import { createProductReviewRouter, createReviewRouter } from '@modules/review/infrastructure/review.routes';
+
+// Google Maps module
+import { GoogleMapsPlacesService } from '@modules/review/infrastructure/google-maps.service';
+import { FetchAndCacheGoogleReviewsUseCase } from '@modules/review/application/fetch-google-reviews.use-case';
+import { GoogleMapsController } from '@modules/review/infrastructure/google-maps.controller';
+import { createGoogleMapsReviewRouter } from '@modules/review/infrastructure/google-maps.routes';
+
 const app: Express = express();
 
 // Security headers
@@ -169,6 +195,10 @@ const loginUseCase = new LoginUseCase(userRepository);
 const getCurrentUserUseCase = new GetCurrentUserUseCase(userRepository);
 const logoutUseCase = new LogoutUseCase();
 
+// Password reset use cases created later (after emailService is available)
+let requestPasswordResetUseCase: RequestPasswordResetUseCase | undefined;
+let resetPasswordUseCase: ResetPasswordUseCase | undefined;
+
 const authController = new AuthController(
   registerUseCase,
   loginUseCase,
@@ -176,6 +206,7 @@ const authController = new AuthController(
   logoutUseCase,
 );
 
+// Auth router (password reset routes added after use cases are created)
 const authRouter = createAuthRouter(authController);
 
 // Mount auth routes
@@ -269,8 +300,21 @@ const invoiceRepository = new PrismaInvoiceRepository(prisma);
 const stripeService = new StripeService();
 const emailService = new EmailService();
 
+// Password reset use cases (need emailService which is now available)
+requestPasswordResetUseCase = new RequestPasswordResetUseCase(emailService);
+resetPasswordUseCase = new ResetPasswordUseCase();
+
+// Add password reset routes to auth router (need authController to be fully initialized)
+// We do this as a separate app.post since the router was already created without these routes
+import { forgotPasswordRateLimiter } from '@shared/infra/middleware/rateLimiter';
+authRouter.post('/forgot-password', forgotPasswordRateLimiter, authController.forgotPassword);
+authRouter.post('/reset-password', authController.resetPassword);
+
+// Coupon use cases (needed by order module)
+const validateCouponUseCase = new ValidateCouponUseCase();
+
 // Order use cases
-const createOrderUseCase = new CreateOrderUseCase(orderRepository, productRepository, settingsRepository, transactionManager);
+const createOrderUseCase = new CreateOrderUseCase(orderRepository, productRepository, settingsRepository, transactionManager, validateCouponUseCase);
 const getOrderByIdUseCase = new GetOrderByIdUseCase(orderRepository);
 const getOrderByNumberUseCase = new GetOrderByNumberUseCase(orderRepository);
 const listUserOrdersUseCase = new ListUserOrdersUseCase(orderRepository);
@@ -495,6 +539,52 @@ app.use('/api/admin/analytics', analyticsRouter);
 app.use('/api/admin/reports', reportsRouter);
 
 // ==========================================
+// Coupon module - dependency injection
+// ==========================================
+
+const couponController = new CouponController(validateCouponUseCase);
+const couponRouter = createCouponRouter(couponController);
+const couponValidateRouter = createCouponValidateRouter(couponController);
+
+// Mount coupon routes
+app.use('/api/admin/coupons', couponRouter);
+app.use('/api/coupons', couponValidateRouter);
+
+// ==========================================
+// Review module - dependency injection
+// ==========================================
+
+const createReviewUseCase = new CreateReviewUseCase();
+const getProductReviewsUseCase = new GetProductReviewsUseCase();
+const deleteReviewUseCase = new DeleteReviewUseCase();
+
+const reviewController = new ReviewController(
+  createReviewUseCase,
+  getProductReviewsUseCase,
+  deleteReviewUseCase,
+);
+
+const productReviewRouter = createProductReviewRouter(reviewController);
+const reviewRouter = createReviewRouter(reviewController);
+
+// Mount review routes
+app.use('/api/products/:productId/reviews', productReviewRouter);
+app.use('/api/reviews', reviewRouter);
+
+// ==========================================
+// Google Maps module - dependency injection
+// ==========================================
+
+const googleMapsPlacesService = new GoogleMapsPlacesService();
+const fetchAndCacheGoogleReviewsUseCase = new FetchAndCacheGoogleReviewsUseCase(googleMapsPlacesService);
+
+const googleMapsController = new GoogleMapsController(fetchAndCacheGoogleReviewsUseCase);
+const googleMapsReviewRouter = createGoogleMapsReviewRouter(googleMapsController);
+
+// Mount Google Maps review route (same /api/reviews prefix, GET /)
+app.use('/api/reviews', googleMapsReviewRouter);
+
+// ==========================================
 // Verifactu module - dependency injection
 // ==========================================
 
@@ -591,32 +681,63 @@ eventBus.on<OrderPaidEvent>('OrderPaid', async (event) => {
 });
 
 // ==========================================
-// Verifactu Polling Job
-// Check invoice status every 5 minutes
+// Google Maps Review Cache Cron Job
+// Refresh cached reviews every 24h (if API key configured)
 // ==========================================
 
-const VERIFACTU_POLL_INTERVAL = 5 * 60 * 1000; // 5 minutes
+if (!process.env.VITEST) {
+  const GOOGLE_MAPS_REFRESH_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours
+  const GOOGLE_MAPS_PLACE_IDS = (process.env.GOOGLE_MAPS_PLACE_IDS || '').split(',').filter(Boolean);
 
-setInterval(async () => {
-  console.log('[Verifactu] Running scheduled status check...');
-  try {
-    await checkInvoiceStatusUseCase.execute();
-  } catch (error) {
-    console.error('[Verifactu] Error in scheduled status check:', error);
+  if (env.GOOGLE_MAPS_API_KEY && GOOGLE_MAPS_PLACE_IDS.length > 0) {
+    setInterval(async () => {
+      console.log('[GoogleMaps] Running scheduled review cache refresh...');
+      for (const placeId of GOOGLE_MAPS_PLACE_IDS) {
+        try {
+          const result = await fetchAndCacheGoogleReviewsUseCase.execute(placeId.trim());
+          console.log(`[GoogleMaps] Cached ${result.cached}/${result.total} reviews for place ${placeId}`);
+        } catch (error) {
+          console.error(`[GoogleMaps] Error refreshing reviews for place ${placeId}:`, error);
+        }
+      }
+    }, GOOGLE_MAPS_REFRESH_INTERVAL);
+
+    console.log(`[GoogleMaps] Review cache refresh scheduled every 24 hours for ${GOOGLE_MAPS_PLACE_IDS.length} place(s)`);
+  } else {
+    console.log('[GoogleMaps] Review cache refresh disabled - API key or place IDs not configured');
   }
-}, VERIFACTU_POLL_INTERVAL);
 
-console.log('[Verifactu] Polling job scheduled every 5 minutes');
+  // ==========================================
+  // Verifactu Polling Job
+  // Check invoice status every 5 minutes
+  // ==========================================
+
+  const VERIFACTU_POLL_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
+  setInterval(async () => {
+    console.log('[Verifactu] Running scheduled status check...');
+    try {
+      await checkInvoiceStatusUseCase.execute();
+    } catch (error) {
+      console.error('[Verifactu] Error in scheduled status check:', error);
+    }
+  }, VERIFACTU_POLL_INTERVAL);
+
+  console.log('[Verifactu] Polling job scheduled every 5 minutes');
+}
 
 // Error handling (must be last)
 app.use(errorHandler);
 
-// Start server
-const PORT = env.PORT;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📧 Environment: ${env.NODE_ENV}`);
-  console.log(`🌐 Frontend URL: ${env.FRONTEND_URL}`);
-});
-
 export { app };
+
+// Only start the server when not running integration tests
+// (vitest sets VITEST env var automatically)
+if (!process.env.VITEST) {
+  const PORT = env.PORT;
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`📧 Environment: ${env.NODE_ENV}`);
+    console.log(`🌐 Frontend URL: ${env.FRONTEND_URL}`);
+  });
+}
