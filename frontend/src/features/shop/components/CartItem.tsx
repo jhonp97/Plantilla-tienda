@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCartStore, type CartItem as CartItemType } from '../../../store/cartStore';
+import { formatPrice } from '../../../utils';
 import styles from './CartItem.module.css';
 
 interface CartItemProps {
@@ -78,7 +79,7 @@ export function CartItem({ item }: CartItemProps) {
                 {item.name}
               </Link>
               <p className={styles.productPrice}>
-                ${item.price.toFixed(2)} cada uno
+                {formatPrice(item.price)} cada uno
               </p>
             </div>
 
@@ -134,7 +135,7 @@ export function CartItem({ item }: CartItemProps) {
             {/* Item Total */}
             <div className={styles.itemTotal}>
               <p className={styles.itemTotalValue}>
-                ${itemTotal.toFixed(2)}
+                {formatPrice(itemTotal)}
               </p>
             </div>
           </div>

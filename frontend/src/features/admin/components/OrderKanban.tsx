@@ -5,6 +5,7 @@ import { useState, useRef } from 'react';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 import type { Order, OrderStatus } from '../../../types/order.types';
+import { formatPrice } from '../../../utils';
 import styles from './OrderKanban.module.css';
 
 interface OrderKanbanProps {
@@ -47,7 +48,7 @@ function OrderCard({ order, onViewDetails, onDragStart, onDragEnd }: {
       </p>
       <div className={styles.orderFooter}>
         <p className={styles.orderTotal}>
-          ${order.total.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
+          {formatPrice(order.total)}
         </p>
         <p className={styles.orderItems}>{order.items.length} items</p>
       </div>

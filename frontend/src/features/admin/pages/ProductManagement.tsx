@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useProductStore } from '../../../store/productStore';
 import type { Product } from '../../../types/product.types';
 import { ConfirmModal } from '../components/shared';
+import { formatPrice } from '../../../utils';
 import styles from './ProductManagement.module.css';
 
 // Product Row Component
@@ -46,7 +47,7 @@ function ProductRow({ product, onEdit, onDeactivate }: ProductRowProps) {
         </div>
       </td>
       <td className={styles.tableCell}>
-        <span className={styles.price}>${product.price.toFixed(2)}</span>
+        <span className={styles.price}>{formatPrice(product.price)}</span>
       </td>
       <td className={styles.tableCell}>
         <span className={`${styles.statusBadge} ${

@@ -8,6 +8,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { useAnalyticsStore } from '../../../store/analyticsStore';
 import { ProductPerformanceTable } from '../components/ProductPerformanceTable';
 import { PageHeader } from '../components/shared';
+import { formatPrice } from '../../../utils';
 import styles from './AnalyticsPage.module.css';
 
 const DATE_PRESETS = [
@@ -162,7 +163,7 @@ export default function AnalyticsPage() {
             <span className={styles.overviewLabel}>Ingresos Totales</span>
           </div>
           <p className={styles.overviewValue}>
-            ${(overview?.totalRevenue || 0).toLocaleString('es-AR', { minimumFractionDigits: 2 })}
+            {formatPrice(overview?.totalRevenue || 0)}
           </p>
           <p className={styles.overviewGrowth}>
             ↑ {(overview?.revenueGrowth || 0).toFixed(1)}% vs período anterior
@@ -209,7 +210,7 @@ export default function AnalyticsPage() {
             <span className={styles.overviewLabel}>Ticket Promedio</span>
           </div>
           <p className={styles.overviewValue}>
-            ${(overview?.averageOrderValue || 0).toLocaleString('es-AR', { minimumFractionDigits: 2 })}
+            {formatPrice(overview?.averageOrderValue || 0)}
           </p>
         </div>
       </div>
@@ -235,7 +236,7 @@ export default function AnalyticsPage() {
                   tick={{ fontSize: 12, fill: '#6b7280' }}
                 />
                 <YAxis
-                  tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                  tickFormatter={(value) => `€${(value / 1000).toFixed(0)}k`}
                   tick={{ fontSize: 12, fill: '#6b7280' }}
                 />
                 <Tooltip
@@ -244,7 +245,7 @@ export default function AnalyticsPage() {
                     border: '1px solid #e5e7eb',
                     borderRadius: '8px',
                   }}
-                  formatter={(value) => [`$${Number(value).toLocaleString('es-AR')}`, 'Ingresos']}
+                  formatter={(value) => [formatPrice(Number(value)), 'Ingresos']}
                 />
                 <Area
                   type="monotone"

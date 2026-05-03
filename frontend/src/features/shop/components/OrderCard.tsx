@@ -3,6 +3,7 @@
  */
 import { Link } from 'react-router-dom';
 import type { Order, OrderStatus } from '../../../types/order.types';
+import { formatPrice } from '../../../utils';
 import styles from './OrderCard.module.css';
 
 interface OrderCardProps {
@@ -94,7 +95,7 @@ export function OrderCard({ order }: OrderCardProps) {
         <div className={styles.orderTotalInfo}>
           <p className={styles.orderTotalLabel}>Total</p>
           <p className={styles.orderTotalValue}>
-            ${order.total.toFixed(2)}
+            {formatPrice(order.total)}
           </p>
         </div>
         <Link

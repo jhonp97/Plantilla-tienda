@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { useCartStore } from '../../../store/cartStore';
 import { useCheckoutStore } from '../../../store/checkoutStore';
+import { formatPrice } from '../../../utils';
 import styles from './CheckoutReviewStep.module.css';
 
 interface CheckoutReviewStepProps {
@@ -78,7 +79,7 @@ export function CheckoutReviewStep({ onNext }: CheckoutReviewStepProps) {
             {/* Item Total */}
             <div className={styles.cartItemTotal}>
               <p className={styles.cartItemTotalValue}>
-                ${(item.price * item.quantity).toFixed(2)}
+                {formatPrice(item.price * item.quantity)}
               </p>
             </div>
           </div>
@@ -89,7 +90,7 @@ export function CheckoutReviewStep({ onNext }: CheckoutReviewStepProps) {
       <div className={styles.orderSummary}>
         <div className={styles.summaryRow}>
           <span className={styles.summaryLabel}>Subtotal</span>
-          <span className={styles.summaryValue}>${subtotal.toFixed(2)}</span>
+          <span className={styles.summaryValue}>{formatPrice(subtotal)}</span>
         </div>
         <div className={styles.summaryRow}>
           <span className={styles.summaryLabel}>Envío</span>

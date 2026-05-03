@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCheckoutStore } from '../../../store/checkoutStore';
 import { useCartStore } from '../../../store/cartStore';
 import { StripePaymentForm } from './StripePaymentForm';
+import { formatPrice } from '../../../utils';
 import styles from './CheckoutPaymentStep.module.css';
 
 interface CheckoutPaymentStepProps {
@@ -66,20 +67,20 @@ export function CheckoutPaymentStep({ onNext, onBack }: CheckoutPaymentStepProps
       <div className={styles.orderSummary}>
         <div className={styles.summaryRow}>
           <span className={styles.summaryLabel}>Subtotal</span>
-          <span className={styles.summaryValue}>${subtotal.toFixed(2)}</span>
+          <span className={styles.summaryValue}>{formatPrice(subtotal)}</span>
         </div>
         <div className={styles.summaryRow}>
           <span className={styles.summaryLabel}>Envío</span>
-          <span className={styles.summaryValue}>${shippingCost.toFixed(2)}</span>
+          <span className={styles.summaryValue}>{formatPrice(shippingCost, { inCents: false })}</span>
         </div>
         <div className={styles.summaryRow}>
           <span className={styles.summaryLabel}>Impuestos (16%)</span>
-          <span className={styles.summaryValue}>${tax.toFixed(2)}</span>
+          <span className={styles.summaryValue}>{formatPrice(tax)}</span>
         </div>
         <div className={styles.totalRow}>
           <span className={styles.totalLabel}>Total</span>
           <span className={styles.totalValue}>
-            ${total.toFixed(2)}
+            {formatPrice(total)}
           </span>
         </div>
       </div>

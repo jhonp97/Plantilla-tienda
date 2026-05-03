@@ -8,6 +8,7 @@ import { OrderKanban } from '../components/OrderKanban';
 import { OrderStatusModal } from '../components/OrderStatusModal';
 import { BaseModal } from '../components/shared/BaseModal';
 import type { Order, OrderStatus, OrderFilters } from '../../../types/order.types';
+import { formatPrice } from '../../../utils';
 import styles from './OrderManagementPage.module.css';
 
 type ViewMode = 'kanban' | 'table';
@@ -278,7 +279,7 @@ export default function OrderManagementPage() {
                         <p className={styles.orderItemQuantity}>Cantidad: {item.quantity}</p>
                       </div>
                       <p className={styles.orderItemPrice}>
-                        ${(item.price * item.quantity).toLocaleString('es-AR', { minimumFractionDigits: 2 })}
+                        {formatPrice(item.price * item.quantity)}
                       </p>
                     </div>
                   ))}
@@ -289,19 +290,19 @@ export default function OrderManagementPage() {
               <div className={styles.orderTotals}>
                 <div className={styles.orderTotalRow}>
                   <span className={styles.orderTotalLabel}>Subtotal:</span>
-                  <span className={styles.orderTotalValue}>${orderDetailsModal.subtotal.toLocaleString('es-AR', { minimumFractionDigits: 2 })}</span>
+                  <span className={styles.orderTotalValue}>{formatPrice(orderDetailsModal.subtotal)}</span>
                 </div>
                 <div className={styles.orderTotalRow}>
                   <span className={styles.orderTotalLabel}>Envío:</span>
-                  <span className={styles.orderTotalValue}>${orderDetailsModal.shippingCost.toLocaleString('es-AR', { minimumFractionDigits: 2 })}</span>
+                  <span className={styles.orderTotalValue}>{formatPrice(orderDetailsModal.shippingCost)}</span>
                 </div>
                 <div className={styles.orderTotalRow}>
                   <span className={styles.orderTotalLabel}>Impuesto:</span>
-                  <span className={styles.orderTotalValue}>${orderDetailsModal.tax.toLocaleString('es-AR', { minimumFractionDigits: 2 })}</span>
+                  <span className={styles.orderTotalValue}>{formatPrice(orderDetailsModal.tax)}</span>
                 </div>
                 <div className={styles.orderTotalFinal}>
                   <span className={styles.orderTotalLabelFinal}>Total:</span>
-                  <span className={styles.orderTotalValueFinal}>${orderDetailsModal.total.toLocaleString('es-AR', { minimumFractionDigits: 2 })}</span>
+                  <span className={styles.orderTotalValueFinal}>{formatPrice(orderDetailsModal.total)}</span>
                 </div>
               </div>
             </div>

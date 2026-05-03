@@ -7,6 +7,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useProductStore } from '../../../store/productStore';
 import { useCartStore } from '../../../store/cartStore';
 import type { Product } from '../../../types/product.types';
+import { formatPrice } from '../../../utils';
 import styles from './ProductDetail.module.css';
 
 // Image Gallery Component
@@ -155,7 +156,7 @@ function RelatedProducts({ products }: RelatedProductsProps) {
                   {product.name}
                 </h3>
                 <p className={styles.relatedCardPrice}>
-                  ${product.price.toFixed(2)}
+                  {formatPrice(product.price)}
                 </p>
               </div>
             </Link>
@@ -302,7 +303,7 @@ export default function ProductDetail() {
 
             <div>
               <p className={styles.productPrice}>
-                ${selectedProduct.price.toFixed(2)}
+                {formatPrice(selectedProduct.price)}
               </p>
               <p className={styles.productTax}>
                 Impuestos incluidos
@@ -352,7 +353,7 @@ export default function ProductDetail() {
                     </svg>
                   </button>
                   <span className={styles.totalText}>
-                    Total: <span className={styles.totalAmount}>${totalPrice.toFixed(2)}</span>
+                    Total: <span className={styles.totalAmount}>{formatPrice(totalPrice)}</span>
                   </span>
                 </div>
               </div>

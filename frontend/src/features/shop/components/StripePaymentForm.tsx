@@ -4,6 +4,7 @@
  */
 import { useState, useEffect } from 'react';
 import { useCheckoutStore } from '../../../store/checkoutStore';
+import { formatPrice } from '../../../utils';
 import styles from './StripePaymentForm.module.css';
 
 interface StripePaymentFormProps {
@@ -199,7 +200,7 @@ export function StripePaymentForm({ amount, onSuccess }: StripePaymentFormProps)
             Procesando pago...
           </span>
         ) : (
-          `Pagar $${amount.toFixed(2)}`
+          `Pagar ${formatPrice(amount)}`
         )}
       </button>
 

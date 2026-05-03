@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useProductStore } from '../../../store/productStore';
 import type { Category, Product, ProductFilters } from '../../../types/product.types';
+import { formatPrice } from '../../../utils';
 import styles from './ProductList.module.css';
 
 // Skeleton component for loading state
@@ -64,7 +65,7 @@ function ProductCard({ product }: ProductCardProps) {
         )}
         <div className={styles.productPriceRow}>
           <span className={styles.productPrice}>
-            ${product.price.toFixed(2)}
+            {formatPrice(product.price)}
           </span>
           <span className={styles.productStock}>
             {product.stock > 0 ? `${product.stock} disponibles` : 'Agotado'}

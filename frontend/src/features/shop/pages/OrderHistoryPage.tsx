@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useOrderStore } from '../../../store/orderStore';
 import type { OrderStatus, PaymentStatus, ShippingStatus } from '../../../types/order.types';
+import { formatPrice } from '../../../utils';
 import styles from './OrderHistoryPage.module.css';
 
 const STATUS_FILTERS: { value: OrderStatus | ''; label: string }[] = [
@@ -177,7 +178,7 @@ export default function OrderHistoryPage() {
                     </div>
                     <div className={styles.orderHeaderRight}>
                       <p className={styles.orderTotal}>
-                        ${order.total.toFixed(2)}
+                        {formatPrice(order.total)}
                       </p>
                       <p className={styles.orderItemsCount}>
                         {order.items.length} {order.items.length === 1 ? 'producto' : 'productos'}

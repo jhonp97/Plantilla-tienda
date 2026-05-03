@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCartStore, type CartItem as CartItemType } from '../../../store/cartStore';
 import { CartItem } from '../components/CartItem';
 import { CartSummary } from '../components/CartSummary';
+import { formatPrice } from '../../../utils';
 import styles from './CartPage.module.css';
 
 export default function CartPage() {
@@ -120,11 +121,11 @@ export default function CartPage() {
               <div className={styles.shippingTextRow}>
                 <span className={styles.shippingText}>
                   {remainingForFreeShipping > 0
-                    ? `Agrega $${remainingForFreeShipping.toFixed(2)} más para envío gratis`
+                    ? `Agrega ${formatPrice(remainingForFreeShipping)} más para envío gratis`
                     : '¡Has conseguido envío gratis!'}
                 </span>
                 <span className={styles.shippingAmount}>
-                  ${subtotal.toFixed(2)} / ${freeShippingThreshold.toFixed(2)}
+                  {formatPrice(subtotal)} / {formatPrice(freeShippingThreshold, { inCents: false })}
                 </span>
               </div>
               <div className={styles.progressBar}>

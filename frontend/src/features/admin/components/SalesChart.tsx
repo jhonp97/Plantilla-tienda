@@ -1,6 +1,7 @@
 /**
  * SalesChart - Sales visualization using Recharts
  */
+import { formatPrice } from '../../../utils';
 import {
   AreaChart,
   Area,
@@ -44,7 +45,7 @@ function CustomTooltip({ active, payload, label }: {
           {entry.dataKey === 'revenue' ? 'Ingresos' : 'Pedidos'}:{' '}
           <span className={styles.tooltipBold}>
             {entry.dataKey === 'revenue'
-              ? `$${entry.value.toLocaleString('es-AR')}`
+              ? formatPrice(entry.value)
               : entry.value}
           </span>
         </p>
@@ -111,7 +112,7 @@ export function SalesChart({ data, isLoading }: SalesChartProps) {
             />
             <YAxis
               yAxisId="left"
-              tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+              tickFormatter={(value) => `€${(value / 1000).toFixed(0)}k`}
               tick={{ fontSize: 12, fill: '#6b7280' }}
               axisLine={false}
               tickLine={false}

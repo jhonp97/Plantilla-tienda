@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 import type { Order, OrderStatus } from '../../../types/order.types';
+import { formatPrice } from '../../../utils';
 import styles from './OrderTable.module.css';
 
 interface OrderTableProps {
@@ -175,7 +176,7 @@ export function OrderTable({
                   </td>
                   <td className={styles.tableCell}>
                     <p className={styles.priceValue}>
-                      ${order.total.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
+                      {formatPrice(order.total)}
                     </p>
                   </td>
                   <td className={styles.tableCell}>

@@ -6,6 +6,7 @@ import type { ShippingOption } from '../../../types/shipping.types';
 import { PageHeader } from '../components/shared';
 import { ConfirmModal } from '../components/shared';
 import { FormInput } from '../components/shared';
+import { formatPrice } from '../../../utils';
 import styles from './ShippingConfigPage.module.css';
 
 interface ShippingFormData {
@@ -189,7 +190,7 @@ export default function ShippingConfigPage() {
               <div className={styles.optionDetailRow}>
                 <span className={styles.optionDetailLabel}>Precio</span>
                 <span className={styles.optionDetailValue}>
-                  {option.price === 0 ? 'Gratis' : `$${option.price.toLocaleString('es-AR')}`}
+                  {option.price === 0 ? 'Gratis' : formatPrice(option.price)}
                 </span>
               </div>
               <div className={styles.optionDetailRow}>

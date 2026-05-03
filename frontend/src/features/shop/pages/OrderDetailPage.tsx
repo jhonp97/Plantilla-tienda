@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useOrderStore } from '../../../store/orderStore';
 import type { OrderStatus, PaymentStatus, ShippingStatus } from '../../../types/order.types';
+import { formatPrice } from '../../../utils';
 import styles from './OrderDetailPage.module.css';
 
 export default function OrderDetailPage() {
@@ -205,12 +206,12 @@ export default function OrderDetailPage() {
                         {item.name}
                       </h3>
                       <p className={styles.orderItemMeta}>
-                        Cantidad: {item.quantity} × ${item.price.toFixed(2)}
+                        Cantidad: {item.quantity} × {formatPrice(item.price)}
                       </p>
                     </div>
                     <div className={styles.orderItemPrice}>
                       <p className={styles.orderItemTotal}>
-                        ${(item.price * item.quantity).toFixed(2)}
+                        {formatPrice(item.price * item.quantity)}
                       </p>
                     </div>
                   </div>
@@ -250,30 +251,30 @@ export default function OrderDetailPage() {
               </h2>
 
               <div className={styles.summaryRows}>
-                <div className={styles.summaryRow}>
-                  <span className={styles.summaryLabel}>Subtotal</span>
-                  <span className={styles.summaryValue}>${order.subtotal.toFixed(2)}</span>
-                </div>
-                <div className={styles.summaryRow}>
-                  <span className={styles.summaryLabel}>Envío</span>
-                  <span className={styles.summaryValue}>
-                    {order.shippingCost === 0 ? (
-                      <span className={styles.summaryFreeShipping}>Gratis</span>
-                    ) : (
-                      `$${order.shippingCost.toFixed(2)}`
-                    )}
-                  </span>
-                </div>
-                <div className={styles.summaryRow}>
-                  <span className={styles.summaryLabel}>Impuestos</span>
-                  <span className={styles.summaryValue}>${order.tax.toFixed(2)}</span>
-                </div>
-                <div className={styles.summaryTotal}>
-                  <span className={styles.summaryTotalLabel}>Total</span>
-                  <span className={styles.summaryTotalValue}>
-                    ${order.total.toFixed(2)}
-                  </span>
-                </div>
+                  <div className={styles.summaryRow}>
+                    <span className={styles.summaryLabel}>Subtotal</span>
+                    <span className={styles.summaryValue}>{formatPrice(order.subtotal)}</span>
+                  </div>
+                  <div className={styles.summaryRow}>
+                    <span className={styles.summaryLabel}>Envío</span>
+                    <span className={styles.summaryValue}>
+                      {order.shippingCost === 0 ? (
+                        <span className={styles.summaryFreeShipping}>Gratis</span>
+                      ) : (
+                        formatPrice(order.shippingCost)
+                      )}
+                    </span>
+                  </div>
+                  <div className={styles.summaryRow}>
+                    <span className={styles.summaryLabel}>Impuestos</span>
+                    <span className={styles.summaryValue}>{formatPrice(order.tax)}</span>
+                  </div>
+                  <div className={styles.summaryTotal}>
+                    <span className={styles.summaryTotalLabel}>Total</span>
+                    <span className={styles.summaryTotalValue}>
+                      {formatPrice(order.total)}
+                    </span>
+                  </div>
               </div>
 
               {/* Payment Info */}

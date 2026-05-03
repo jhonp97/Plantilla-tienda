@@ -2,6 +2,7 @@
  * CartSummary - Cart totals and summary display
  */
 import { useCartStore } from '../../../store/cartStore';
+import { formatPrice } from '../../../utils';
 import styles from './CartSummary.module.css';
 
 export function CartSummary() {
@@ -25,7 +26,7 @@ export function CartSummary() {
       {/* Subtotal */}
       <div className={styles.summaryRow}>
         <span className={styles.summaryLabel}>Subtotal</span>
-        <span className={styles.summaryValue}>${subtotal.toFixed(2)}</span>
+        <span className={styles.summaryValue}>{formatPrice(subtotal)}</span>
       </div>
 
       {/* Shipping */}
@@ -35,7 +36,7 @@ export function CartSummary() {
           {shippingCost === 0 ? (
             <span className={styles.freeShipping}>Gratis</span>
           ) : (
-            `$${shippingCost.toFixed(2)}`
+            formatPrice(shippingCost, { inCents: false })
           )}
         </span>
       </div>
@@ -43,7 +44,7 @@ export function CartSummary() {
       {/* Tax */}
       <div className={styles.summaryRow}>
         <span className={styles.summaryLabel}>Impuestos (16%)</span>
-        <span className={styles.summaryValue}>${tax.toFixed(2)}</span>
+        <span className={styles.summaryValue}>{formatPrice(tax)}</span>
       </div>
 
       {/* Divider */}
@@ -53,7 +54,7 @@ export function CartSummary() {
       <div className={styles.totalRow}>
         <span className={styles.totalLabel}>Total</span>
         <span className={styles.totalValue}>
-          ${total.toFixed(2)}
+          {formatPrice(total)}
         </span>
       </div>
 
@@ -62,7 +63,7 @@ export function CartSummary() {
         <p>
           {shippingCost === 0
             ? '¡Has desbloqueado envío gratis!'
-            : `Agrega $${(100 - subtotal).toFixed(2)} más para envío gratis`}
+            : `Agrega ${formatPrice(100 - subtotal)} más para envío gratis`}
         </p>
       </div>
 

@@ -3,6 +3,7 @@
  */
 import { useState, useMemo } from 'react';
 import type { TopProduct } from '../../../types/analytics.types';
+import { formatPrice } from '../../../utils';
 import styles from './ProductPerformanceTable.module.css';
 
 interface ProductPerformanceTableProps {
@@ -149,7 +150,7 @@ export function ProductPerformanceTable({ products, isLoading }: ProductPerforma
                     </td>
                     <td className={styles.tableCell}>
                       <span className={`${styles.valueText} ${styles.valueBold}`}>
-                        ${product.revenue.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
+                        {formatPrice(product.revenue)}
                       </span>
                     </td>
                     <td className={styles.tableCell}>

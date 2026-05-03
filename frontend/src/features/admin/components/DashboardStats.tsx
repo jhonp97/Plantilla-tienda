@@ -2,6 +2,7 @@
  * DashboardStats - KPI cards with key metrics for admin dashboard
  */
 import { useMemo } from 'react';
+import { formatPrice } from '../../../utils';
 import styles from './DashboardStats.module.css';
 
 interface DashboardStatsProps {
@@ -35,7 +36,7 @@ function StatCard({
             {title}
           </p>
           <p className={styles.cardValue}>
-            {typeof value === 'number' ? `$${value.toLocaleString('es-AR', { minimumFractionDigits: 2 })}` : value}
+            {typeof value === 'number' ? value.toLocaleString('es-AR') : value}
           </p>
           {subValue && (
             <p className={styles.cardSubValue}>{subValue}</p>
@@ -74,7 +75,7 @@ export function DashboardStats({
   const stats = useMemo(() => [
     {
       title: 'Ventas Hoy',
-      value: todaySales,
+      value: formatPrice(todaySales),
       subValue: '+12.5% vs ayer',
       trend: 12.5,
       trendUp: true,
@@ -87,7 +88,7 @@ export function DashboardStats({
     },
     {
       title: 'Ventas Semana',
-      value: weekSales,
+      value: formatPrice(weekSales),
       subValue: '+8.2% vs semana anterior',
       trend: 8.2,
       trendUp: true,

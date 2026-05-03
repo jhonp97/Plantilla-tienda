@@ -6,6 +6,7 @@ import { useAnalyticsStore } from '../../../store/analyticsStore';
 import { DashboardStats } from '../components/DashboardStats';
 import { SalesChart } from '../components/SalesChart';
 import { LowStockAlert } from '../components/LowStockAlert';
+import { formatPrice } from '../../../utils';
 import styles from './AdminDashboardPage.module.css';
 
 export default function AdminDashboardPage() {
@@ -117,7 +118,7 @@ export default function AdminDashboardPage() {
                     </td>
                     <td className={styles.tableCell}>
                       <span className={styles.valueBold}>
-                        ${product.revenue.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
+                        {formatPrice(product.revenue)}
                       </span>
                     </td>
                   </tr>
