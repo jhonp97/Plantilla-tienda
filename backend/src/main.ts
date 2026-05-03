@@ -15,7 +15,7 @@ import { LoginUseCase } from '@modules/auth/application/use-cases/LoginUseCase';
 import { GetCurrentUserUseCase } from '@modules/auth/application/GetCurrentUserUseCase';
 import { LogoutUseCase } from '@modules/auth/application/LogoutUseCase';
 import { errorHandler } from '@shared/infra/middleware/errorHandler';
-import { loginRateLimiter, globalRateLimiter } from '@shared/infra/middleware/rateLimiter';
+import { loginRateLimiter, globalRateLimiter, healthRateLimiter } from '@shared/infra/middleware/rateLimiter';
 
 // Product module imports
 import { ProductController } from '@modules/product/infrastructure/http/product.controller';
@@ -153,10 +153,14 @@ app.use(cookieParser());
 // Global rate limiter
 app.use(globalRateLimiter);
 
-// Health check
-app.get('/health', (_req, res) => {
-  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
-});
+// Health check handler
+const healthHandler = (_req: express.Request, res: express.Response) => {
+  res.status(200).json({ status: 'ok' });
+};
+
+// Health check endpoints with rate limiting
+app.get('/health', healthRateLimiter, healthHandler);
+app.get('/api/health', healthRateLimiter, healthHandler);
 
 // Auth module - dependency injection
 const userRepository = new PrismaUserRepository(prisma);

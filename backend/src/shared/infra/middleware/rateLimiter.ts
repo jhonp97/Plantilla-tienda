@@ -21,3 +21,14 @@ export const globalRateLimiter = rateLimit({
     error: 'Too many requests. Please try again later.',
   },
 });
+
+export const healthRateLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 30, // 30 requests per minute
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    error: 'Too many requests. Please try again later.',
+  },
+});
