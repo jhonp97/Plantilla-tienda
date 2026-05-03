@@ -5,6 +5,7 @@ import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 import type { ReportType, ReportFormat } from '../../../types/reports.types';
 import { BaseModal } from './shared';
+import { formatPrice } from '../../../utils/formatPrice';
 import styles from './ReportPreview.module.css';
 
 interface ReportPreviewProps {
@@ -109,7 +110,7 @@ export function ReportPreview({
           <div className={styles.previewCardBody}>
             <div className={styles.previewRow}>
               <span className={styles.previewLabel}>Ingresos Totales</span>
-              <span className={styles.previewValue}>$125,450.00</span>
+              <span className={styles.previewValue}>{formatPrice(125450.00, { inCents: false })}</span>
             </div>
             <div className={styles.previewRow}>
               <span className={styles.previewLabel}>Pedidos</span>
@@ -117,7 +118,7 @@ export function ReportPreview({
             </div>
             <div className={styles.previewRow}>
               <span className={styles.previewLabel}>Ticket Promedio</span>
-              <span className={styles.previewValue}>$366.81</span>
+              <span className={styles.previewValue}>{formatPrice(366.81, { inCents: false })}</span>
             </div>
             <div className={styles.previewRow}>
               <span className={styles.previewLabel}>Fecha de generación</span>

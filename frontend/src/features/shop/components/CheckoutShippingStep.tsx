@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useCheckoutStore } from '../../../store/checkoutStore';
 import { AddressForm } from './AddressForm';
 import type { Address, CreateAddressInput } from '../../../types/address.types';
+import { formatPrice } from '../../../utils/formatPrice';
 import styles from './CheckoutShippingStep.module.css';
 
 interface CheckoutShippingStepProps {
@@ -108,7 +109,7 @@ export function CheckoutShippingStep({ onNext, onBack }: CheckoutShippingStepPro
                 <p className={styles.shippingOptionName}>Envío Estándar</p>
                 <p className={styles.shippingOptionTime}>3-5 días hábiles</p>
               </div>
-              <span className={styles.shippingOptionPrice}>$9.99</span>
+              <span className={styles.shippingOptionPrice}>{formatPrice(9.99, { inCents: false })}</span>
             </label>
             <label className={styles.shippingOption}>
               <input
@@ -120,7 +121,7 @@ export function CheckoutShippingStep({ onNext, onBack }: CheckoutShippingStepPro
                 <p className={styles.shippingOptionName}>Envío Express</p>
                 <p className={styles.shippingOptionTime}>1-2 días hábiles</p>
               </div>
-              <span className={styles.shippingOptionPrice}>$19.99</span>
+              <span className={styles.shippingOptionPrice}>{formatPrice(19.99, { inCents: false })}</span>
             </label>
           </div>
         </div>
