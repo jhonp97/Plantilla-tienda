@@ -191,6 +191,95 @@ async function main() {
 
     console.log('✅ Store settings created');
 
+    // Create test coupons
+    const coupons = [
+      {
+        code: 'BIENVENIDO10',
+        discountType: 'PERCENTAGE' as const,
+        discountValue: 10,
+        minOrderAmount: 3000,
+        usageLimit: 100,
+        usageCount: 0,
+        isActive: true,
+      },
+      {
+        code: 'GASTOSENVIO',
+        discountType: 'FIXED' as const,
+        discountValue: 500,
+        minOrderAmount: 2000,
+        usageLimit: 50,
+        usageCount: 0,
+        isActive: true,
+      },
+      {
+        code: 'VIP20',
+        discountType: 'PERCENTAGE' as const,
+        discountValue: 20,
+        minOrderAmount: 10000,
+        usageLimit: 10,
+        usageCount: 0,
+        isActive: true,
+      },
+      {
+        code: 'EXPERIADO',
+        discountType: 'PERCENTAGE' as const,
+        discountValue: 5,
+        expiresAt: new Date('2024-01-01'),
+        usageLimit: null,
+        usageCount: 0,
+        isActive: false,
+      },
+    ];
+
+    for (const couponData of coupons) {
+      await prisma.coupon.upsert({
+        where: { code: couponData.code },
+        update: {},
+        create: couponData,
+      });
+    }
+    console.log(`✅ ${coupons.length} coupons created`);
+
+    // Create test reviews
+    const allProducts = await prisma.product.findMany({ take: 3 });
+    const customerUser = await prisma.user.findUnique({ where: { email: 'customer@test.com' } });
+
+    if (customerUser && allProducts.length > 0) {
+      const reviews = [
+        {
+          productId: allProducts[0]!.id,
+          userId: customerUser.id,
+          rating: 5,
+          comment: 'Excelente producto, muy recomendado. La calidad superó mis expectativas.',
+          isVerifiedPurchase: true,
+        },
+      ];
+
+      if (allProducts.length > 1) {
+        reviews.push({
+          productId: allProducts[1]!.id,
+          userId: customerUser.id,
+          rating: 4,
+          comment: 'Muy buen producto, aunque el envío tardó un poco más de lo esperado.',
+          isVerifiedPurchase: true,
+        });
+      }
+
+      for (const reviewData of reviews) {
+        // Check if review already exists to avoid duplicates
+        const existing = await prisma.review.findFirst({
+          where: {
+            productId: reviewData.productId,
+            userId: reviewData.userId,
+          },
+        });
+        if (!existing) {
+          await prisma.review.create({ data: reviewData });
+        }
+      }
+      console.log(`✅ ${reviews.length} reviews created for customer user`);
+    }
+
     console.log('\n🎉 Seed completed successfully!');
     console.log('\nYou can now access:');
     console.log('  - http://localhost:5173/products (Product catalog)');

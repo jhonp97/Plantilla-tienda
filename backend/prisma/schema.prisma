@@ -18,6 +18,14 @@ enum Role {
 }
 
 // ==========================================
+// DiscountType Enum
+// ==========================================
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+// ==========================================
 // OrderStatus Enum
 // ==========================================
 enum OrderStatus {
@@ -46,6 +54,7 @@ model User {
 
   addresses Address[]
   orders    Order[]
+  reviews   Review[]
 
   @@index([email])
   @@index([role])
@@ -89,6 +98,7 @@ model Product {
 
   category   Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   images     ProductImage[]
+  reviews    Review[]
 
   @@index([categoryId])
   @@index([isActive])
@@ -284,4 +294,80 @@ model Invoice {
   @@index([invoiceNumber])
   @@index([verifactuUuid])
   @@map("invoices")
+}
+
+// ==========================================
+// PasswordResetToken Model
+// ==========================================
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  tokenHash String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  used      Boolean  @default(false)
+
+  @@unique([email, tokenHash])
+  @@index([tokenHash])
+  @@index([email])
+  @@map("password_reset_tokens")
+}
+
+// ==========================================
+// Coupon Model
+// ==========================================
+model Coupon {
+  id             String       @id @default(cuid())
+  code           String       @unique
+  discountType   DiscountType
+  discountValue  Int
+  minOrderAmount Int?
+  usageLimit     Int?
+  usageCount     Int          @default(0)
+  expiresAt      DateTime?
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([code])
+  @@index([isActive])
+  @@map("coupons")
+}
+
+// ==========================================
+// Review Model
+// ==========================================
+model Review {
+  id                String   @id @default(cuid())
+  productId         String
+  userId            String
+  rating            Int
+  comment           String?
+  isVerifiedPurchase Boolean @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([userId])
+  @@map("reviews")
+}
+
+// ==========================================
+// GoogleMapReview Model
+// ==========================================
+model GoogleMapReview {
+  id         String   @id @default(cuid())
+  placeId    String
+  authorName String
+  rating     Int
+  text       String
+  reviewDate DateTime
+  cachedAt   DateTime @default(now())
+
+  @@unique([placeId, authorName, reviewDate])
+  @@index([placeId])
+  @@map("google_map_reviews")
 }
