@@ -28,6 +28,28 @@ async function main() {
     });
     console.log('✅ Admin user created: admin@tienda.com / admin123');
 
+    // Create customer user
+    const customerPassword = await bcrypt.hash('customer123', 10);
+    await prisma.user.upsert({
+      where: { email: 'customer@test.com' },
+      update: {},
+      create: {
+        email: 'customer@test.com',
+        passwordHash: customerPassword,
+        fullName: 'Cliente de Prueba',
+        nifCif: '87654321A',
+        role: 'CUSTOMER',
+        address: {
+          street: 'Calle Cliente 456',
+          postalCode: '08001',
+          city: 'Barcelona',
+          province: 'Barcelona',
+          country: 'España',
+        },
+      },
+    });
+    console.log('✅ Customer user created: customer@test.com / customer123');
+
     // Create categories
     const electronics = await prisma.category.upsert({
       where: { slug: 'electronica' },

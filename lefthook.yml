@@ -1,9 +1,4 @@
 pre-commit:
   commands:
     check-env:
-      run: >
-        $staged = git diff --cached --name-only
-        if ($staged -match '\.env$') { 
-          echo "ERROR: .env file is staged!" 
-          exit 1 
-        }
+      run: "git diff --cached --name-only | grep '\\.env$' && { echo 'ERROR: .env file is staged!'; exit 1; } || exit 0"
