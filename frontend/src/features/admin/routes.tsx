@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { MinimalSpinner } from '../../components/MinimalSpinner';
 import styles from './LoadingFallback.module.css';
 
 const ProductManagement = lazy(() => import('./pages/ProductManagement'));
@@ -12,11 +13,12 @@ const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
 const ReportsPage = lazy(() => import('./pages/ReportsPage'));
 const ShippingConfigPage = lazy(() => import('./pages/ShippingConfigPage'));
 const CouponManagement = lazy(() => import('./pages/CouponManagement'));
+const VerifactuAdminPage = lazy(() => import('./pages/VerifactuAdminPage'));
 
 function LoadingFallback() {
   return (
     <div className={styles.container}>
-      <div className={styles.spinner} />
+      <MinimalSpinner size={32} />
     </div>
   );
 }
@@ -62,6 +64,13 @@ export function AdminRoutes() {
         </Suspense>
       } />
       
+      {/* Coupons */}
+      <Route path="coupons" element={
+        <Suspense fallback={<LoadingFallback />}>
+          <CouponManagement />
+        </Suspense>
+      } />
+      
       {/* Analytics */}
       <Route path="analytics" element={
         <Suspense fallback={<LoadingFallback />}>
@@ -76,10 +85,10 @@ export function AdminRoutes() {
         </Suspense>
       } />
       
-      {/* Coupons */}
-      <Route path="coupons" element={
+      {/* Verifactu */}
+      <Route path="verifactu" element={
         <Suspense fallback={<LoadingFallback />}>
-          <CouponManagement />
+          <VerifactuAdminPage />
         </Suspense>
       } />
 

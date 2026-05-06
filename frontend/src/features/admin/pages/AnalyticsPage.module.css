@@ -1,277 +1,143 @@
-/* AnalyticsPage.module.css - Analytics dashboard page styles */
+/* AnalyticsPage.module.css — Premium analytics dashboard */
 
-@import '../styles/AdminShared.module.css';
-
-/* Page Container */
 .pageContainer {
-  padding: var(--spacing-lg);
+  padding: var(--space-3);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--space-3);
 }
 
-/* Header Section */
-.headerSection {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-@media (min-width: 640px) {
-  .headerSection {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-}
-
-.headerLeft {
-  display: flex;
-  flex-direction: column;
-}
-
-.headerTitle {
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.headerSubtitle {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-  margin-top: var(--spacing-xs);
-}
-
-.exportButton {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--color-primary);
-  color: var(--color-white);
-  border-radius: var(--radius-md);
-  border: none;
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  cursor: pointer;
-  transition: background var(--transition-fast);
-}
-
-.exportButton:hover {
-  background: var(--color-primary-hover);
-}
-
-.exportButtonIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-/* Date Range Picker Card */
-.dateRangeCard {
-  background: var(--color-white);
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--color-gray-200);
-  padding: var(--spacing-md);
-}
-
-.presetButtons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-sm);
-}
-
-.presetButton {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  transition: background var(--transition-fast);
-}
-
-.presetButtonActive {
-  background: var(--color-primary);
-  color: var(--color-white);
-}
-
-.presetButtonInactive {
-  background: var(--color-gray-100);
-  color: var(--text-secondary);
-}
-
-.presetButtonInactive:hover {
-  background: var(--color-gray-200);
-}
-
-.dateInputsRow {
-  display: flex;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-md);
-}
-
-.dateInputGroup {
-  flex: 1;
-}
-
-.dateLabel {
-  display: block;
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-  margin-bottom: var(--spacing-xs);
-}
-
-.dateInput {
-  width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid var(--color-gray-300);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  outline: none;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.dateInput:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
-}
-
-.dateInputGroupSmall {
-  width: 10rem;
-}
-
-/* Overview Cards Grid */
-.overviewGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--spacing-lg);
-}
-
-@media (min-width: 768px) {
-  .overviewGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .overviewGrid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-/* Overview Card */
+/* Overview Cards */
 .overviewCard {
   background: var(--color-white);
-  border-radius: var(--radius-xl);
   border: 1px solid var(--color-gray-200);
-  padding: var(--spacing-lg);
-}
-
-.overviewCardHeader {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-sm);
-}
-
-.overviewIconBox {
-  padding: var(--spacing-sm);
   border-radius: var(--radius-lg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.overviewIconBoxBlue {
-  background: var(--color-primary-light);
-}
-
-.overviewIconBoxGreen {
-  background: var(--color-success-light);
-}
-
-.overviewIconBoxPurple {
-  background: var(--status-purple-bg);
-}
-
-.overviewIconBoxOrange {
-  background: var(--status-warning-bg);
-}
-
-.overviewIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-.overviewIconBlue {
-  color: var(--color-primary);
-}
-
-.overviewIconGreen {
-  color: var(--color-success);
-}
-
-.overviewIconPurple {
-  color: var(--status-purple-icon);
-}
-
-.overviewIconOrange {
-  color: var(--status-orange-icon);
+  padding: var(--space-3);
 }
 
 .overviewLabel {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 var(--space-1) 0;
 }
 
 .overviewValue {
+  font-family: var(--font-heading);
   font-size: var(--font-size-2xl);
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.1;
 }
 
 .overviewGrowth {
-  font-size: var(--font-size-sm);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
   color: var(--color-success);
-  margin-top: var(--spacing-xs);
+  margin: var(--space-1) 0 0 0;
 }
+
+/* Export Button */
+.exportButton {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-accent); color: var(--color-white);
+  border: none; border-radius: var(--radius-md);
+  font-family: var(--font-body); font-size: var(--font-size-sm); font-weight: 500;
+  cursor: pointer; transition: background var(--transition-fast);
+}
+
+.exportButton:hover { background: var(--color-text-primary); }
+.exportButtonIcon { width: 20px; height: 20px; }
+
+/* Filter Row */
+.filterRow {
+  display: flex;
+  gap: var(--space-1);
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-1);
+  width: fit-content;
+}
+
+.presetBtn {
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: transparent;
+  color: var(--color-text-secondary);
+}
+
+.presetBtn:hover { color: var(--color-text-primary); }
+.presetBtnActive { background: var(--color-accent); color: var(--color-white); }
 
 /* Charts Row */
 .chartsRow {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--spacing-lg);
+  gap: var(--space-3);
 }
 
 @media (min-width: 1024px) {
-  .chartsRow {
-    grid-template-columns: 2fr 1fr;
-  }
+  .chartsRow { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 1280px) {
+  .chartsRow { grid-template-columns: 1fr 1fr 1fr; }
 }
 
 /* Chart Card */
 .chartCard {
   background: var(--color-white);
-  border-radius: var(--radius-xl);
   border: 1px solid var(--color-gray-200);
-  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
 }
 
 .chartTitle {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: var(--spacing-md);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--space-2) 0;
 }
 
-.chartContainer {
-  height: 20rem;
-}
+.chartContainer { height: 260px; }
 
-/* Category Pie Chart */
-.categoryChartCard {
+/* Tooltip */
+.tooltip {
   background: var(--color-white);
-  border-radius: var(--radius-xl);
   border: 1px solid var(--color-gray-200);
-  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-2);
 }
+
+.tooltipTitle {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.tooltipValue {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.tooltipBold { font-weight: 600; color: var(--color-text-primary); }

@@ -1,62 +1,40 @@
-/* DashboardStats.module.css - KPI cards for admin dashboard */
+/* DashboardStats.module.css — Premium monochrome KPI cards */
 
-/* Stats Grid */
 .statsGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--spacing-lg);
+  width: 100%;
 }
 
-@media (min-width: 768px) {
-  .statsGrid {
+.statsGridInner {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+}
+
+@media (max-width: 1279px) {
+  .statsGridInner {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 1024px) {
-  .statsGrid {
-    grid-template-columns: repeat(4, 1fr);
+@media (max-width: 640px) {
+  .statsGridInner {
+    grid-template-columns: 1fr;
   }
 }
 
-/* Stat Card */
+/* ── Stat Card ── */
 .statCard {
   background: var(--color-white);
-  border-radius: var(--radius-xl);
   border: 1px solid var(--color-gray-200);
-  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
   transition: box-shadow var(--transition-base);
 }
 
 .statCard:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
 }
 
-/* Skeleton Loading */
-.skeletonCard {
-  background: var(--color-white);
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--color-gray-200);
-  padding: var(--spacing-lg);
-}
-
-.skeletonLine {
-  height: 1rem;
-  background: var(--color-gray-200);
-  border-radius: var(--radius-sm);
-}
-
-.skeletonLineShort {
-  width: 6rem;
-  margin-bottom: var(--spacing-md);
-}
-
-.skeletonLineMedium {
-  width: 8rem;
-  height: 2rem;
-}
-
-/* Card Content */
 .cardHeader {
   display: flex;
   align-items: flex-start;
@@ -68,94 +46,79 @@
 }
 
 .cardTitle {
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  margin: 0 0 var(--space-1) 0;
 }
 
 .cardValue {
-  margin-top: var(--spacing-sm);
-  font-size: 1.875rem;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-3xl);
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-1) 0;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 .cardSubValue {
-  margin-top: var(--spacing-xs);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
+  margin: 0;
 }
 
-/* Trend indicator */
-.trendUp {
-  margin-top: var(--spacing-sm);
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  color: var(--color-success);
-}
-
-.trendDown {
-  margin-top: var(--spacing-sm);
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  color: var(--color-danger);
-}
-
-/* Icon Container */
+/* ── Icon ── */
 .iconContainer {
-  padding: var(--spacing-sm);
-  background: var(--color-gray-50);
+  padding: var(--space-1);
+  background: var(--color-bg-secondary);
   border-radius: var(--radius-lg);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.iconBlue {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: var(--color-primary);
+.iconContainer svg {
+  width: 20px;
+  height: 20px;
 }
 
-.iconGreen {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: var(--color-success);
+.iconAccent {
+  color: var(--color-accent-alt);
 }
 
-.iconOrange {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: var(--color-warning);
+.iconSlate {
+  color: var(--color-accent);
 }
 
-.iconRed {
-  width: 1.5rem;
-  height: 1.5rem;
+.iconDanger {
   color: var(--color-danger);
 }
 
-.iconGray {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: var(--text-tertiary);
+/* ── Skeleton ── */
+.skeletonCard {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
 }
 
-/* Sparkline placeholder */
-.sparkline {
-  margin-top: var(--spacing-md);
-  height: 3rem;
-  display: flex;
-  align-items: flex-end;
-  gap: var(--spacing-xs);
-}
-
-.sparklineBar {
-  flex: 1;
+.skeletonLineShort {
+  height: 12px;
+  width: 60%;
   background: var(--color-gray-100);
   border-radius: var(--radius-sm);
-  transition: background var(--transition-fast);
+  margin-bottom: var(--space-2);
 }
 
-.statCard:hover .sparklineBar {
-  background: var(--color-primary-light);
+.skeletonLineMedium {
+  height: 28px;
+  width: 80%;
+  background: var(--color-gray-100);
+  border-radius: var(--radius-sm);
 }

@@ -1,15 +1,16 @@
 /**
- * ProductManagement - Admin product list with CRUD actions
+ * ProductManagement — Premium admin product list with CRUD actions.
+ * Uses StatusPill for isActive, compact table, premium search/filters.
  */
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useProductStore } from '../../../store/productStore';
 import type { Product } from '../../../types/product.types';
+import { StatusPill } from '../../../components/StatusPill';
 import { ConfirmModal } from '../components/shared';
 import { formatPrice } from '../../../utils';
 import styles from './ProductManagement.module.css';
 
-// Product Row Component
 interface ProductRowProps {
   product: Product;
   onEdit: (id: string) => void;
@@ -24,11 +25,7 @@ function ProductRow({ product, onEdit, onDeactivate }: ProductRowProps) {
       <td className={styles.tableCell}>
         <div className={styles.productImage}>
           {primaryImage ? (
-            <img
-              src={primaryImage.url}
-              alt={product.name}
-              className={styles.productImageImg}
-            />
+            <img src={primaryImage.url} alt={product.name} className={styles.productImageImg} />
           ) : (
             <div className={styles.productImagePlaceholder}>
               <svg className={styles.productImagePlaceholderIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,22 +38,17 @@ function ProductRow({ product, onEdit, onDeactivate }: ProductRowProps) {
       <td className={styles.tableCell}>
         <div className={styles.productInfo}>
           <p className={styles.productName}>{product.name}</p>
-          {product.category && (
-            <p className={styles.productCategory}>{product.category.name}</p>
-          )}
+          {product.category && <p className={styles.productCategory}>{product.category.name}</p>}
         </div>
       </td>
       <td className={styles.tableCell}>
         <span className={styles.price}>{formatPrice(product.price)}</span>
       </td>
       <td className={styles.tableCell}>
-        <span className={`${styles.statusBadge} ${
-          product.isActive
-            ? styles.statusActive
-            : styles.statusInactive
-        }`}>
-          {product.isActive ? 'Activo' : 'Inactivo'}
-        </span>
+        <StatusPill
+          status={product.isActive ? 'COMPLETED' : 'CANCELLED'}
+          label={product.isActive ? 'Activo' : 'Inactivo'}
+        />
       </td>
       <td className={styles.tableCell}>
         <span className={product.stock === 0 ? styles.stockLow : styles.stockNormal}>
@@ -65,20 +57,12 @@ function ProductRow({ product, onEdit, onDeactivate }: ProductRowProps) {
       </td>
       <td className={styles.tableCell}>
         <div className={styles.actionsCell}>
-          <button
-            onClick={() => onEdit(product.id)}
-            className={styles.actionButton}
-            title="Editar"
-          >
+          <button onClick={() => onEdit(product.id)} className={styles.actionButton} title="Editar">
             <svg className={styles.actionIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
           </button>
-          <button
-            onClick={() => onDeactivate(product.id)}
-            className={styles.actionButtonDanger}
-            title={product.isActive ? 'Desactivar' : 'Activar'}
-          >
+          <button onClick={() => onDeactivate(product.id)} className={styles.actionButtonDanger} title={product.isActive ? 'Desactivar' : 'Activar'}>
             <svg className={styles.actionIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
             </svg>
@@ -89,26 +73,13 @@ function ProductRow({ product, onEdit, onDeactivate }: ProductRowProps) {
   );
 }
 
-// Main ProductManagement Component
 export default function ProductManagement() {
   const navigate = useNavigate();
-  const {
-    products,
-    categories,
-    isLoading,
-    error,
-    fetchProducts,
-    fetchCategories,
-    deactivateProduct,
-  } = useProductStore();
-
+  const { products, categories, isLoading, error, fetchProducts, fetchCategories, deactivateProduct } = useProductStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
   const [filterActive, setFilterActive] = useState('');
-  const [deactivateModal, setDeactivateModal] = useState<{
-    isOpen: boolean;
-    productId: string | null;
-  }>({ isOpen: false, productId: null });
+  const [deactivateModal, setDeactivateModal] = useState<{ isOpen: boolean; productId: string | null }>({ isOpen: false, productId: null });
   const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -116,59 +87,38 @@ export default function ProductManagement() {
     fetchProducts();
   }, []);
 
-  // Filter products
   const filteredProducts = products.filter((product) => {
-    const matchesSearch = !searchTerm ||
-      product.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !filterCategory ||
-      product.category?.id === filterCategory;
+    const matchesSearch = !searchTerm || product.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = !filterCategory || product.category?.id === filterCategory;
     const matchesActive = !filterActive ||
       (filterActive === 'active' && product.isActive) ||
       (filterActive === 'inactive' && !product.isActive);
-
     return matchesSearch && matchesCategory && matchesActive;
   });
 
-  const handleEdit = (id: string) => {
-    navigate(`/dashboard/products/${id}/edit`);
-  };
+  const handleEdit = (id: string) => navigate(`/dashboard/products/${id}/edit`);
 
-  const handleDeactivateClick = (id: string) => {
-    setDeactivateModal({ isOpen: true, productId: id });
-  };
+  const handleDeactivateClick = (id: string) => setDeactivateModal({ isOpen: true, productId: id });
 
   const handleDeactivateConfirm = async () => {
     if (!deactivateModal.productId) return;
-
     setDeletingIds((prev) => new Set(prev).add(deactivateModal.productId!));
-
     try {
       await deactivateProduct(deactivateModal.productId);
       setDeactivateModal({ isOpen: false, productId: null });
     } finally {
-      setDeletingIds((prev) => {
-        const next = new Set(prev);
-        next.delete(deactivateModal.productId!);
-        return next;
-      });
+      setDeletingIds((prev) => { const next = new Set(prev); next.delete(deactivateModal.productId!); return next; });
     }
   };
 
-  const handleDeactivateCancel = () => {
-    setDeactivateModal({ isOpen: false, productId: null });
-  };
+  const handleDeactivateCancel = () => setDeactivateModal({ isOpen: false, productId: null });
 
   if (error) {
     return (
       <div className={styles.pageContainer}>
         <div className={styles.errorAlert}>
           <p>Error: {error}</p>
-          <button
-            onClick={() => fetchProducts()}
-            className={styles.errorRetryLink}
-          >
-            Reintentar
-          </button>
+          <button onClick={() => fetchProducts()} className={styles.errorRetryLink}>Reintentar</button>
         </div>
       </div>
     );
@@ -181,10 +131,7 @@ export default function ProductManagement() {
           <h1 className={styles.pageTitle}>Gestión de Productos</h1>
           <p className={styles.pageSubtitle}>Administra el catálogo de productos</p>
         </div>
-        <Link
-          to="/dashboard/products/new"
-          className={styles.primaryButton}
-        >
+        <Link to="/dashboard/products/new" className={styles.primaryButton}>
           <svg className={styles.primaryButtonIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
@@ -196,29 +143,13 @@ export default function ProductManagement() {
       <div className={styles.filtersBar}>
         <div className={styles.filtersRow}>
           <div className={styles.filterInputContainer}>
-            <input
-              type="text"
-              placeholder="Buscar productos..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className={styles.filterInput}
-            />
+            <input type="text" placeholder="Buscar productos..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className={styles.filterInput} />
           </div>
-          <select
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-            className={styles.filterSelect}
-          >
+          <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className={styles.filterSelect}>
             <option value="">Todas las categorías</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>{cat.name}</option>
-            ))}
+            {categories.map((cat) => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
           </select>
-          <select
-            value={filterActive}
-            onChange={(e) => setFilterActive(e.target.value)}
-            className={styles.filterSelect}
-          >
+          <select value={filterActive} onChange={(e) => setFilterActive(e.target.value)} className={styles.filterSelect}>
             <option value="">Todos los estados</option>
             <option value="active">Activos</option>
             <option value="inactive">Inactivos</option>
@@ -232,64 +163,26 @@ export default function ProductManagement() {
           <table className={styles.table}>
             <thead className={styles.tableHeader}>
               <tr>
-                <th className={styles.tableHeaderCell}>
-                  Imagen
-                </th>
-                <th className={styles.tableHeaderCell}>
-                  Producto
-                </th>
-                <th className={styles.tableHeaderCell}>
-                  Precio
-                </th>
-                <th className={styles.tableHeaderCell}>
-                  Estado
-                </th>
-                <th className={styles.tableHeaderCell}>
-                  Stock
-                </th>
-                <th className={styles.tableHeaderCell}>
-                  Acciones
-                </th>
+                <th className={styles.tableHeaderCell}>Imagen</th>
+                <th className={styles.tableHeaderCell}>Producto</th>
+                <th className={styles.tableHeaderCell}>Precio</th>
+                <th className={styles.tableHeaderCell}>Estado</th>
+                <th className={styles.tableHeaderCell}>Stock</th>
+                <th className={styles.tableHeaderCell}>Acciones</th>
               </tr>
             </thead>
             <tbody className={styles.tableBody}>
               {isLoading ? (
                 [...Array(5)].map((_, i) => (
                   <tr key={i} className={styles.tableRow}>
-                    <td className={styles.tableCell}>
-                      <div className={`${styles.skeletonRow} ${styles.skeletonCell}`} />
-                    </td>
-                    <td className={styles.tableCell}>
-                      <div className={`${styles.skeletonRow} ${styles.skeletonCell}`} />
-                    </td>
-                    <td className={styles.tableCell}>
-                      <div className={`${styles.skeletonRow} ${styles.skeletonCell}`} />
-                    </td>
-                    <td className={styles.tableCell}>
-                      <div className={`${styles.skeletonRow} ${styles.skeletonCell}`} />
-                    </td>
-                    <td className={styles.tableCell}>
-                      <div className={`${styles.skeletonRow} ${styles.skeletonCell}`} />
-                    </td>
-                    <td className={styles.tableCell}>
-                      <div className={`${styles.skeletonRow} ${styles.skeletonCell}`} />
-                    </td>
+                    {[...Array(6)].map((_, j) => <td key={j} className={styles.tableCell}><div className={styles.skeletonRow} /></td>)}
                   </tr>
                 ))
               ) : filteredProducts.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className={styles.emptyCell}>
-                    No se encontraron productos
-                  </td>
-                </tr>
+                <tr><td colSpan={6} className={styles.emptyCell}>No se encontraron productos</td></tr>
               ) : (
                 filteredProducts.map((product) => (
-                  <ProductRow
-                    key={product.id}
-                    product={product}
-                    onEdit={handleEdit}
-                    onDeactivate={handleDeactivateClick}
-                  />
+                  <ProductRow key={product.id} product={product} onEdit={handleEdit} onDeactivate={handleDeactivateClick} />
                 ))
               )}
             </tbody>
@@ -297,7 +190,6 @@ export default function ProductManagement() {
         </div>
       </div>
 
-      {/* Deactivate Confirmation Modal */}
       <ConfirmModal
         isOpen={deactivateModal.isOpen}
         title="Desactivar Producto"

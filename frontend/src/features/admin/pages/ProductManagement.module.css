@@ -1,16 +1,13 @@
-/* ProductManagement.module.css - Product management page styles */
+/* ProductManagement.module.css — Premium product management */
 
-/* Page Container */
-.pageContainer {
-  padding: var(--spacing-lg);
-}
+.pageContainer { padding: var(--space-3); }
 
 /* Header */
 .pageHeader {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
 }
 
 @media (min-width: 640px) {
@@ -22,385 +19,174 @@
 }
 
 .pageTitle {
+  font-family: var(--font-heading);
   font-size: var(--font-size-2xl);
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  margin: 0;
 }
 
 .pageSubtitle {
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-  margin-top: var(--spacing-xs);
+  color: var(--color-text-secondary);
+  margin: var(--space-1) 0 0 0;
 }
 
-/* Primary Button */
 .primaryButton {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--color-primary);
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-accent);
   color: var(--color-white);
-  border-radius: var(--radius-md);
   border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   font-weight: 500;
+  text-decoration: none;
   cursor: pointer;
   transition: background var(--transition-fast);
 }
 
-.primaryButton:hover {
-  background: var(--color-primary-hover);
-}
+.primaryButton:hover { background: var(--color-text-primary); }
+.primaryButtonIcon { width: 20px; height: 20px; }
 
-.primaryButtonIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-/* Filters Bar */
+/* Filters */
 .filtersBar {
   background: var(--color-white);
-  border-radius: var(--radius-lg);
   border: 1px solid var(--color-gray-200);
-  padding: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2);
+  margin-bottom: var(--space-3);
 }
 
 .filtersRow {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-md);
+  gap: var(--space-2);
 }
+
+.filterInputContainer { flex: 1; min-width: 200px; }
 
 .filterInput {
-  flex: 1;
-  min-width: 12.5rem;
-  padding: var(--spacing-sm) var(--spacing-md);
+  width: 100%;
+  padding: var(--space-1) var(--space-2);
   border: 1px solid var(--color-gray-300);
   border-radius: var(--radius-md);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   outline: none;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition: border-color var(--transition-fast);
 }
 
-.filterInput:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
-}
-
-.filterInputContainer {
-  flex: 1;
-  min-width: 12.5rem;
-}
+.filterInput:focus { border-color: var(--color-accent); }
 
 .filterSelect {
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--space-1) var(--space-2);
   border: 1px solid var(--color-gray-300);
   border-radius: var(--radius-md);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   outline: none;
   background: var(--color-white);
   cursor: pointer;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition: border-color var(--transition-fast);
 }
 
-.filterSelect:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
-}
+.filterSelect:focus { border-color: var(--color-accent); }
 
-/* Table Container */
+/* Table */
 .tableContainer {
   background: var(--color-white);
-  border-radius: var(--radius-lg);
   border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
-.tableWrapper {
-  overflow-x: auto;
-}
+.tableWrapper { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; }
 
-.table {
-  width: 100%;
-}
-
-.tableHeader {
-  background: var(--color-gray-50);
-  border-bottom: 1px solid var(--color-gray-200);
-}
+.tableHeader { border-bottom: 1px solid var(--color-gray-200); }
 
 .tableHeaderCell {
-  padding: var(--spacing-md);
+  padding: var(--space-1) var(--space-2);
   text-align: left;
+  font-family: var(--font-body);
   font-size: var(--font-size-xs);
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-weight: 600;
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  background: var(--color-bg-secondary);
 }
 
-.tableBody {
-  border-bottom: 1px solid var(--color-gray-200);
-}
-
-.tableRow {
-  transition: background var(--transition-fast);
-}
-
-.tableRow:hover {
-  background: var(--color-gray-50);
-}
-
-.tableCell {
-  padding: var(--spacing-md);
-}
+.tableBody { border-bottom: 1px solid var(--color-gray-200); }
+.tableRow { transition: background var(--transition-fast); }
+.tableRow:hover { background: var(--color-bg-secondary); }
+.tableCell { padding: var(--space-1) var(--space-2); vertical-align: middle; }
 
 /* Product Image */
 .productImage {
-  width: 3rem;
-  height: 3rem;
-  border-radius: var(--radius-md);
+  width: 40px; height: 40px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--color-gray-100);
+  background: var(--color-bg-secondary);
 }
 
-.productImageImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+.productImageImg { width: 100%; height: 100%; object-fit: cover; }
 
 .productImagePlaceholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-tertiary);
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-text-tertiary);
 }
 
-.productImagePlaceholderIcon {
-  width: 1.5rem;
-  height: 1.5rem;
-}
+.productImagePlaceholderIcon { width: 20px; height: 20px; }
 
-/* Product Info */
-.productInfo {
-  display: flex;
-  flex-direction: column;
-}
+.productInfo { display: flex; flex-direction: column; gap: 2px; }
+.productName { font-family: var(--font-body); font-weight: 500; color: var(--color-text-primary); }
+.productCategory { font-family: var(--font-body); font-size: var(--font-size-xs); color: var(--color-text-secondary); }
 
-.productName {
-  font-weight: 500;
-  color: var(--text-primary);
-}
+.price { font-family: var(--font-heading); font-weight: 600; color: var(--color-text-primary); }
 
-.productCategory {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-}
-
-/* Price */
-.price {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-/* Status Badge */
-.statusBadge {
-  display: inline-flex;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-full);
-  font-size: var(--font-size-xs);
-  font-weight: 500;
-}
-
-.statusActive {
-  background: var(--color-success-light);
-  color: var(--status-success-text);
-}
-
-.statusInactive {
-  background: var(--color-gray-100);
-  color: var(--text-secondary);
-}
-
-/* Stock */
-.stockLow {
-  color: var(--color-danger);
-  font-weight: 500;
-}
-
-.stockNormal {
-  color: var(--text-primary);
-}
+.stockLow { color: var(--color-danger); font-weight: 500; font-family: var(--font-body); }
+.stockNormal { color: var(--color-text-primary); font-family: var(--font-body); }
 
 /* Actions */
-.actionsCell {
+.actionsCell { display: flex; gap: var(--space-1); }
+
+.actionButton, .actionButtonDanger {
+  padding: var(--space-1);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
   display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
 }
 
-.actionButton {
-  padding: var(--spacing-sm);
-  color: var(--color-primary);
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: background var(--transition-fast);
-}
+.actionButton { color: var(--color-text-secondary); }
+.actionButton:hover { border-color: var(--color-accent); color: var(--color-accent); }
+.actionButtonDanger { color: var(--color-danger); }
+.actionButtonDanger:hover { border-color: var(--color-danger); background: var(--color-danger-light); }
+.actionIcon { width: 18px; height: 18px; }
 
-.actionButton:hover {
-  background: var(--color-primary-light);
-}
+/* Skeleton */
+.skeletonRow { height: 24px; background: var(--color-bg-secondary); border-radius: var(--radius-sm); animation: pulse 2s ease-in-out infinite; }
 
-.actionButtonDanger {
-  padding: var(--spacing-sm);
-  color: var(--color-danger);
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: background var(--transition-fast);
-}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-.actionButtonDanger:hover {
-  background: var(--color-danger-light);
-}
+.emptyCell { padding: var(--space-4); text-align: center; color: var(--color-text-secondary); font-family: var(--font-body); font-size: var(--font-size-sm); }
 
-.actionIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-/* Skeleton Loading */
-.skeletonRow {
-  height: 3rem;
-  background: var(--color-gray-100);
-}
-
-.skeletonCell {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-/* Empty State */
-.emptyRow {
-  text-align: center;
-}
-
-.emptyCell {
-  padding: var(--spacing-2xl);
-  color: var(--text-secondary);
-}
-
-/* Error Alert */
 .errorAlert {
-  padding: var(--spacing-md);
+  padding: var(--space-2);
   background: var(--color-danger-light);
   border: 1px solid rgba(220, 38, 38, 0.2);
   border-radius: var(--radius-lg);
   color: var(--color-danger);
 }
 
-.errorRetryLink {
-  margin-top: var(--spacing-sm);
-  font-size: var(--font-size-sm);
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-/* Modal Overlay */
-.modalOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: var(--z-modal);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-md);
-}
-
-.modal {
-  background: var(--color-white);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xl);
-  max-width: 28rem;
-  width: 100%;
-}
-
-.modalHeader {
-  padding: var(--spacing-lg);
-  border-bottom: 1px solid var(--color-gray-200);
-}
-
-.modalTitle {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.modalBody {
-  padding: var(--spacing-lg);
-}
-
-.modalBodyText {
-  color: var(--text-secondary);
-}
-
-.modalFooter {
-  padding: var(--spacing-lg);
-  border-top: 1px solid var(--color-gray-200);
-  display: flex;
-  gap: var(--spacing-md);
-  justify-content: flex-end;
-}
-
-.cancelButton {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid var(--color-gray-300);
-  border-radius: var(--radius-md);
-  background: var(--color-white);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: background var(--transition-fast);
-}
-
-.cancelButton:hover:not(:disabled) {
-  background: var(--color-gray-50);
-}
-
-.cancelButton:disabled {
-  opacity: 0.5;
-}
-
-.deleteButton {
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--color-danger);
-  color: var(--color-white);
-  border-radius: var(--radius-md);
-  border: none;
-  cursor: pointer;
-  transition: background var(--transition-fast);
-}
-
-.deleteButton:hover:not(:disabled) {
-  background: var(--status-error-hover);
-}
-
-.deleteButton:disabled {
-  opacity: 0.5;
-}
+.errorRetryLink { margin-top: var(--space-1); font-size: var(--font-size-sm); text-decoration: underline; cursor: pointer; display: inline-block; }

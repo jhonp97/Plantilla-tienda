@@ -1,5 +1,7 @@
 /**
- * AdminDashboardPage - Main dashboard with KPIs and charts
+ * AdminDashboardPage — Premium dashboard with monochrome KPIs,
+ * chart section, low stock alert, and top products table.
+ * Uses staggerIn animation on KPI cards via DashboardStats.
  */
 import { useEffect } from 'react';
 import { useAnalyticsStore } from '../../../store/analyticsStore';
@@ -31,21 +33,6 @@ export default function AdminDashboardPage() {
 
   return (
     <div className={styles.pageContainer}>
-      {/* Header */}
-      <div className={styles.pageHeader}>
-        <div>
-          <h1 className={styles.pageTitle}>Dashboard</h1>
-          <p className={styles.pageSubtitle}>Resumen de tu tienda en tiempo real</p>
-        </div>
-        <div className={styles.headerActions}>
-          <select className={styles.timeFilter}>
-            <option>Últimos 7 días</option>
-            <option>Últimos 30 días</option>
-            <option>Últimos 90 días</option>
-          </select>
-        </div>
-      </div>
-
       {/* KPI Stats */}
       <DashboardStats
         todaySales={todaySales}

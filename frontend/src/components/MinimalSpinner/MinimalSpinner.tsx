@@ -5,20 +5,25 @@ export interface MinimalSpinnerProps {
   className?: string;
   /** Accessible label */
   label?: string;
+  /** Size in pixels. Default: 24 */
+  size?: number;
 }
 
 /**
- * MinimalSpinner — 16x16 SVG monochrome loading spinner.
+ * MinimalSpinner — SVG monochrome loading spinner.
  * Pure CSS animation (no GSAP needed).
  */
 export function MinimalSpinner({
   className = '',
   label = 'Cargando',
+  size = 24,
 }: MinimalSpinnerProps) {
   return (
     <svg
       className={`${styles.spinner} ${className}`}
       viewBox="0 0 24 24"
+      width={size}
+      height={size}
       xmlns="http://www.w3.org/2000/svg"
       role="status"
       aria-label={label}

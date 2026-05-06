@@ -1,5 +1,8 @@
 /**
- * SalesChart - Sales visualization using Recharts
+ * SalesChart — Premium sales visualization using Recharts.
+ * Thin lines (strokeWidth:1), 10% area fill opacity,
+ * monochrome palette (slate + dorado), minimal grid,
+ * premium tooltip, time period filters.
  */
 import { formatPrice } from '../../../utils';
 import {
@@ -10,9 +13,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  BarChart,
-  Bar,
-  Legend,
 } from 'recharts';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -41,7 +41,7 @@ function CustomTooltip({ active, payload, label }: {
         {label && format(parseISO(label), 'd MMM yyyy', { locale: es })}
       </p>
       {payload.map((entry, index) => (
-        <p key={index} className={styles.tooltipValue} style={{ color: entry.color }}>
+        <p key={index} className={styles.tooltipValue}>
           {entry.dataKey === 'revenue' ? 'Ingresos' : 'Pedidos'}:{' '}
           <span className={styles.tooltipBold}>
             {entry.dataKey === 'revenue'
@@ -58,7 +58,7 @@ export function SalesChart({ data, isLoading }: SalesChartProps) {
   if (isLoading) {
     return (
       <div className={styles.skeletonContainer}>
-        <div className={`${styles.skeletonTitle}`} />
+        <div className={styles.skeletonTitle} />
         <div className={styles.skeletonChart} />
       </div>
     );
@@ -89,11 +89,11 @@ export function SalesChart({ data, isLoading }: SalesChartProps) {
         </div>
         <div className={styles.legend}>
           <div className={styles.legendItem}>
-            <div className={`${styles.legendDot} ${styles.legendDotPrimary}`} />
+            <div className={styles.legendDotRevenue} />
             <span className={styles.legendLabel}>Ingresos</span>
           </div>
           <div className={styles.legendItem}>
-            <div className={`${styles.legendDot} ${styles.legendDotSuccess}`} />
+            <div className={styles.legendDotOrders} />
             <span className={styles.legendLabel}>Pedidos</span>
           </div>
         </div>
@@ -101,48 +101,63 @@ export function SalesChart({ data, isLoading }: SalesChartProps) {
 
       <div className={styles.chartArea}>
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
+          <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+            <defs>
+              <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#0F172A" stopOpacity={0.1} />
+                <stop offset="95%" stopColor="#0F172A" stopOpacity={0} />
+              </linearGradient>
+              <linearGradient id="ordersGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.1} />
+                <stop offset="95%" stopColor="#D4AF37" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="#F0F0F0" vertical={false} />
             <XAxis
               dataKey="date"
               tickFormatter={(date) => format(parseISO(date), 'd MMM', { locale: es })}
-              tick={{ fontSize: 12, fill: '#6b7280' }}
-              axisLine={{ stroke: '#e5e7eb' }}
+              tick={{ fontSize: 12, fill: '#666666', fontFamily: 'Inter' }}
+              axisLine={{ stroke: '#E2E8F0' }}
               tickLine={false}
             />
             <YAxis
               yAxisId="left"
               tickFormatter={(value) => `€${(value / 1000).toFixed(0)}k`}
-              tick={{ fontSize: 12, fill: '#6b7280' }}
+              tick={{ fontSize: 12, fill: '#666666', fontFamily: 'Inter' }}
               axisLine={false}
               tickLine={false}
+              width={50}
             />
             <YAxis
               yAxisId="right"
               orientation="right"
-              tick={{ fontSize: 12, fill: '#6b7280' }}
+              tick={{ fontSize: 12, fill: '#666666', fontFamily: 'Inter' }}
               axisLine={false}
               tickLine={false}
+              width={30}
             />
             <Tooltip content={<CustomTooltip />} />
-            <Legend />
-            <Bar
+            <Area
               yAxisId="left"
+              type="monotone"
               dataKey="revenue"
-              name="Ingresos"
-              fill="#3b82f6"
-              radius={[4, 4, 0, 0]}
-              barSize={32}
+              stroke="#0F172A"
+              strokeWidth={1}
+              fill="url(#revenueGradient)"
+              dot={false}
+              activeDot={{ r: 3, fill: '#0F172A', stroke: '#fff', strokeWidth: 1 }}
             />
-            <Bar
+            <Area
               yAxisId="right"
+              type="monotone"
               dataKey="orders"
-              name="Pedidos"
-              fill="#22c55e"
-              radius={[4, 4, 0, 0]}
-              barSize={32}
+              stroke="#D4AF37"
+              strokeWidth={1}
+              fill="url(#ordersGradient)"
+              dot={false}
+              activeDot={{ r: 3, fill: '#D4AF37', stroke: '#fff', strokeWidth: 1 }}
             />
-          </BarChart>
+          </AreaChart>
         </ResponsiveContainer>
       </div>
     </div>

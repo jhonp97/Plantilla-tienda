@@ -1,10 +1,12 @@
 /**
- * OrderTable - Table view with filters and sorting for order management
+ * OrderTable — Compact order table with StatusPill integration.
+ * Uses the shared StatusPill component for status badges.
  */
 import { useState } from 'react';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 import type { Order, OrderStatus } from '../../../types/order.types';
+import { StatusPill } from '../../../components/StatusPill';
 import { formatPrice } from '../../../utils';
 import styles from './OrderTable.module.css';
 
@@ -15,14 +17,14 @@ interface OrderTableProps {
   onChangeStatus: (order: Order) => void;
 }
 
-const STATUS_CLASSES: Record<OrderStatus, string> = {
-  PENDING: styles.statusPending,
-  CONFIRMED: styles.statusConfirmed,
-  PROCESSING: styles.statusProcessing,
-  SHIPPED: styles.statusShipped,
-  DELIVERED: styles.statusDelivered,
-  CANCELLED: styles.statusCancelled,
-  REFUNDED: styles.statusRefunded,
+const STATUS_MAP: Record<string, 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'CANCELLED' | 'SHIPPED'> = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  SHIPPED: 'SHIPPED',
+  DELIVERED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'CANCELLED',
 };
 
 const STATUS_LABELS: Record<OrderStatus, string> = {
@@ -75,11 +77,28 @@ export function OrderTable({
 
   if (isLoading) {
     return (
-      <div className={styles.skeletonContainer}>
-        <div className={styles.skeletonContent}>
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className={styles.skeletonRow} />
-          ))}
+      <div className={styles.tableContainer}>
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead className={styles.tableHeader}>
+              <tr>
+                {['', 'Orden', 'Cliente', 'Estado', 'Total', 'Fecha', 'Acciones'].map((h) => (
+                  <th key={h} className={styles.tableHeaderCell}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <tr key={i} className={styles.tableRow}>
+                  {[1, 2, 3, 4, 5, 6, 7].map((j) => (
+                    <td key={j} className={styles.tableCell}>
+                      <div className={styles.skeletonCell} />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     );
@@ -117,24 +136,12 @@ export function OrderTable({
                   className={styles.checkbox}
                 />
               </th>
-              <th className={styles.tableHeaderCell}>
-                Orden
-              </th>
-              <th className={styles.tableHeaderCell}>
-                Cliente
-              </th>
-              <th className={styles.tableHeaderCell}>
-                Estado
-              </th>
-              <th className={styles.tableHeaderCell}>
-                Total
-              </th>
-              <th className={styles.tableHeaderCell}>
-                Fecha
-              </th>
-              <th className={styles.tableHeaderCell}>
-                Acciones
-              </th>
+              <th className={styles.tableHeaderCell}>Orden</th>
+              <th className={styles.tableHeaderCell}>Cliente</th>
+              <th className={styles.tableHeaderCell}>Estado</th>
+              <th className={styles.tableHeaderCell}>Total</th>
+              <th className={styles.tableHeaderCell}>Fecha</th>
+              <th className={styles.tableHeaderCell}>Acciones</th>
             </tr>
           </thead>
           <tbody className={styles.tableBody}>
@@ -170,14 +177,13 @@ export function OrderTable({
                     </div>
                   </td>
                   <td className={styles.tableCell}>
-                    <span className={`${styles.statusBadge} ${STATUS_CLASSES[order.status]}`}>
-                      {STATUS_LABELS[order.status]}
-                    </span>
+                    <StatusPill
+                      status={STATUS_MAP[order.status] || 'PENDING'}
+                      label={STATUS_LABELS[order.status]}
+                    />
                   </td>
                   <td className={styles.tableCell}>
-                    <p className={styles.priceValue}>
-                      {formatPrice(order.total)}
-                    </p>
+                    <p className={styles.priceValue}>{formatPrice(order.total)}</p>
                   </td>
                   <td className={styles.tableCell}>
                     <p className={styles.dateValue}>

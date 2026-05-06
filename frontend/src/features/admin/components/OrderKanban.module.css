@@ -1,60 +1,48 @@
-/* OrderKanban.module.css - Kanban view for order management */
+/* OrderKanban.module.css — Kanban view with StatusPill */
 
-/* Container */
 .kanbanContainer {
-  display: flex;
-  gap: var(--spacing-md);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-2);
   overflow-x: auto;
-  padding-bottom: var(--spacing-md);
+  padding-bottom: var(--space-2);
+}
+
+@media (max-width: 1279px) {
+  .kanbanContainer {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .kanbanContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .kanbanContainer {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Column */
 .column {
-  flex-shrink: 0;
-  width: 18rem;
+  background: var(--color-bg-secondary);
   border-radius: var(--radius-lg);
-  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
 }
 
 .columnDragOver {
-  background: var(--color-gray-100);
-  box-shadow: 0 0 0 2px var(--color-primary);
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
 }
 
-.columnDefault {
-  background: var(--color-gray-50);
-}
-
-/* Column Header */
 .columnHeader {
-  padding: var(--spacing-md);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  border-bottom: 2px solid;
-}
-
-.columnHeaderBlue {
-  background: var(--color-primary-light);
-  border-color: var(--color-primary);
-}
-
-.columnHeaderGreen {
-  background: var(--color-success-light);
-  border-color: var(--color-success);
-}
-
-.columnHeaderYellow {
-  background: var(--color-warning-light);
-  border-color: var(--color-warning);
-}
-
-.columnHeaderPurple {
-  background: var(--status-purple-bg);
-  border-color: var(--status-purple-border);
-}
-
-.columnHeaderIndigo {
-  background: var(--status-processing-bg);
-  border-color: var(--status-processing-border);
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--color-gray-200);
 }
 
 .columnHeaderContent {
@@ -64,131 +52,139 @@
 }
 
 .columnTitle {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--color-text-primary);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .columnCount {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  background: var(--color-white);
-  color: var(--text-secondary);
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  border-radius: var(--radius-full);
-}
-
-/* Column Content */
-.columnContent {
-  padding: var(--spacing-sm);
-  min-height: 24rem;
-  max-height: 37.5rem;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-}
-
-.emptyColumn {
-  height: 6rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-tertiary);
+  width: 24px;
+  height: 24px;
+  background: var(--color-white);
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.columnContent {
+  padding: var(--space-1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  overflow-y: auto;
+}
+
+.emptyColumn {
+  padding: var(--space-3);
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
 }
 
 /* Order Card */
 .orderCard {
   background: var(--color-white);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-gray-200);
-  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2);
   cursor: pointer;
   transition: box-shadow var(--transition-fast);
 }
 
 .orderCard:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .orderCardHeader {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--space-1);
 }
 
 .orderNumber {
-  font-weight: 500;
+  font-family: var(--font-body);
+  font-weight: 600;
   font-size: var(--font-size-sm);
-  color: var(--text-primary);
-}
-
-.orderDate {
-  font-size: var(--font-size-xs);
-  color: var(--text-secondary);
+  color: var(--color-text-primary);
+  margin: 0;
 }
 
 .orderCustomer {
-  font-size: var(--font-size-xs);
-  color: var(--text-secondary);
-  margin-bottom: var(--spacing-sm);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--space-1) 0;
 }
 
 .orderFooter {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-1);
+  border-top: 1px solid var(--color-gray-100);
 }
 
 .orderTotal {
-  font-size: var(--font-size-sm);
+  font-family: var(--font-heading);
   font-weight: 600;
-  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  margin: 0;
 }
 
 .orderItems {
+  font-family: var(--font-body);
   font-size: var(--font-size-xs);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
+  margin: 0;
 }
 
-/* Skeleton Loading */
-.skeletonContainer {
-  display: flex;
-  gap: var(--spacing-md);
-  overflow-x: auto;
-  padding-bottom: var(--spacing-md);
-}
-
+/* Skeleton */
 .skeletonColumn {
-  flex-shrink: 0;
-  width: 18rem;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2);
 }
 
 .skeletonCard {
-  background: var(--color-gray-100);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-md);
-  height: 24rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
 .skeletonHeader {
-  height: 1rem;
+  height: 20px;
+  width: 60%;
   background: var(--color-gray-200);
   border-radius: var(--radius-sm);
-  width: 6rem;
-  margin-bottom: var(--spacing-sm);
 }
 
 .skeletonItemList {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: var(--space-1);
 }
 
 .skeletonItem {
-  height: 6rem;
+  height: 80px;
   background: var(--color-gray-200);
   border-radius: var(--radius-md);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }

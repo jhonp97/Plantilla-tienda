@@ -1,10 +1,11 @@
 /**
- * OrderKanban - Kanban view for order management with drag-and-drop
+ * OrderKanban — Kanban view with StatusPill integration.
  */
 import { useState, useRef } from 'react';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 import type { Order, OrderStatus } from '../../../types/order.types';
+import { StatusPill } from '../../../components/StatusPill';
 import { formatPrice } from '../../../utils';
 import styles from './OrderKanban.module.css';
 
@@ -15,13 +16,33 @@ interface OrderKanbanProps {
   onChangeStatus: (order: Order, newStatus: OrderStatus) => void;
 }
 
-const COLUMNS: { status: OrderStatus; label: string; headerClass: string }[] = [
-  { status: 'PENDING', label: 'Pendiente', headerClass: styles.columnHeaderYellow },
-  { status: 'CONFIRMED', label: 'Confirmado', headerClass: styles.columnHeaderBlue },
-  { status: 'PROCESSING', label: 'Procesando', headerClass: styles.columnHeaderPurple },
-  { status: 'SHIPPED', label: 'Enviado', headerClass: styles.columnHeaderIndigo },
-  { status: 'DELIVERED', label: 'Entregado', headerClass: styles.columnHeaderGreen },
+const COLUMNS: { status: OrderStatus; label: string }[] = [
+  { status: 'PENDING', label: 'Pendiente' },
+  { status: 'CONFIRMED', label: 'Confirmado' },
+  { status: 'PROCESSING', label: 'Procesando' },
+  { status: 'SHIPPED', label: 'Enviado' },
+  { status: 'DELIVERED', label: 'Entregado' },
 ];
+
+const STATUS_MAP: Record<string, 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'CANCELLED' | 'SHIPPED'> = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  SHIPPED: 'SHIPPED',
+  DELIVERED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'CANCELLED',
+};
+
+const STATUS_LABELS: Record<OrderStatus, string> = {
+  PENDING: 'Pendiente',
+  CONFIRMED: 'Confirmado',
+  PROCESSING: 'Procesando',
+  SHIPPED: 'Enviado',
+  DELIVERED: 'Entregado',
+  CANCELLED: 'Cancelado',
+  REFUNDED: 'Reembolsado',
+};
 
 function OrderCard({ order, onViewDetails, onDragStart, onDragEnd }: {
   order: Order;
@@ -39,17 +60,16 @@ function OrderCard({ order, onViewDetails, onDragStart, onDragEnd }: {
     >
       <div className={styles.orderCardHeader}>
         <p className={styles.orderNumber}>#{order.orderNumber}</p>
-        <span className={styles.orderDate}>
-          {format(parseISO(order.createdAt), 'd MMM', { locale: es })}
-        </span>
+        <StatusPill
+          status={STATUS_MAP[order.status] || 'PENDING'}
+          label={STATUS_LABELS[order.status]}
+        />
       </div>
       <p className={styles.orderCustomer}>
         {order.shippingAddress.firstName} {order.shippingAddress.lastName}
       </p>
       <div className={styles.orderFooter}>
-        <p className={styles.orderTotal}>
-          {formatPrice(order.total)}
-        </p>
+        <p className={styles.orderTotal}>{formatPrice(order.total)}</p>
         <p className={styles.orderItems}>{order.items.length} items</p>
       </div>
     </div>
@@ -83,15 +103,9 @@ export function OrderKanban({
   const handleDragEnd = () => {
     setDraggedOrderId(null);
     setDragOverColumn(null);
-    dragCounter.current = {
-      PENDING: 0,
-      CONFIRMED: 0,
-      PROCESSING: 0,
-      SHIPPED: 0,
-      DELIVERED: 0,
-      CANCELLED: 0,
-      REFUNDED: 0,
-    };
+    Object.keys(dragCounter.current).forEach((k) => {
+      dragCounter.current[k as OrderStatus] = 0;
+    });
   };
 
   const handleDragEnter = (status: OrderStatus) => {
@@ -116,18 +130,7 @@ export function OrderKanban({
         onChangeStatus(order, newStatus);
       }
     }
-
-    setDraggedOrderId(null);
-    setDragOverColumn(null);
-    dragCounter.current = {
-      PENDING: 0,
-      CONFIRMED: 0,
-      PROCESSING: 0,
-      SHIPPED: 0,
-      DELIVERED: 0,
-      CANCELLED: 0,
-      REFUNDED: 0,
-    };
+    handleDragEnd();
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -136,7 +139,7 @@ export function OrderKanban({
 
   if (isLoading) {
     return (
-      <div className={styles.skeletonContainer}>
+      <div className={styles.kanbanContainer}>
         {COLUMNS.map((col) => (
           <div key={col.status} className={styles.skeletonColumn}>
             <div className={styles.skeletonCard}>
@@ -162,28 +165,22 @@ export function OrderKanban({
         return (
           <div
             key={column.status}
-            className={`${styles.column} ${isDragOver ? styles.columnDragOver : styles.columnDefault}`}
+            className={`${styles.column} ${isDragOver ? styles.columnDragOver : ''}`}
             onDragEnter={() => handleDragEnter(column.status)}
             onDragLeave={() => handleDragLeave(column.status)}
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, column.status)}
           >
-            {/* Column Header */}
-            <div className={`${styles.columnHeader} ${column.headerClass}`}>
+            <div className={styles.columnHeader}>
               <div className={styles.columnHeaderContent}>
                 <h3 className={styles.columnTitle}>{column.label}</h3>
-                <span className={styles.columnCount}>
-                  {columnOrders.length}
-                </span>
+                <span className={styles.columnCount}>{columnOrders.length}</span>
               </div>
             </div>
 
-            {/* Column Content */}
             <div className={styles.columnContent}>
               {columnOrders.length === 0 ? (
-                <div className={styles.emptyColumn}>
-                  Sin órdenes
-                </div>
+                <div className={styles.emptyColumn}>Sin órdenes</div>
               ) : (
                 columnOrders.map((order) => (
                   <OrderCard

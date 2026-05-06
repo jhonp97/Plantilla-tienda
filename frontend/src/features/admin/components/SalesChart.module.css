@@ -1,67 +1,70 @@
-/* SalesChart.module.css - Sales visualization chart styles */
+/* SalesChart.module.css — Premium chart styles */
 
-/* Container */
 .chartContainer {
   background: var(--color-white);
-  border-radius: var(--radius-xl);
   border: 1px solid var(--color-gray-200);
-  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
 }
 
-/* Header */
 .chartHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--space-3);
 }
 
 .chartTitle {
+  font-family: var(--font-heading);
   font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--text-primary);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  margin: 0;
 }
 
 .chartSubtitle {
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-  margin-top: var(--spacing-xs);
+  color: var(--color-text-secondary);
+  margin: var(--space-1) 0 0 0;
 }
 
 /* Legend */
 .legend {
   display: flex;
-  gap: var(--spacing-md);
+  gap: var(--space-2);
 }
 
 .legendItem {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--space-1);
 }
 
-.legendDot {
-  width: 0.75rem;
-  height: 0.75rem;
+.legendDotRevenue {
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-accent);
   border-radius: 50%;
 }
 
-.legendDotPrimary {
-  background: var(--color-primary);
-}
-
-.legendDotSuccess {
-  background: var(--color-success);
+.legendDotOrders {
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-accent-alt);
+  border-radius: 50%;
 }
 
 .legendLabel {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
 }
 
 /* Chart Area */
 .chartArea {
-  height: 20rem;
+  height: 280px;
 }
 
 /* Tooltip */
@@ -70,50 +73,47 @@
   border: 1px solid var(--color-gray-200);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
-  padding: var(--spacing-md);
+  padding: var(--space-2);
 }
 
 .tooltipTitle {
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   font-weight: 500;
-  color: var(--text-primary);
-  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
 }
 
 .tooltipValue {
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
-}
-
-.tooltipValuePrimary {
-  color: var(--color-primary);
-}
-
-.tooltipValueSuccess {
-  color: var(--color-success);
+  color: var(--color-text-secondary);
+  margin: 0;
 }
 
 .tooltipBold {
   font-weight: 600;
+  color: var(--color-text-primary);
 }
 
-/* Skeleton Loading */
+/* Skeleton */
 .skeletonContainer {
   background: var(--color-white);
-  border-radius: var(--radius-xl);
   border: 1px solid var(--color-gray-200);
-  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
 }
 
 .skeletonTitle {
-  height: 1rem;
-  background: var(--color-gray-200);
+  height: 16px;
+  background: var(--color-bg-secondary);
   border-radius: var(--radius-sm);
-  width: 8rem;
-  margin-bottom: var(--spacing-md);
+  width: 120px;
+  margin-bottom: var(--space-3);
 }
 
 .skeletonChart {
-  height: 20rem;
-  background: var(--color-gray-100);
+  height: 280px;
+  background: var(--color-bg-secondary);
   border-radius: var(--radius-md);
 }

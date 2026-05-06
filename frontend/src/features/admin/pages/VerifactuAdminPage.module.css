@@ -1,0 +1,208 @@
+/* VerifactuAdminPage.module.css — Premium Verifactu page */
+
+.pageContainer { padding: var(--space-3); display: flex; flex-direction: column; gap: var(--space-3); }
+
+.pageHeader { display: flex; flex-direction: column; gap: var(--space-1); }
+
+.pageTitle {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.pageSubtitle {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: var(--space-1) 0 0 0;
+}
+
+/* Summary */
+.summaryGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-3); }
+
+@media (max-width: 768px) { .summaryGrid { grid-template-columns: repeat(2, 1fr); } }
+
+.summaryCard {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  text-align: center;
+}
+
+.summaryValue {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.summaryLabel {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: var(--space-1);
+}
+
+/* Table */
+.tableContainer {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.tableWrapper { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; }
+
+.tableHeader { border-bottom: 1px solid var(--color-gray-200); }
+
+.tableHeaderCell {
+  padding: var(--space-1) var(--space-2);
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--color-bg-secondary);
+  white-space: nowrap;
+}
+
+.tableBody { border-bottom: 1px solid var(--color-gray-200); }
+.tableRow { transition: background var(--transition-fast); }
+.tableRow:hover { background: var(--color-bg-secondary); }
+.tableCell { padding: var(--space-1) var(--space-2); vertical-align: middle; }
+
+.invoiceNumber {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: 0.02em;
+}
+
+.orderNumberRef {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.customerNameCell {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.dateCell {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.amountCell {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.emptyCell {
+  padding: var(--space-4);
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+}
+
+/* Actions */
+.actionsCell { display: flex; gap: var(--space-1); }
+
+.actionButtonSecondary, .actionButtonDanger {
+  padding: var(--space-1);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+}
+
+.actionButtonSecondary { color: var(--color-text-secondary); }
+.actionButtonSecondary:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+.actionButtonDanger { color: var(--color-danger); }
+.actionButtonDanger:hover { border-color: var(--color-danger); background: var(--color-danger-light); }
+
+.actionIcon { width: 18px; height: 18px; }
+
+/* Modal */
+.modalOverlay {
+  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal); display: flex; align-items: center; justify-content: center;
+  padding: var(--space-2);
+}
+
+.modal {
+  background: var(--color-white); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl); max-width: 32rem; width: 100%;
+}
+
+.modalHeader { padding: var(--space-3); border-bottom: 1px solid var(--color-gray-200); }
+
+.modalTitle {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.modalBody { padding: var(--space-3); display: flex; flex-direction: column; gap: var(--space-2); align-items: center; text-align: center; }
+.modalFooter { padding: var(--space-3); border-top: 1px solid var(--color-gray-200); display: flex; gap: var(--space-2); justify-content: flex-end; }
+
+.warningIcon { color: var(--color-danger); }
+
+.modalMessage {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cancelButton {
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-md);
+  background: var(--color-white); color: var(--color-text-secondary);
+  font-family: var(--font-body); font-size: var(--font-size-sm);
+  cursor: pointer; transition: background var(--transition-fast);
+}
+
+.cancelButton:hover:not(:disabled) { background: var(--color-bg-secondary); }
+.cancelButton:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.rectificativaButton {
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-danger); color: var(--color-white);
+  border: none; border-radius: var(--radius-md);
+  font-family: var(--font-body); font-size: var(--font-size-sm); font-weight: 600;
+  cursor: pointer; transition: background var(--transition-fast);
+}
+
+.rectificativaButton:hover:not(:disabled) { background: #dc2626; }
+.rectificativaButton:disabled { opacity: 0.7; cursor: not-allowed; }
