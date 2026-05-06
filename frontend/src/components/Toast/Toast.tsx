@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Toast as ToastType } from '../../store/toastStore';
 import { useToastStore } from '../../store/toastStore';
 import styles from './Toast.module.css';
@@ -38,6 +39,7 @@ interface ToastItemProps {
 }
 
 export function ToastItem({ toast }: ToastItemProps) {
+  const { t } = useTranslation();
   const { removeToast } = useToastStore();
   const [isExiting, setIsExiting] = useState(false);
 
@@ -66,7 +68,7 @@ export function ToastItem({ toast }: ToastItemProps) {
       <button
         className={styles.closeButton}
         onClick={handleDismiss}
-        aria-label="Cerrar notificación"
+        aria-label={t('common.close')}
         type="button"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

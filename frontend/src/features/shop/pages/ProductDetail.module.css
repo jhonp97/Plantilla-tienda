@@ -4,7 +4,7 @@
 .pageContainer {
   min-height: 100vh;
   background: var(--color-bg-primary);
-  padding: var(--space-6) 0 var-space-16;
+  padding: var(--space-6) 0 var(--space-16);
 }
 
 .container {

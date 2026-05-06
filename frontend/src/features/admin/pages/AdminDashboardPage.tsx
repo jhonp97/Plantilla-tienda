@@ -4,6 +4,7 @@
  * Uses staggerIn animation on KPI cards via DashboardStats.
  */
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAnalyticsStore } from '../../../store/analyticsStore';
 import { DashboardStats } from '../components/DashboardStats';
 import { SalesChart } from '../components/SalesChart';
@@ -12,6 +13,7 @@ import { formatPrice } from '../../../utils';
 import styles from './AdminDashboardPage.module.css';
 
 export default function AdminDashboardPage() {
+  const { t } = useTranslation();
   const {
     overview,
     salesData,
@@ -56,8 +58,8 @@ export default function AdminDashboardPage() {
       <div className={styles.topProductsSection}>
         <div className={styles.sectionHeader}>
           <div>
-            <h3 className={styles.sectionTitle}>Productos Más Vendidos</h3>
-            <p className={styles.sectionSubtitle}>Top 10 productos por unidades vendidas</p>
+            <h3 className={styles.sectionTitle}>{t('admin.dashboard.topProducts')}</h3>
+            <p className={styles.sectionSubtitle}>{t('admin.dashboard.topProductsSubtitle')}</p>
           </div>
         </div>
 
@@ -72,10 +74,10 @@ export default function AdminDashboardPage() {
             <table className={styles.table}>
               <thead className={styles.tableHeader}>
                 <tr>
-                  <th className={styles.tableHeaderCell}>#</th>
-                  <th className={styles.tableHeaderCell}>Producto</th>
-                  <th className={styles.tableHeaderCell}>Vendidos</th>
-                  <th className={styles.tableHeaderCell}>Ingresos</th>
+                  <th scope="col" className={styles.tableHeaderCell}>{t('admin.tableNumber')}</th>
+                  <th scope="col" className={styles.tableHeaderCell}>{t('admin.tableProduct')}</th>
+                  <th scope="col" className={styles.tableHeaderCell}>{t('admin.tableSold')}</th>
+                  <th scope="col" className={styles.tableHeaderCell}>{t('admin.tableRevenue')}</th>
                 </tr>
               </thead>
               <tbody className={styles.tableBody}>
@@ -113,7 +115,7 @@ export default function AdminDashboardPage() {
                 {topProducts.length === 0 && (
                   <tr>
                     <td colSpan={4} className={styles.emptyCell}>
-                      No hay datos de productos disponibles
+                      {t('admin.noProductData')}
                     </td>
                   </tr>
                 )}

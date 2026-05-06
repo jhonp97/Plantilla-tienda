@@ -1,6 +1,6 @@
 /* Hero */
 .hero {
-  background: linear-gradient(135deg, var(--color-primary) 0%, #1e40af 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-bg-secondary) 100%);
   padding: var(--spacing-3xl) var(--spacing-xl);
   text-align: center;
 }

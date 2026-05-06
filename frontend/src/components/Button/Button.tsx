@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { MinimalSpinner } from '@components/MinimalSpinner';
 import styles from './Button.module.css';
 
@@ -17,6 +18,8 @@ export function Button({
   className = '',
   ...rest
 }: ButtonProps) {
+  const { t } = useTranslation();
+
   return (
     <button
       className={`${styles.button} ${styles[variant]} ${styles[size]} ${className}`}
@@ -25,7 +28,7 @@ export function Button({
     >
       {isLoading ? (
         <>
-          <MinimalSpinner label="Cargando" />
+          <MinimalSpinner label={t('common.loading')} />
           <span className={styles.loadingText}>{children}</span>
         </>
       ) : (

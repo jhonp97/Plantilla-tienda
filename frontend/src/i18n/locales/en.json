@@ -126,6 +126,8 @@
     "addedToCart": "Added to cart",
     "addingToCart": "Adding...",
     "outOfStockLabel": "Out of stock",
+    "stickyAddToCart": "Buy {{product}}",
+    "stickyAdding": "Adding...",
     "reviews": "Reviews",
     "reviewCount": "{{count}} review",
     "reviewCount_plural": "{{count}} reviews",
@@ -150,7 +152,9 @@
     "verified": "Verified",
     "anonymous": "Anonymous",
     "backToReviews": "Retry",
-    "noReviews": "No reviews yet"
+    "noReviews": "No reviews yet",
+    "decreaseQty": "Decrease quantity",
+    "increaseQty": "Increase quantity"
   },
   "cart": {
     "title": "Your Cart ({{count}} item)",
@@ -185,9 +189,10 @@
       "item": "item",
       "items": "items",
       "total": "Total",
-      "decreaseQty": "Decrease quantity of",
-      "increaseQty": "Increase quantity of",
-      "removeItem": "Remove item"
+    "decreaseQty": "Decrease quantity of",
+    "increaseQty": "Increase quantity of",
+    "removeItem": "Remove item",
+    "items": "items"
     }
   },
   "checkout": {
@@ -286,6 +291,45 @@
     "errorLoading": "Error",
     "orderNotes": "Notes"
   },
+  "verifactu": {
+    "title": "Verifactu Invoicing",
+    "subtitle": "Electronic invoice management with Verifactu",
+    "totalInvoices": "Total Invoices",
+    "correct": "Correct",
+    "pendingErrors": "Pending / Errors",
+    "cancelled": "Cancelled",
+    "tableInvoice": "Invoice",
+    "tableOrder": "Order",
+    "tableCustomer": "Customer",
+    "tableStatus": "Status",
+    "tableDate": "Date",
+    "tableAmount": "Amount",
+    "tableActions": "Actions",
+    "noInvoices": "No invoices available",
+    "previewTitle": "Preview invoice",
+    "rectificativaTitle": "Generate Rectificative / Cancellation Invoice",
+    "statusPending": "Pending",
+    "statusCorrect": "Correct",
+    "statusAcceptedErrors": "Accepted with errors",
+    "statusCancelled": "Cancelled",
+    "rectificativaModalTitle": "Generate Rectificative / Cancellation Invoice",
+    "rectificativaWarning": "You are about to generate a <1>Rectificative Invoice</1> for invoice <3>{{invoiceNumber}}</3> of order <5>{{orderNumber}}</5>.",
+    "rectificativaCannotUndo": "This action <1>cannot be undone</1>. The original invoice will be cancelled and a rectificative invoice will be issued with the corrected data.",
+    "cancel": "Cancel",
+    "generateRectificativa": "Generate Rectificative Invoice",
+    "generating": "Generating...",
+    "previewInvoice": "Invoice Preview",
+    "close": "Close",
+    "invoiceNumber": "Invoice N°",
+    "orderNumber": "Order",
+    "customerName": "Customer",
+    "invoiceDate": "Date",
+    "invoiceAmount": "Amount",
+    "haciendaPhrase": "Verifiable invoice at the AEAT electronic headquarters",
+    "qrHint": "Scan the QR code to verify the invoice on the Tax Agency website.",
+    "downloadPdf": "Download PDF",
+    "sendEmail": "Send by Email"
+  },
   "admin": {
     "dashboard": "Dashboard",
     "dashboardSubtitle": "Your store overview in real time",
@@ -295,6 +339,18 @@
     "topProducts": "Top Selling Products",
     "topProductsSubtitle": "Top 10 products by units sold",
     "noProductData": "No product data available",
+    "dashboard": {
+      "todaySales": "Today's Sales",
+      "weekSales": "Week Sales",
+      "pendingOrders": "Pending Orders",
+      "lowStock": "Low Stock",
+      "vsYesterday": "+{{percent}}% vs yesterday",
+      "vsLastWeek": "+{{percent}}% vs last week",
+      "needsAttention": "Needs attention",
+      "restockNeeded": "Restock needed",
+      "topProducts": "Top Selling Products",
+      "topProductsSubtitle": "Top 10 products by units sold"
+    },
     "tableNumber": "#",
     "tableProduct": "Product",
     "tableSold": "Sold",
@@ -477,7 +533,9 @@
     },
     "categories": {
       "title": "Featured Categories",
-      "subtitle": "Explore our most popular categories"
+      "subtitle": "Explore our most popular categories",
+      "productCount": "{{count}} product",
+      "productCount_plural": "{{count}} products"
     },
     "featured": {
       "title": "Featured Products",

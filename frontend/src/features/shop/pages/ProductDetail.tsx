@@ -491,7 +491,7 @@ export default function ProductDetail() {
                         onClick={() => handleQuantityChange(-1)}
                         disabled={quantity <= 1}
                         className={styles.quantityButton}
-                        aria-label="Disminuir cantidad"
+                        aria-label={t('shop.decreaseQty')}
                         type="button"
                       >
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -503,7 +503,7 @@ export default function ProductDetail() {
                         onClick={() => handleQuantityChange(1)}
                         disabled={quantity >= selectedProduct.stock}
                         className={styles.quantityButton}
-                        aria-label="Aumentar cantidad"
+                        aria-label={t('shop.increaseQty')}
                         type="button"
                       >
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">

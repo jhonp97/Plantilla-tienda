@@ -19,8 +19,8 @@ function LoadingFallback() {
       <div style={{
         width: '40px',
         height: '40px',
-        border: '3px solid #e2e8f0',
-        borderTopColor: '#2563eb',
+        border: '3px solid var(--surface-border, #e2e8f0)',
+        borderTopColor: 'var(--color-accent, #0F172A)',
         borderRadius: '50%',
         animation: 'spin 0.8s linear infinite'
       }} />

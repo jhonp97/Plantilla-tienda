@@ -14,6 +14,11 @@ import { HeroSection } from '@features/shop/components/HeroSection';
 import type { Review } from '@services/review.service';
 import styles from './HomePage.module.css';
 
+function prefersReducedMotion(): boolean {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 /** Fetch reviews from the Google Reviews API */
 async function fetchGoogleReviews(): Promise<Review[]> {
   try {
@@ -62,6 +67,7 @@ interface CategoryCardProps {
 }
 
 function CategoryCard({ name, slug, image, productCount }: CategoryCardProps) {
+  const { t } = useTranslation();
   const imgSrc =
     image ||
     'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&q=60';
@@ -83,7 +89,7 @@ function CategoryCard({ name, slug, image, productCount }: CategoryCardProps) {
         <h3 className={styles.categoryCardName}>{name}</h3>
         {productCount !== undefined && (
           <p className={styles.categoryCardCount}>
-            {productCount} {productCount === 1 ? 'producto' : 'productos'}
+            {t('home.categories.productCount', { count: productCount })}
           </p>
         )}
       </div>
@@ -203,19 +209,20 @@ export default function HomePage() {
   // Auto-scroll carousel every 5 seconds
   const startAutoplay = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
+    const scrollBehavior = prefersReducedMotion() ? 'instant' as ScrollBehavior : 'smooth' as ScrollBehavior;
     intervalRef.current = setInterval(() => {
       if (!carouselRef.current) return;
       const maxScroll =
         carouselRef.current.scrollWidth - carouselRef.current.clientWidth;
       const newScroll = carouselRef.current.scrollLeft + carouselRef.current.clientWidth;
       if (newScroll >= maxScroll) {
-        carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        carouselRef.current.scrollTo({ left: 0, behavior: scrollBehavior });
         setActiveDot(0);
       } else {
-        carouselRef.current.scrollBy({ left: carouselRef.current.clientWidth, behavior: 'smooth' });
+        carouselRef.current.scrollBy({ left: carouselRef.current.clientWidth, behavior: scrollBehavior });
         setActiveDot((d) => d + 1);
       }
-    }, 5000);
+    }, prefersReducedMotion() ? 1 : 5000);
   }, []);
 
   useEffect(() => {

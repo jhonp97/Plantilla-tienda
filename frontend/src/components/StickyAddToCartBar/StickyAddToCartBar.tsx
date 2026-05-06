@@ -6,6 +6,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { formatPrice } from '@utils/formatPrice';
 import styles from './StickyAddToCartBar.module.css';
 
@@ -35,6 +36,7 @@ export function StickyAddToCartBar({
   isOutOfStock = false,
   productSlug,
 }: StickyAddToCartBarProps) {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const barRef = useRef<HTMLDivElement>(null);
 
@@ -80,10 +82,10 @@ export function StickyAddToCartBar({
             className={styles.addBtn}
             onClick={onAddToCart}
             disabled={isLoading || isOutOfStock}
-            aria-label={`Añadir ${productName} al carrito`}
+             aria-label={t('shop.stickyAddToCart', { product: productName })}
             type="button"
           >
-            {isLoading ? 'Agregando...' : isOutOfStock ? 'Agotado' : 'Add to Cart'}
+            {isLoading ? t('shop.stickyAdding') : isOutOfStock ? t('shop.outOfStockLabel') : t('shop.addToCart')}
           </button>
         </div>
       </div>

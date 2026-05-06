@@ -126,6 +126,8 @@
     "addedToCart": "Agregado al carrito",
     "addingToCart": "Agregando...",
     "outOfStockLabel": "Agotado",
+    "stickyAddToCart": "Comprar {{product}}",
+    "stickyAdding": "Agregando...",
     "reviews": "Reseñas",
     "reviewCount": "{{count}} reseña",
     "reviewCount_plural": "{{count}} reseñas",
@@ -150,7 +152,9 @@
     "verified": "Verificada",
     "anonymous": "Anónimo",
     "backToReviews": "Reintentar",
-    "noReviews": "No hay reseñas aún"
+    "noReviews": "No hay reseñas aún",
+    "decreaseQty": "Disminuir cantidad",
+    "increaseQty": "Aumentar cantidad"
   },
   "cart": {
     "title": "Tu Carrito ({{count}} item)",
@@ -185,9 +189,10 @@
       "item": "producto",
       "items": "productos",
       "total": "Total",
-      "decreaseQty": "Disminuir cantidad de",
-      "increaseQty": "Aumentar cantidad de",
-      "removeItem": "Eliminar producto"
+    "decreaseQty": "Disminuir cantidad de",
+    "increaseQty": "Aumentar cantidad de",
+    "removeItem": "Eliminar producto",
+    "items": "productos"
     }
   },
   "checkout": {
@@ -286,6 +291,45 @@
     "errorLoading": "Error",
     "orderNotes": "Notas"
   },
+  "verifactu": {
+    "title": "Facturación Verifactu",
+    "subtitle": "Gestión de facturas electrónicas con Verifactu",
+    "totalInvoices": "Total Facturas",
+    "correct": "Correctas",
+    "pendingErrors": "Pendientes / Errores",
+    "cancelled": "Anuladas",
+    "tableInvoice": "Factura",
+    "tableOrder": "Orden",
+    "tableCustomer": "Cliente",
+    "tableStatus": "Estado",
+    "tableDate": "Fecha",
+    "tableAmount": "Importe",
+    "tableActions": "Acciones",
+    "noInvoices": "No hay facturas disponibles",
+    "previewTitle": "Previsualizar factura",
+    "rectificativaTitle": "Generar Factura Rectificativa / Anulación",
+    "statusPending": "Pendiente",
+    "statusCorrect": "Correcto",
+    "statusAcceptedErrors": "Aceptado con errores",
+    "statusCancelled": "Anulada",
+    "rectificativaModalTitle": "Generar Factura Rectificativa / Anulación",
+    "rectificativaWarning": "Vas a generar una <1>Factura Rectificativa</1> para la factura <3>{{invoiceNumber}}</3> de la orden <5>{{orderNumber}}</5>.",
+    "rectificativaCannotUndo": "Esta acción <1>no se puede deshacer</1>. La factura original quedará anulada y se emitirá una factura rectificativa con los datos corregidos.",
+    "cancel": "Cancelar",
+    "generateRectificativa": "Generar Factura Rectificativa",
+    "generating": "Generando...",
+    "previewInvoice": "Previsualización de Factura",
+    "close": "Cerrar",
+    "invoiceNumber": "Factura N°",
+    "orderNumber": "Orden",
+    "customerName": "Cliente",
+    "invoiceDate": "Fecha",
+    "invoiceAmount": "Importe",
+    "haciendaPhrase": "Factura verificable en la sede electrónica de la AEAT",
+    "qrHint": "Escanea el código QR para verificar la factura en la web de la Agencia Tributaria.",
+    "downloadPdf": "Descargar PDF",
+    "sendEmail": "Enviar por Email"
+  },
   "admin": {
     "dashboard": "Dashboard",
     "dashboardSubtitle": "Resumen de tu tienda en tiempo real",
@@ -295,6 +339,18 @@
     "topProducts": "Productos Más Vendidos",
     "topProductsSubtitle": "Top 10 productos por unidades vendidas",
     "noProductData": "No hay datos de productos disponibles",
+    "dashboard": {
+      "todaySales": "Ventas Hoy",
+      "weekSales": "Ventas Semana",
+      "pendingOrders": "Órdenes Pendientes",
+      "lowStock": "Stock Bajo",
+      "vsYesterday": "+{{percent}}% vs ayer",
+      "vsLastWeek": "+{{percent}}% vs semana anterior",
+      "needsAttention": "Requieren atención",
+      "restockNeeded": "Reposición necesaria",
+      "topProducts": "Productos Más Vendidos",
+      "topProductsSubtitle": "Top 10 productos por unidades vendidas"
+    },
     "tableNumber": "#",
     "tableProduct": "Producto",
     "tableSold": "Vendidos",
@@ -477,7 +533,9 @@
     },
     "categories": {
       "title": "Categorías Destacadas",
-      "subtitle": "Explora nuestras categorías más populares"
+      "subtitle": "Explora nuestras categorías más populares",
+      "productCount": "{{count}} producto",
+      "productCount_plural": "{{count}} productos"
     },
     "featured": {
       "title": "Productos Destacados",

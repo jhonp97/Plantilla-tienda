@@ -86,8 +86,8 @@
 }
 
 .statusConfirmed {
-  background: #dbeafe;
-  color: #1e40af;
+  background: var(--color-success-light);
+  color: var(--color-success);
 }
 
 .statusProcessing {

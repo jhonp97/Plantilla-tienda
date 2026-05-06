@@ -3,6 +3,7 @@
  * Shows order data, QR code (via qrcode.react), Hacienda phrase,
  * download PDF and email buttons.
  */
+import { useTranslation } from 'react-i18next';
 import { QRCodeSVG } from 'qrcode.react';
 import styles from './InvoicePreviewModal.module.css';
 
@@ -27,6 +28,8 @@ export function InvoicePreviewModal({
   pdfUrl,
   onClose,
 }: InvoicePreviewModalProps) {
+  const { t } = useTranslation();
+
   const formatCurrency = (value: number): string => {
     return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(value / 100);
   };
@@ -36,8 +39,8 @@ export function InvoicePreviewModal({
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className={styles.header}>
-          <h2 className={styles.title}>Previsualización de Factura</h2>
-          <button onClick={onClose} className={styles.closeButton} aria-label="Cerrar">
+          <h2 className={styles.title}>{t('verifactu.previewInvoice')}</h2>
+          <button onClick={onClose} className={styles.closeButton} aria-label={t('verifactu.close')}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M18 6L6 18M6 6l12 12" />
             </svg>
@@ -49,23 +52,23 @@ export function InvoicePreviewModal({
           {/* Invoice Data */}
           <div className={styles.invoiceData}>
             <div className={styles.dataRow}>
-              <span className={styles.dataLabel}>Factura N°</span>
+              <span className={styles.dataLabel}>{t('verifactu.invoiceNumber')}</span>
               <span className={styles.dataValue}>{invoiceNumber}</span>
             </div>
             <div className={styles.dataRow}>
-              <span className={styles.dataLabel}>Orden</span>
+              <span className={styles.dataLabel}>{t('verifactu.orderNumber')}</span>
               <span className={styles.dataValue}>{orderNumber}</span>
             </div>
             <div className={styles.dataRow}>
-              <span className={styles.dataLabel}>Cliente</span>
+              <span className={styles.dataLabel}>{t('verifactu.customerName')}</span>
               <span className={styles.dataValue}>{customerName}</span>
             </div>
             <div className={styles.dataRow}>
-              <span className={styles.dataLabel}>Fecha</span>
+              <span className={styles.dataLabel}>{t('verifactu.invoiceDate')}</span>
               <span className={styles.dataValue}>{new Date(date).toLocaleDateString('es-ES')}</span>
             </div>
             <div className={styles.dataRow}>
-              <span className={styles.dataLabel}>Importe</span>
+              <span className={styles.dataLabel}>{t('verifactu.invoiceAmount')}</span>
               <span className={styles.dataValueTotal}>{formatCurrency(amount)}</span>
             </div>
           </div>
@@ -81,10 +84,10 @@ export function InvoicePreviewModal({
               />
             </div>
             <p className={styles.haciendaPhrase}>
-              Factura verificable en la sede electrónica de la AEAT
+              {t('verifactu.haciendaPhrase')}
             </p>
             <p className={styles.qrHint}>
-              Escanea el código QR para verificar la factura en la web de la Agencia Tributaria.
+              {t('verifactu.qrHint')}
             </p>
           </div>
         </div>
@@ -103,14 +106,14 @@ export function InvoicePreviewModal({
               <polyline points="7 10 12 15 17 10" />
               <line x1="12" y1="15" x2="12" y2="3" />
             </svg>
-            Descargar PDF
+            {t('verifactu.downloadPdf')}
           </button>
           <button className={styles.emailButton}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
               <polyline points="22,6 12,13 2,6" />
             </svg>
-            Enviar por Email
+            {t('verifactu.sendEmail')}
           </button>
         </div>
       </div>

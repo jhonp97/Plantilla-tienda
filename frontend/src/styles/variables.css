@@ -113,8 +113,8 @@
   --status-error-text: #991b1b;
   --status-error-bg: #fee2e2;
   --status-error-hover: #b91c1c;
-  --status-info-text: #1e40af;
-  --status-info-bg: #dbeafe;
+  --status-info-text: var(--color-accent);
+  --status-info-bg: var(--color-bg-secondary);
   --status-processing-text: #4338ca;
   --status-processing-bg: #e0e7ff;
   --status-processing-border: #6366f1;
