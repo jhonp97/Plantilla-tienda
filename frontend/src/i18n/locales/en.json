@@ -179,7 +179,16 @@
     "sslSecure": "SSL Secure",
     "trustStripe": "Stripe",
     "quantity": "Qty: {{count}}",
-    "removeItem": "Remove"
+    "removeItem": "Remove",
+    "drawer": {
+      "title": "Cart",
+      "item": "item",
+      "items": "items",
+      "total": "Total",
+      "decreaseQty": "Decrease quantity of",
+      "increaseQty": "Increase quantity of",
+      "removeItem": "Remove item"
+    }
   },
   "checkout": {
     "title": "Checkout",
@@ -223,7 +232,14 @@
     "continueShopping": "Continue Shopping",
     "needHelp": "Need help?",
     "contactUs": "Contact us",
-    "paymentId": "Payment ID"
+    "paymentId": "Payment ID",
+    "backToStore": "Back to store",
+    "trust": {
+      "title": "Secure checkout",
+      "securePayment": "100% secure payment",
+      "dataProtection": "Your data is protected",
+      "sslEncryption": "Bank-grade SSL encryption"
+    }
   },
   "orders": {
     "title": "My Orders",
@@ -445,6 +461,35 @@
     "resetPassword": {
       "title": "Reset Password",
       "description": "Create a new password for your account"
+    }
+  },
+  "home": {
+    "seo": {
+      "title": "Home",
+      "description": "Welcome to MyStore. Discover exclusive products with a premium shopping experience."
+    },
+    "hero": {
+      "title": "Discover Your Style",
+      "subtitle": "Explore our curated collection of premium products, designed for those who appreciate quality and good design.",
+      "cta": "View Collection",
+      "scroll": "Discover",
+      "ariaLabel": "Hero — Welcome to MyStore"
+    },
+    "categories": {
+      "title": "Featured Categories",
+      "subtitle": "Explore our most popular categories"
+    },
+    "featured": {
+      "title": "Featured Products",
+      "subtitle": "The most popular products from our collection"
+    },
+    "reviews": {
+      "title": "What Our Customers Say",
+      "subtitle": "Verified reviews from Google Maps",
+      "ariaLabel": "Customer reviews carousel",
+      "dotsLabel": "Review navigation",
+      "reviewLabel": "Review",
+      "anonymous": "Customer"
     }
   },
   "common": {

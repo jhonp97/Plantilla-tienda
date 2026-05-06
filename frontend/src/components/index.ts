@@ -30,3 +30,8 @@ export { StatusPill } from './StatusPill';
 export type { StatusPillProps, PillStatus } from './StatusPill';
 export { LazyImage } from './LazyImage';
 export type { LazyImageProps } from './LazyImage';
+export { StickyAddToCartBar } from './StickyAddToCartBar';
+export type { StickyAddToCartBarProps } from './StickyAddToCartBar';
+export { CheckoutHeader } from './CheckoutHeader';
+export type { CheckoutHeaderProps } from './CheckoutHeader';
+export { TrustBadges } from './TrustBadges';

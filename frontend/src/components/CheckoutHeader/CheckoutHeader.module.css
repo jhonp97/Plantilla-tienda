@@ -1,0 +1,58 @@
+/* CheckoutHeader.module.css — Minimal header for checkout flow */
+
+.header {
+  background: var(--color-bg-primary);
+  border-bottom: 1px solid var(--color-bg-secondary);
+  padding: var(--space-3) var(--space-4);
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  color: var(--color-text-primary);
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.logo svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-family: var(--font-body);
+}
+
+.backLink:hover {
+  color: var(--color-text-primary);
+}
+
+.backLink svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.backLink:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
+}

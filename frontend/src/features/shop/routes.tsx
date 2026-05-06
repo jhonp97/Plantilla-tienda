@@ -1,8 +1,9 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import { Layout } from '@components/Layout';
 import { PageTransition } from '@components/PageTransition';
 
+const HomePage = lazy(() => import('./pages/HomePage'));
 const ProductList = lazy(() => import('./pages/ProductList'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail'));
 const CartPage = lazy(() => import('./pages/CartPage'));
@@ -39,8 +40,11 @@ function LoadingFallback() {
 }
 
 function ShopLayout() {
+  const location = useLocation();
+  const isCheckout = location.pathname.startsWith('/checkout');
+
   return (
-    <Layout>
+    <Layout hideHeader={isCheckout} hideFooter={isCheckout}>
       <Outlet />
     </Layout>
   );
@@ -59,7 +63,9 @@ export function ShopRoutes() {
   return (
     <Routes>
       <Route element={<ShopLayout />}>
-        <Route path="/" element={<Navigate to="/products" replace />} />
+        <Route index element={
+          <AnimatedRoute><HomePage /></AnimatedRoute>
+        } />
         <Route path="products" element={
           <AnimatedRoute><ProductList /></AnimatedRoute>
         } />

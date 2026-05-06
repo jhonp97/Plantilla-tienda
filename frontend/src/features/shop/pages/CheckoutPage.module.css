@@ -1,29 +1,45 @@
-/* CheckoutPage.module.css - CSS Modules for CheckoutPage */
+/* CheckoutPage.module.css — Premium checkout with sticky summary */
 
 /* ============ Main Container ============ */
 .pageContainer {
   min-height: 100vh;
-  background: var(--color-gray-50);
-  padding: var(--spacing-xl) 0;
+  background: var(--color-bg-secondary);
 }
 
-.container {
+.checkoutLayout {
+  display: flex;
+  flex-direction: column;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 var(--spacing-md);
+  padding: var(--space-6) var(--space-4);
+  gap: var(--space-6);
+}
+
+@media (min-width: 1024px) {
+  .checkoutLayout {
+    flex-direction: row;
+    padding: var(--space-8) var(--space-4);
+  }
+}
+
+/* ============ Left Column (Steps) ============ */
+.stepsColumn {
+  flex: 1;
+  min-width: 0;
 }
 
 .pageTitle {
-  font-size: 1.875rem;
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
   font-weight: 700;
-  color: var(--color-gray-900);
-  margin-bottom: var(--spacing-xl);
-  text-align: center;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-5);
+  letter-spacing: -0.02em;
 }
 
 /* ============ Stepper ============ */
 .stepperContainer {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--space-6);
 }
 
 .stepper {
@@ -49,11 +65,11 @@
 }
 
 .connectorActive {
-  background: var(--color-primary);
+  background: var(--color-accent);
 }
 
 .connectorInactive {
-  background: var(--color-gray-300);
+  background: var(--color-bg-secondary);
 }
 
 .stepButton {
@@ -66,28 +82,29 @@
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  transition: all var(--transition-base);
+  transition: all 0.2s ease;
   border: none;
   cursor: pointer;
+  font-family: var(--font-body);
 }
 
 .stepButtonActive {
-  background: var(--color-primary);
-  color: var(--color-white);
+  background: var(--color-accent);
+  color: #FFFFFF;
 }
 
 .stepButtonCompleted {
-  background: var(--color-primary);
-  color: var(--color-white);
+  background: var(--color-accent);
+  color: #FFFFFF;
 }
 
 .stepButtonPending {
-  background: var(--color-gray-300);
-  color: var(--color-gray-500);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
 }
 
 .stepButtonActiveRing {
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+  box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.15);
 }
 
 .stepIcon {
@@ -96,40 +113,131 @@
 }
 
 .stepLabel {
-  margin-top: var(--spacing-sm);
+  margin-top: var(--space-2);
   font-size: 0.75rem;
   text-align: center;
+  font-family: var(--font-body);
 }
 
 @media (min-width: 640px) {
   .stepLabel {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
   }
 }
 
 .stepLabelActive {
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 .stepLabelCompleted {
-  color: var(--color-gray-600);
+  color: var(--color-text-secondary);
 }
 
 .stepLabelPending {
-  color: var(--color-gray-400);
+  color: var(--color-bg-secondary);
 }
 
 /* ============ Step Content ============ */
 .stepContent {
-  background: var(--color-white);
+  background: var(--color-bg-primary);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: var(--spacing-lg);
+  border: 1px solid var(--color-bg-secondary);
+  padding: var(--space-5);
 }
 
 @media (min-width: 640px) {
   .stepContent {
-    padding: var(--spacing-xl) var(--spacing-xl);
+    padding: var(--space-6);
+  }
+}
+
+/* ============ Right Column (Summary Sidebar) ============ */
+.summaryColumn {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .summaryColumn {
+    width: 360px;
+    flex-shrink: 0;
+  }
+}
+
+.summarySticky {
+  position: static;
+}
+
+@media (min-width: 1024px) {
+  .summarySticky {
+    position: sticky;
+    top: var(--space-4);
+  }
+}
+
+/* ============ Summary Card ============ */
+.summaryCard {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-bg-secondary);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.summaryTitle {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.summaryItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summaryItemLabel {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.summaryItemValue {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.summaryDivider {
+  height: 1px;
+  background: var(--color-bg-secondary);
+}
+
+.summaryTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summaryTotalLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.summaryTotalValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+/* ============ Mobile summary (inline, < 1024px) ============ */
+@media (max-width: 1023px) {
+  .summaryColumn {
+    order: -1;
   }
 }

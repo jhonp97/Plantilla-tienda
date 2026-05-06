@@ -179,7 +179,16 @@
     "sslSecure": "SSL Secure",
     "trustStripe": "Stripe",
     "quantity": "Cantidad: {{count}}",
-    "removeItem": "Eliminar"
+    "removeItem": "Eliminar",
+    "drawer": {
+      "title": "Carrito",
+      "item": "producto",
+      "items": "productos",
+      "total": "Total",
+      "decreaseQty": "Disminuir cantidad de",
+      "increaseQty": "Aumentar cantidad de",
+      "removeItem": "Eliminar producto"
+    }
   },
   "checkout": {
     "title": "Finalizar Compra",
@@ -223,7 +232,14 @@
     "continueShopping": "Seguir Comprando",
     "needHelp": "¿Necesitas ayuda?",
     "contactUs": "Contáctanos",
-    "paymentId": "ID de Pago"
+    "paymentId": "ID de Pago",
+    "backToStore": "Volver a la tienda",
+    "trust": {
+      "title": "Compra segura",
+      "securePayment": "Pago 100% seguro",
+      "dataProtection": "Tus datos están protegidos",
+      "sslEncryption": "Cifrado SSL de grado bancario"
+    }
   },
   "orders": {
     "title": "Mis Pedidos",
@@ -445,6 +461,35 @@
     "resetPassword": {
       "title": "Restablecer Contraseña",
       "description": "Crea una nueva contraseña para tu cuenta"
+    }
+  },
+  "home": {
+    "seo": {
+      "title": "Inicio",
+      "description": "Bienvenido a MiTienda. Descubre productos exclusivos con una experiencia de compra premium."
+    },
+    "hero": {
+      "title": "Descubre tu Estilo",
+      "subtitle": "Explora nuestra colección curada de productos premium, diseñados para quienes aprecian la calidad y el buen diseño.",
+      "cta": "Ver Colección",
+      "scroll": "Descubre",
+      "ariaLabel": "Hero — Bienvenido a MiTienda"
+    },
+    "categories": {
+      "title": "Categorías Destacadas",
+      "subtitle": "Explora nuestras categorías más populares"
+    },
+    "featured": {
+      "title": "Productos Destacados",
+      "subtitle": "Los productos más populares de nuestra colección"
+    },
+    "reviews": {
+      "title": "Lo Que Dicen Nuestros Clientes",
+      "subtitle": "Opiniones verificadas de Google Maps",
+      "ariaLabel": "Carrusel de reseñas de clientes",
+      "dotsLabel": "Navegación de reseñas",
+      "reviewLabel": "Reseña",
+      "anonymous": "Cliente"
     }
   },
   "common": {
