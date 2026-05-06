@@ -7,6 +7,9 @@ import App from './App';
 import { ToastContainer } from './components/Toast/ToastContainer';
 import '@styles/global.css';
 
+// Activate premium theme
+document.documentElement.setAttribute('data-theme', 'premium');
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <HelmetProvider>

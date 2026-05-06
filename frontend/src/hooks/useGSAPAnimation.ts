@@ -39,6 +39,18 @@ interface ScrollTriggerOptions {
   toggleActions?: string;
 }
 
+interface CurtainRevealOptions {
+  target: AnimationTarget;
+  trigger?: string | Element;
+  start?: string;
+}
+
+interface CrossfadeHoverOptions {
+  primaryTarget: AnimationTarget;
+  secondaryTarget: AnimationTarget;
+  duration?: number;
+}
+
 function prefersReducedMotion(): boolean {
   if (typeof window === 'undefined') return false;
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -61,7 +73,6 @@ export function useGSAPAnimation() {
   const animate = useCallback(
     (target: AnimationTarget, vars: AnimationVars): gsap.core.Tween | null => {
       if (prefersReducedMotion()) {
-        // Skip animation, just set final state
         gsap.set(target, { clearProps: 'all' });
         return null;
       }
@@ -182,6 +193,101 @@ export function useGSAPAnimation() {
     [],
   );
 
+  /** ── Curtain Reveal ──
+   * Animates clip-path from inset(0 0 100% 0) to inset(0 0 0% 0)
+   * triggered by ScrollTrigger when element enters viewport.
+   */
+  const curtainReveal = useCallback(
+    (options: CurtainRevealOptions): gsap.core.Tween | null => {
+      if (prefersReducedMotion()) {
+        gsap.set(options.target, { clearProps: 'all' });
+        return null;
+      }
+
+      const tween = gsap.fromTo(
+        options.target,
+        { clipPath: 'inset(0 0 100% 0)' },
+        {
+          clipPath: 'inset(0 0 0% 0)',
+          duration: 0.8,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: options.trigger ?? (options.target as string),
+            start: options.start ?? 'top 85%',
+          },
+          overwrite: 'auto',
+        },
+      );
+      tweensRef.current.push(tween);
+      return tween;
+    },
+    [],
+  );
+
+  /** ── Crossfade Hover ──
+   * Crossfades between primary and secondary elements on hover.
+   * Duration default 0.3s with power1.inOut easing.
+   */
+  const crossfadeHover = useCallback(
+    (options: CrossfadeHoverOptions): (() => void) | null => {
+      if (prefersReducedMotion()) {
+        gsap.set(options.primaryTarget, { clearProps: 'all' });
+        gsap.set(options.secondaryTarget, { clearProps: 'all' });
+        return null;
+      }
+
+      const duration = options.duration ?? 0.3;
+      const ease = 'power1.inOut';
+
+      const enterTween = gsap.to(options.primaryTarget, {
+        opacity: 0,
+        duration,
+        ease,
+        overwrite: 'auto',
+      });
+      const leaveTween = gsap.to(options.secondaryTarget, {
+        opacity: 0,
+        duration,
+        ease,
+        paused: true,
+        overwrite: 'auto',
+      });
+
+      tweensRef.current.push(enterTween, leaveTween);
+
+      const onEnter = () => {
+        gsap.to(options.secondaryTarget, { opacity: 1, duration, ease, overwrite: 'auto' });
+        gsap.to(options.primaryTarget, { opacity: 0, duration, ease, overwrite: 'auto' });
+      };
+
+      const onLeave = () => {
+        gsap.to(options.primaryTarget, { opacity: 1, duration, ease, overwrite: 'auto' });
+        gsap.to(options.secondaryTarget, { opacity: 0, duration, ease, overwrite: 'auto' });
+      };
+
+      // Attach event listeners to the targets
+      const primaryEl = options.primaryTarget instanceof Element
+        ? options.primaryTarget
+        : typeof options.primaryTarget === 'string'
+          ? document.querySelector(options.primaryTarget)
+          : null;
+
+      if (primaryEl) {
+        primaryEl.addEventListener('mouseenter', onEnter);
+        primaryEl.addEventListener('mouseleave', onLeave);
+
+        // Return cleanup function
+        return () => {
+          primaryEl.removeEventListener('mouseenter', onEnter);
+          primaryEl.removeEventListener('mouseleave', onLeave);
+        };
+      }
+
+      return null;
+    },
+    [],
+  );
+
   const pageOut = useCallback(
     (target: AnimationTarget): Promise<void> => {
       return new Promise((resolve) => {
@@ -192,8 +298,8 @@ export function useGSAPAnimation() {
 
         const tween = gsap.to(target, {
           opacity: 0,
-          y: -20,
-          duration: 0.2,
+          y: -15,
+          duration: 0.25,
           ease: 'power2.in',
           onComplete: resolve,
         });
@@ -212,12 +318,12 @@ export function useGSAPAnimation() {
           return;
         }
 
-        gsap.set(target, { opacity: 0, y: 20 });
+        gsap.set(target, { opacity: 0, y: 15 });
         const tween = gsap.to(target, {
           opacity: 1,
           y: 0,
           duration: 0.3,
-          ease: 'power2.out',
+          ease: 'power3.out',
           onComplete: resolve,
         });
         tweensRef.current.push(tween);
@@ -238,6 +344,8 @@ export function useGSAPAnimation() {
     fadeIn,
     slideUp,
     scrollTrigger,
+    curtainReveal,
+    crossfadeHover,
     pageOut,
     pageIn,
     cleanup,

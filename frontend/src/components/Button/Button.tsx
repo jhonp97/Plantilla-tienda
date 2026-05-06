@@ -1,3 +1,4 @@
+import { MinimalSpinner } from '@components/MinimalSpinner';
 import styles from './Button.module.css';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -22,7 +23,14 @@ export function Button({
       disabled={disabled || isLoading}
       {...rest}
     >
-      {isLoading ? <span className={styles.spinner} /> : children}
+      {isLoading ? (
+        <>
+          <MinimalSpinner label="Cargando" />
+          <span className={styles.loadingText}>{children}</span>
+        </>
+      ) : (
+        children
+      )}
     </button>
   );
 }

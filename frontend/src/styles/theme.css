@@ -1,3 +1,4 @@
+/* ── Dark Theme (existing) ── */
 [data-theme='dark'] {
   /* Background & Surface */
   --bg-primary: var(--color-gray-900);
@@ -23,4 +24,30 @@
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Premium Theme Override (data-theme="premium") ── */
+[data-theme='premium'] {
+  /* Ensure monochrome palette takes precedence */
+  --color-bg-primary: #FAFAFA;
+  --color-bg-secondary: #F0F0F0;
+  --color-text-primary: #111111;
+  --color-text-secondary: #666666;
+  --color-accent: #0F172A;
+  --color-accent-alt: #D4AF37;
+  --color-danger: #EF4444;
+  --color-success: #10B981;
+
+  /* Map legacy vars through accent for backward compat */
+  --color-primary: var(--color-accent);
+  --color-primary-hover: #1a2744;
+  --color-primary-light: #e8eaf0;
+
+  /* Map surface/text tokens */
+  --bg-primary: var(--color-bg-primary);
+  --bg-secondary: var(--color-bg-secondary);
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --surface-primary: var(--color-white);
+  --surface-border: var(--color-gray-200);
 }

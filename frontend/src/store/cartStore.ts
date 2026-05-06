@@ -30,6 +30,11 @@ interface CartState {
   updateQuantity: (productId: string, quantity: number) => void;
   setCoupon: (coupon: AppliedCoupon | null) => void;
   getCouponCode: () => string | null;
+  // Cart Drawer state
+  isDrawerOpen: boolean;
+  openDrawer: () => void;
+  closeDrawer: () => void;
+  toggleDrawer: () => void;
 }
 
 const CART_ID_KEY = 'cart_id';
@@ -59,6 +64,12 @@ export const useCartStore = create<CartState>((set, get) => ({
   items: [],
   isLoading: false,
   coupon: null,
+
+  // Cart Drawer state
+  isDrawerOpen: false,
+  openDrawer: () => set({ isDrawerOpen: true }),
+  closeDrawer: () => set({ isDrawerOpen: false }),
+  toggleDrawer: () => set((state) => ({ isDrawerOpen: !state.isDrawerOpen })),
 
   getCartId: () => get().cartId,
 
